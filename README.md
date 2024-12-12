@@ -29,7 +29,7 @@ Moving slowly, showing each command
 ```lua
 {
   "aaronik/treewalker.nvim",
-  config = {
+  opts = {
     highlight = true -- default is false
   }
 }
