@@ -181,4 +181,10 @@ function M.get_at_row(row)
   return vim.treesitter.get_node({ pos = { row - 1, col } })
 end
 
+-----Getting the size of the node is no trivial thing. Different nodes behave differently.
+-----@param row integer
+-----@return TSNode|nil
+--function M.get_real_range(row)
+--end
+
 return M

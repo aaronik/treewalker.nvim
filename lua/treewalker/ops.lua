@@ -54,13 +54,44 @@ end
 function M.jump(row, node)
   vim.cmd("normal! m'") -- Add originating node to jump list
   vim.api.nvim_win_set_cursor(0, { row, 0 })
-  vim.cmd("normal! ^") -- Jump to start of line
+  vim.cmd("normal! ^")  -- Jump to start of line
   if require("treewalker").opts.highlight then
     node = nodes.get_highest_coincident(node)
     local range = nodes.range(node)
     local duration = require("treewalker").opts.highlight_duration
     M.highlight(range, duration)
   end
+end
+
+-- https://github.com/nvim-treesitter/nvim-treesitter/blob/981ca7e353da6ea69eaafe4348fda5e800f9e1d8/lua/nvim-treesitter/ts_utils.lua#L388
+-- (ts_utils.swap_nodes)
+---@param rows1 [integer, integer] -- [start row, end row]
+---@param rows2 [integer, integer] -- [start row, end row]
+function M.swap(rows1, rows2)
+  local s1, e1, s2, e2 = rows1[1], rows1[2], rows2[1], rows2[2]
+  local text1 = lines.get_lines(s1, e1)
+  local text2 = lines.get_lines(s2, e2)
+
+  ---@type lsp.Range
+  local range1 = {
+    start = { line = s1 - 1, character = 0 },
+    ["end"] = { line = e1 - 1, character = 0 } -- end is reserved
+  }
+
+  ---@type lsp.Range
+  local range2 = {
+    start = { line = s2 - 1, character = 0 },
+    ["end"] = { line = e2 - 1, character = 0 }
+  }
+
+  -- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textEdit
+  ---@type lsp.TextEdit
+  local edit1 = { range = range1, newText = table.concat(text2, "\n") }
+  ---@type lsp.TextEdit
+  local edit2 = { range = range2, newText = table.concat(text1, "\n") }
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.lsp.util.apply_text_edits({ edit1, edit2 }, bufnr, "utf-8")
 end
 
 return M
