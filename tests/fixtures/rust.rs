@@ -1,21 +1,21 @@
 use rand::{thread_rng, Rng};
+use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 use strum_macros::{Display, EnumIter};
-use serde::{Serialize, Deserialize};
 
 // Define a trait that describes how to calculate the area of a shape
-#[derive(Debug, Clone, Copy)]
+#[derive(Clone, Copy)]
 trait Shape {
     fn area(&self) -> f64;
 }
 
 // Implement the Shape trait for a Circle
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 struct Circle {
     radius: f64,
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Copy)]
 impl Shape for Circle {
     fn area(&self) -> f64 {
         std::f64::consts::PI * self.radius.powi(2)
@@ -47,10 +47,17 @@ fn print_shape_area(shape: &dyn Shape) {
 
 fn main() {
     let circle = Circle { radius: 5.0 };
-    let rectangle = Rectangle { width: 4.0, height: 6.0 };
+    let rectangle = Rectangle {
+        width: 4.0,
+        height: 6.0,
+    };
 
-    print_shape_area(&circle);
-    print_shape_area(&rectangle);
+    if (true) {
+        print_shape_area(&circle);
+        print_shape_area(&rectangle);
+    } else {
+        println!("haha newp")
+    }
 
     // Example of a function that uses both the Shape and Display traits
     fn display_area<T: Shape + std::fmt::Display>(shape: &T) {

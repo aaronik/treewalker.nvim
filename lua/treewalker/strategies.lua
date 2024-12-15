@@ -20,6 +20,16 @@ local function get_node_from_neighboring_line(current_row, dir)
   local candidate_line = lines.get_line(candidate_row)
   local candidate_col = lines.get_start_col(candidate_line)
   local candidate = nodes.get_at_rowcol(candidate_row, candidate_col)
+
+  -- For py decorators, when we examine the target-ness of a node, we
+  -- want to be checking the highest coincident, rather than checking
+  -- an inner node, then going up to highest coincident. Check the ultimate
+  -- node kinda thing, rather than checking a child and then assuming
+  -- its highest node will be good.
+  if candidate then
+    candidate = nodes.get_highest_coincident(candidate)
+  end
+
   return candidate, candidate_row, candidate_line
 end
 
@@ -63,13 +73,13 @@ function M.get_down_and_in(starting_row, starting_col)
   for candidate_row = starting_row + 1, last_row, 1 do
     local candidate_line = lines.get_line(candidate_row)
     local candidate_col = lines.get_start_col(candidate_line)
-    local candidate_node = nodes.get_at_row(candidate_row)
+    local candidate = nodes.get_at_row(candidate_row)
     local is_empty = candidate_line == ""
 
-    if candidate_col == starting_col or not candidate_node then
+    if candidate_col == starting_col or not candidate then
       goto continue
-    elseif candidate_col > starting_col and nodes.is_jump_target(candidate_node) then
-      return candidate_node, candidate_row, candidate_line
+    elseif candidate_col > starting_col and nodes.is_jump_target(candidate) then
+      return candidate, candidate_row, candidate_line
     elseif candidate_col < starting_col and not is_empty then
       break
     end

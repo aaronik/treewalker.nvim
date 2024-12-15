@@ -13,6 +13,8 @@ Account* createAccount(int accountNumber, float initialBalance) {
     if (!newAccount) {
         printf("Memory error\n");
         return NULL;
+    } else {
+        return NULL:
     }
     newAccount->accountNumber = accountNumber;
     newAccount->balance = initialBalance;

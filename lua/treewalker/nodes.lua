@@ -4,14 +4,16 @@ local lines = require "treewalker.lines"
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
-  "attribute_item", -- rust decorators
+  "attribute_item", -- decorators (rust)
+  "decorat", -- decorators (py)
+  "else", -- else/elseif statements (lua)
+  "elif", -- else/elseif statements (py)
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
   "body",
   "block",
 }
-
 
 local M = {}
 
@@ -51,18 +53,6 @@ function M.is_highlight_target(node)
       and not is_root_node(node)
 end
 
----Do the nodes have the same starting point
----@param node1 TSNode
----@param node2 TSNode
----@return boolean
-function M.have_same_start(node1, node2)
-  local srow1, scol1 = node1:range()
-  local srow2, scol2 = node2:range()
-  return
-      srow1 == srow2 and
-      scol1 == scol2
-end
-
 ---Do the nodes have the same starting row
 ---@param node1 TSNode
 ---@param node2 TSNode
@@ -79,16 +69,6 @@ function M.have_same_scol(node1, node2)
   local _, scol1 = node1:range()
   local _, scol2 = node2:range()
   return scol1 == scol2
-end
-
----Do the nodes have the same starting line
----@param node1 TSNode
----@param node2 TSNode
----@return boolean
-function M.on_same_line(node1, node2)
-  local srow1 = node1:start()
-  local srow2 = node2:start()
-  return srow1 == srow2
 end
 
 ---helper to get all the children from a node
@@ -161,7 +141,7 @@ end
 function M.get_current()
   local node = vim.treesitter.get_node()
   assert(node)
-  return node
+  return M.get_highest_coincident(node)
 end
 
 ---Get node at row/col
@@ -169,7 +149,10 @@ end
 ---@param col integer
 ---@return TSNode|nil
 function M.get_at_rowcol(row, col)
-  return vim.treesitter.get_node({ pos = { row - 1, col } })
+  local node = vim.treesitter.get_node({ pos = { row - 1, col } })
+  if node then
+    return M.get_highest_coincident(node)
+  end
 end
 
 ---Get node at row (after having pressed ^)
@@ -178,7 +161,10 @@ end
 function M.get_at_row(row)
   local line = lines.get_line(row)
   local col = lines.get_start_col(line)
-  return vim.treesitter.get_node({ pos = { row - 1, col } })
+  local node = vim.treesitter.get_node({ pos = { row - 1, col } })
+  if node then
+    return M.get_highest_coincident(node)
+  end
 end
 
 return M

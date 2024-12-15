@@ -182,6 +182,14 @@ function M.get_node()
   return node
 end
 
+if true then
+  print('hi')
+elseif false then
+  print('hi')
+else
+  print('hi')
+end
+
 return M
 
 -- This is a lua fixture. I thought I was being smart when I got it

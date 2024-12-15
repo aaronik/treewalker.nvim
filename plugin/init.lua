@@ -1,7 +1,7 @@
 local function tw()
-  -- local util = require "treewalker.util"
-  -- return util.R('treewalker')
-  return require('treewalker')
+  local util = require "treewalker.util"
+  return util.R('treewalker')
+  -- return require('treewalker')
 end
 
 local subcommands = {
@@ -19,6 +19,22 @@ local subcommands = {
 
   Right = function()
     tw().move_in()
+  end,
+
+  SwapUp = function()
+    tw().swap_up()
+  end,
+
+  SwapDown = function()
+    tw().swap_down()
+  end,
+
+  SwapRight = function()
+    tw().swap_in()
+  end,
+
+  SwapLeft = function()
+    tw().swap_out()
   end
 }
 

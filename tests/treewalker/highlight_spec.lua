@@ -1,7 +1,5 @@
-local util = require "treewalker.util"
 local load_fixture = require "tests.load_fixture"
 local stub = require 'luassert.stub'
-local spy = require 'luassert.spy'
 local assert = require "luassert"
 local tw = require 'treewalker'
 local ops = require 'treewalker.ops'

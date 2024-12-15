@@ -1,4 +1,5 @@
 from functools import wraps
+import os
 
 def random_annotation(func):
     @wraps(func)
@@ -36,37 +37,79 @@ class Car:
 
 
 @random_annotation
+class Task:
+    def __init__(self, description):
+        self.description = description
+        self.completed = False
+
+    def mark_complete(self):
+        self.completed = True
+
+    def __str__(self):
+        status = "✓" if self.completed else "✗"
+        return f"[{status}] {self.description}"
+
+
+class TodoList:
+    def __init__(self, file_name):
+        self.file_name = file_name
+        self.tasks = []
+        self.load_tasks()
+
+    def add_task(self, description):
+        task = Task(description)
+        self.tasks.append(task)
+        self.save_tasks()
+
+    def list_tasks(self):
+        if not self.tasks:
+            print("No tasks in the list.")
+        for idx, task in enumerate(self.tasks, 1):
+            print(f"{idx}: {task}")
+
+    def mark_task_complete(self, task_number):
+        try:
+            task = self.tasks[task_number - 1]
+            task.mark_complete()
+            self.save_tasks()
+        except IndexError:
+            print("Task number does not exist.")
+
+    def save_tasks(self):
+        with open(self.file_name, 'w') as file:
+            for task in self.tasks:
+                file.write(f"{task.description}|{task.completed}\n")
+
+    def load_tasks(self):
+        if os.path.exists(self.file_name):
+            with open(self.file_name, 'r') as file:
+                for line in file:
+                    description, completed = line.strip().split('|')
+                    task = Task(description)
+                    task.completed = completed == 'True'
+                    self.tasks.append(task)
+
+
 def main():
-    """
-    This function demonstrates a nested structure.
-    It uses four levels of nesting to perform different tasks.
-    """
+    todo = TodoList('tasks.txt')
 
-    # Level 1: Outer Loop
-    for i in range(5):
-        print(f"Outer Loop iteration {i+1}")
+    while True:
+        print("\nOptions:")
 
-        # Level 2: Middle Function Call
-        def middle_func(x):
-            """This function prints a message and returns the input value."""
-            print(f"Middle function called with argument {x}.")
-            return x
+        choice = input("Choose an option: ")
 
-        middle_value = middle_func(i)
-
-        if middle_value == i:
-            print("Condition met.")
-
-            # Level 3: Inner Loop
-            for j in range(10):
-                print(f"Inner Loop iteration {j+1}")
-
-                # Level 4: Deepest Nesting (Conditional Statement)
-                if j % 2 == 0:
-                    print("Even number detected.")
-                else:
-                    print("Odd number detected.")
+        if choice == "1":
+            description = input("Enter a task description: ")
+            todo.add_task(description)
+        elif choice == "2":
+            todo.list_tasks()
+        elif choice == "3":
+            task_number = int(input("Enter task number to mark as complete: "))
+            todo.mark_task_complete(task_number)
+        elif choice == "4":
+            break
+        else:
+            print("Invalid option, please try again.")
 
 if __name__ == "__main__":
     main()
-
