@@ -30,7 +30,7 @@ Moving slowly, showing each command
 {
   "aaronik/treewalker.nvim",
   opts = {
-    highlight = true -- default is false
+    highlight = true -- briefly highlight the node after jumping to it
   }
 }
 ```

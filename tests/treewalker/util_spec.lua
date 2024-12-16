@@ -91,19 +91,6 @@ describe("util", function()
     end)
   end)
 
-  describe("ensure_env_var", function()
-    it("returns true", function()
-      -- always set
-      local res = util.has_env_var("SHELL")
-      assert.is_true(res)
-    end)
-
-    it("returns false", function()
-      local res = util.has_env_var("IM_SUPER_SURE_THIS_ENV_VAR_WONT_BE_SET_FR_FR")
-      assert.is_false(res)
-    end)
-  end)
-
   describe("reverse", function()
     it("reverses an array table", function()
       local t = { 1, 2, 3, 4, 5 }

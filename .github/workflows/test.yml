@@ -1,0 +1,39 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Install Make Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install libtool-bin autoconf automake cmake g++ pkg-config unzip gettext curl -y
+
+    - name: Install Neovim
+      run: |
+        sudo snap install nvim --classic
+
+    - name: Install Plenary
+      run: |
+        git clone https://github.com/nvim-lua/plenary.nvim.git
+        mkdir -p .local/share/nvim/lazy/
+        mv plenary.nvim .local/share/nvim/lazy/
+
+    - name: Run Tests
+      env:
+        XDG_CONFIG_HOME: ${{ github.workspace }}/.config
+        XDG_DATA_HOME: ${{ github.workspace }}/.local/share
+        XDG_STATE_HOME: ${{ github.workspace }}/.local/state
+        XDG_CACHE_HOME: ${{ github.workspace }}/.cache
+      run: make test

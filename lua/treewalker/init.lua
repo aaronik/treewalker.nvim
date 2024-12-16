@@ -8,8 +8,11 @@ local Treewalker = {}
 
 ---@alias Opts { highlight: boolean }
 
+-- Default setup() options
 ---@type Opts
-Treewalker.opts = {}
+Treewalker.opts = {
+  highlight = true
+}
 
 ---@param opts Opts | nil
 function Treewalker.setup(opts)

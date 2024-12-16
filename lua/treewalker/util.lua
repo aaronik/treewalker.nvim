@@ -98,12 +98,6 @@ M.guid = function()
   end)
 end
 
----@param env_key string
----@return boolean
-M.has_env_var = function(env_key)
-  return type(os.getenv(env_key)) ~= type(nil)
-end
-
 ---reverse an array table
 ---@param t table
 M.reverse = function (t)
