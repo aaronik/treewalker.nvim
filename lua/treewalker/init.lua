@@ -4,6 +4,8 @@ local ops = require('treewalker.ops')
 local lines = require('treewalker.lines')
 local strategies = require('treewalker.strategies')
 
+local ts_utils = require 'nvim-treesitter.ts_utils'
+
 local Treewalker = {}
 
 ---@alias Opts { highlight: boolean }
@@ -99,6 +101,32 @@ function Treewalker.move_down()
 
   -- Ultimate failure
   return --util.log("no down candidate")
+end
+
+---@return nil
+function Treewalker.swap_prev()
+  local node = strategies.get_current_top_node()
+  if not node then
+    return
+  end
+
+  local prev_node = node:prev_named_sibling()
+  if prev_node then
+    ts_utils.swap_nodes(node, prev_node, 0, true)
+  end
+end
+
+---@return nil
+function Treewalker.swap_next()
+  local node = strategies.get_current_top_node()
+  if not node then
+    return
+  end
+
+  local next_node = node:next_named_sibling()
+  if next_node then
+    ts_utils.swap_nodes(node, next_node, 0, true)
+  end
 end
 
 return Treewalker

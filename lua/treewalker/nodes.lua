@@ -4,6 +4,7 @@ local lines = require "treewalker.lines"
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
+  "block"
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
