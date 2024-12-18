@@ -3,11 +3,6 @@ local stub = require('luassert.stub')
 local assert = require("luassert")
 
 describe("util", function()
-  describe("contains_line", function()
-    assert(util.contains({ "has", "also" }, "has"))
-    assert.False(util.contains({ "doesnt" }, "has"))
-  end)
-
   describe("guid", function()
     it("never repeats", function()
       local guids = {}
@@ -54,40 +49,6 @@ describe("util", function()
       assert.same({ "1\n", "2\n", "3\n", "4\n", "5\n", }, writes)
       assert.equal(1, num_flushes)
       assert.equal(1, num_closes)
-    end)
-  end)
-
-  describe("merge_tables", function()
-    it("merges N hash style tables", function()
-      local a = { a = true }
-      local b = { b = true }
-      local c = { c = true }
-      local d = util.merge_tables(a, b, c)
-      assert.same({ a = true, b = true, c = true }, d)
-    end)
-
-    it("merges multiple array style tables", function()
-      local a = { true }
-      local b = { false }
-      local c = { true, false }
-      local d = util.merge_tables(a, b, c)
-      assert.same({ true, false, true, false }, d)
-    end)
-
-    it("merges combo style tables", function()
-      local a = { a = true }
-      local b = { false, false }
-      local c = { true, true }
-      local d = util.merge_tables(a, b, c)
-      assert.same({ a = true, false, false, true, true }, d)
-    end)
-
-    it("does not overwrite arguments", function()
-      local a = { a = true }
-      local b = { b = true }
-      util.merge_tables(a, b)
-      assert.same({ a = true }, a)
-      assert.same({ b = true }, b)
     end)
   end)
 

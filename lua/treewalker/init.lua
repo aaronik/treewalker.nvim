@@ -1,5 +1,4 @@
 local nodes = require('treewalker.nodes')
-local util = require('treewalker.util')
 local ops = require('treewalker.ops')
 local lines = require('treewalker.lines')
 local strategies = require('treewalker.strategies')
@@ -17,7 +16,7 @@ Treewalker.opts = {
 
 ---@param opts Opts | nil
 function Treewalker.setup(opts)
-  Treewalker.opts = util.merge_tables(Treewalker.opts, opts)
+  Treewalker.opts = vim.tbl_deep_extend('force', Treewalker.opts, opts or {})
 end
 
 ---@return nil

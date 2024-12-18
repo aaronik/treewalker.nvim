@@ -55,42 +55,6 @@ M.log = function(...)
   log_file:close()
 end
 
----@param lines string[]
----@param string string
-M.contains = function(lines, string)
-  local found_line = false
-  for _, line in ipairs(lines) do
-    if line == string then
-      found_line = true
-      break
-    end
-  end
-  return found_line
-end
-
---- Merging multiple tables into one. Works on both map like and array like tables.
---- This function accepts variadic arguments (multiple tables)
---- It merges keys from the provided tables into a new table.
---- Later tables get precedence
---- @generic T
---- @param ... T - Any number of tables to merge.
---- @return T - A new merged table of the same type as the input tables.
-M.merge_tables = function(...)
-  local new_table = {}
-
-  for _, t in ipairs({ ... }) do
-    for k, v in pairs(t) do
-      if type(k) == "number" then
-        table.insert(new_table, v)
-      else
-        new_table[k] = v
-      end
-    end
-  end
-
-  return new_table
-end
-
 M.guid = function()
   local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
   return string.gsub(template, '[xy]', function(c)

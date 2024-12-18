@@ -1,5 +1,3 @@
-local util = require('treewalker.util')
-
 local M = {}
 
 local NON_TARGET_NODE_MATCHERS = {
@@ -28,7 +26,7 @@ local function is_jump_target(node)
 end
 
 local function is_descendant_jump_target(node)
-  return util.contains(TARGET_DESCENDANT_TYPES, node:type())
+  return vim.list_contains(TARGET_DESCENDANT_TYPES, node:type())
 end
 
 ---Do the nodes have the same starting point

@@ -1,6 +1,5 @@
 local lines = require('treewalker.lines')
 local nodes = require('treewalker.nodes')
-local util  = require('treewalker.util')
 
 ---@alias Dir "up" | "down"
 
