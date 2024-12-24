@@ -2,7 +2,20 @@ local util = require('treewalker.util')
 local movement = require('treewalker.movement')
 local swap = require('treewalker.swap')
 
+local M = {}
 local Treewalker = {}
+
+setmetatable(M, {
+  __index = function(_, key)
+    local ft = vim.bo.ft
+    if vim.treesitter.language.get_lang(ft) then
+        return rawget(Treewalker, key)
+    end
+    return function()
+      vim.notify('There is no parser for `' .. ft .. '`, please install the parser first', vim.log.levels.WARN)
+    end
+  end,
+})
 
 ---@alias Opts { highlight: boolean, highlight_duration: integer }
 
@@ -32,4 +45,4 @@ for fn_name, fn in pairs(swap) do
   Treewalker[fn_name] = fn
 end
 
-return Treewalker
+return M
