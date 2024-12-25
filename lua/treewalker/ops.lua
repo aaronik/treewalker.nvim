@@ -13,7 +13,7 @@ local M = {}
 function M.highlight(range, duration)
   local start_row, start_col, end_row, end_col = range[1], range[2], range[3], range[4]
   local ns_id = vim.api.nvim_create_namespace("")
-  local hl_group = "ColorColumn"
+  local hl_group = require("treewalker").opts.highlight_group
 
   for row = start_row, end_row do
     if row == start_row and row == end_row then

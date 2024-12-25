@@ -43,6 +43,7 @@ The swap commands intelligently swap nodes, including comments and attributes/de
   opts = {
     highlight = true, -- Whether to briefly highlight the node after jumping to it
     highlight_duration = 250, -- How long should above highlight last (in ms)
+    highlight_group = "ColorColumn", -- Highlight group 
   }
 }
 ```
