@@ -353,14 +353,14 @@ describe("Swapping in a rust file:", function()
   -- The below issue is also happening in TSTextObjectSwapNext/Prev @parameter.inner
   -- In rust, node:parent() is taking us to a node that is way higher up than what
   -- appears to be the parent (via via.treesitter.inspect_tree())
-  pending("Swaps right from a string to a fn call", function()
+  it("Swaps right from a string to a fn call", function()
     vim.fn.cursor(46, 18) -- inside shape
     assert.same('    println!("shape_area", calculate_area(shape));', lines.get_line(46))
     tw.swap_right()
     assert.same('    println!(calculate_area(shape), "shape_area");', lines.get_line(46))
   end)
 
-  pending("Swaps laterally from a string to a fn call", function()
+  it("Swaps laterally from a string to a fn call", function()
     vim.fn.cursor(46, 32) -- inside calculate
     assert.same('    println!("shape_area", calculate_area(shape));', lines.get_line(46))
     tw.swap_left()

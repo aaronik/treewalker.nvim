@@ -1,11 +1,11 @@
--- local function tw()
---   local util = require "treewalker.util"
---   return util.R('treewalker')
--- end
-
 local function tw()
-  return require('treewalker')
+  local util = require "treewalker.util"
+  return util.R('treewalker')
 end
+
+-- local function tw()
+--   return require('treewalker')
+-- end
 
 local subcommands = {
   Up = function()
