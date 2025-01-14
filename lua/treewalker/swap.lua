@@ -3,6 +3,7 @@ local operations = require "treewalker.operations"
 local targets = require "treewalker.targets"
 local augment = require "treewalker.augment"
 local strategies = require "treewalker.strategies"
+local util = require "treewalker.util"
 
 local M = {}
 
@@ -159,6 +160,20 @@ function M.swap_left()
   local current = nodes.get_current()
   local target = prev_sib(current)
 
+  util.log("\n\n\n\n\n")
+  nodes.log_parents(current, 4)
+  local parent = current:parent()
+  if parent then
+    util.log("parent: " .. parent:type() .. ", sexpr: " .. parent:sexpr())
+    for child in parent:iter_children() do
+      if child:named() then
+        util.log("child: " .. child:type() .. " | named")
+      else
+        util.log("child: " .. child:type())
+      end
+    end
+  end
+
   -- strings
   local candidate = strategies.get_highest_string_node(nodes.get_current())
   if candidate then candidate = nodes.get_highest_coincident(candidate) end
@@ -170,6 +185,15 @@ function M.swap_left()
 
   -- No candidates found
   if not current or not target then return end
+
+  -- Handle rust incosistency
+  -- This is necessary because calling node:parent() on something like
+  -- |calculate_area(shape) goes too high up the tree. I think this _may_ be
+  -- a problem with vim.treesitter itself. TODO: Experiment with removing
+  -- this in the future. It's in the tests so should be easy.
+  local next = next_sib(current)
+  if current:type() == 'identifier' and next and next:type() == "token_tree" then
+  end
 
   operations.swap_nodes(target, current)
 
