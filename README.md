@@ -1,6 +1,5 @@
-
 <div align="center">
-    <h1>Treewalker.nvim</h1>
+    <h1>Treewalker.nvim<br><br>🌳🌲🌴🌲🌴🌳</h1>
     <h4 align="center">
         <a href="#Installation">Installation</a>
         ·
@@ -178,4 +177,5 @@ of `Treewalker`'s left/right swapping code is inspired by `ts_utils`.
 `Treewalker` operates a little differently under the hood, picking the highest
 startwise coinciding node over the lowest. But mostly it does the work of
 finding the next relevant node and packaging it all up into a nice interface.
+
 
