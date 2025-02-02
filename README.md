@@ -32,10 +32,10 @@
 
 ## Movement
 
-The movement commands move you through your code in an intuitive way:
+The movement commands move you through your code in an intuitive way, skipping nodes that don't help you move quickly:
 
-* **`:Treewalker Up`** - Moves up to the previous neighbor node, skipping comments, annotations, and other unintuitive nodes
-* **`:Treewalker Down`** - Moves down to the next neighbor node, skipping comments, annotations, and other unintuitive nodes
+* **`:Treewalker Up`** - Moves up to the previous neighbor node
+* **`:Treewalker Down`** - Moves down to the next neighbor node
 * **`:Treewalker Left`** - Moves to the first ancestor node that's on a different line from the current node
 * **`:Treewalker Right`** - Moves to the next node down that's indented further than the current node
 
