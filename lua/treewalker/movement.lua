@@ -6,6 +6,7 @@ local M = {}
 
 ---@return nil
 function M.move_out()
+  vim.cmd("normal! ^")
   local node = nodes.get_current()
   local target, row = targets.out(node)
   if not (target and row) then return end

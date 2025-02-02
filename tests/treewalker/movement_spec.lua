@@ -79,6 +79,12 @@ describe("Movement in a regular lua file: ", function()
     tw.move_down()
     helpers.assert_cursor_at(30, 1, "local function is_descendant_jump_target")
   end)
+
+  it("moves to true outer node when invoked from inside a line", function()
+    vim.fn.cursor(22, 28) -- |NON_
+    tw.move_out()
+    helpers.assert_cursor_at(21, 1)
+  end)
 end)
 
 describe("Movement in a lua spec file: ", function()
