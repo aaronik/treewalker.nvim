@@ -11,9 +11,7 @@ local function current()
   local current_line = lines.get_line(current_row)
   assert(current_line, "cursor cannot be on invalid line number")
   local current_col = lines.get_start_col(current_line)
-
   return current_row, current_col
-
 end
 
 ---@param node TSNode
