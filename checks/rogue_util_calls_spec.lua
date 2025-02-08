@@ -6,7 +6,6 @@ local load_fixture = require "tests.load_fixture"
 local assert = require 'luassert'
 local stub = require 'luassert.stub'
 local util = require 'treewalker.util'
-local nodes = require 'treewalker.nodes'
 
 local commands = {
   "Treewalker Up",

@@ -180,7 +180,8 @@ end
 ---@param node TSNode
 ---@return TSNode
 function M.get_highest_row_coincident(node)
-  local iter = node:parent()
+  ---@type TSNode | nil
+  local iter = node
   while iter and M.have_same_srow(node, iter) do
     if M.is_highlight_target(iter) then node = iter end
     iter = iter:parent()

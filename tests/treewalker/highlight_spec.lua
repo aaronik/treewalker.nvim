@@ -2,12 +2,14 @@ local load_fixture = require "tests.load_fixture"
 local stub = require 'luassert.stub'
 local assert = require "luassert"
 local tw = require 'treewalker'
+local h = require 'tests.treewalker.helpers'
 local operations = require 'treewalker.operations'
 
 local highlight_stub = stub(operations, "highlight")
 
 -- use with rows as they're numbered in vim lines (1-indexed)
 local function assert_highlighted(srow, scol, erow, ecol, desc)
+  assert(highlight_stub.calls[1], "highlight was not called at all")
   assert.same(
     { srow - 1, scol - 1, erow - 1, ecol },
     highlight_stub.calls[1].refs[1],
@@ -114,5 +116,12 @@ describe("Highlights in a regular lua file: ", function()
     vim.fn.cursor(27, 3)
     tw.move_up()
     assert_highlighted(22, 3, 26, 5, "child = iter()")
+  end)
+
+  it("given in a line with no parent, move_out highlights the whole node", function()
+    vim.fn.cursor(21, 16) -- |is_jump_target
+    tw.move_out()
+    h.assert_cursor_at(21, 1)
+    assert_highlighted(21, 1, 28, 3, "is_jump_target function")
   end)
 end)

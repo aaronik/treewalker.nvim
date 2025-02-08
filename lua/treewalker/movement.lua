@@ -9,7 +9,11 @@ function M.move_out()
   vim.cmd("normal! ^")
   local node = nodes.get_current()
   local target, row = targets.out(node)
-  if not (target and row) then return end
+  if not (target and row) then
+    -- highlight the node anyways, for when normal! ^ does something
+    operations.jump(node, nodes.get_srow(node))
+    return
+  end
   vim.cmd("normal! m'") -- Add originating node to jump list
   operations.jump(target, row)
   vim.cmd("normal! m'") -- Add destination node to jump list
