@@ -6,6 +6,7 @@ local load_fixture = require "tests.load_fixture"
 local assert = require 'luassert'
 local stub = require 'luassert.stub'
 local util = require 'treewalker.util'
+local nodes = require 'treewalker.nodes'
 
 local commands = {
   "Treewalker Up",
@@ -18,13 +19,21 @@ local commands = {
   "Treewalker SwapLeft",
 }
 
+-- can't get luassert (plenary) spy working
+-- This needs to be generic over obj but can't figure out that either
+---@param obj table
+---@param method string
+local function spy(obj, method)
+  local orig = obj[method]
+  local stoob = stub(obj, method)
+  stoob.callback = orig
+  ---@type type obj
+  return stoob
+end
+
 describe("Extent util calls:", function()
-  local orig_R = util.R
-  local orig_log = util.log
-  local util_R_stub = stub(util, "R")
-  local util_log_stub = stub(util, "log")
-  util_R_stub.callback = orig_R
-  util_log_stub.callback = orig_log
+  local util_R_stub = spy(util, "R")
+  local util_log_stub = spy(util, "log")
 
   for _, command in ipairs(commands) do
     before_each(function()
