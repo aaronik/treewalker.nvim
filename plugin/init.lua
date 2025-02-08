@@ -1,4 +1,6 @@
 -- local function tw()
+--   -- Use this function for development. Makes the plugin auto-reload so you
+--   -- don't need to restart nvim to get the changes.
 --   local util = require "treewalker.util"
 --   return util.R('treewalker')
 -- end
