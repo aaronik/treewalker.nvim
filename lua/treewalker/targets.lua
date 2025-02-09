@@ -4,12 +4,16 @@ local strategies = require "treewalker.strategies"
 
 local M = {}
 
--- Gets node at row start point
+-- Gets a bunch of information about where the user currently is.
+-- I don't really like this here, I wish everything ran on nodes.
+-- But the node information is often wrong, like the current node
+-- could come back as a bigger containing scope, and the behavior
+-- would be unintuitive.
 ---@return integer, integer
 local function current()
   local current_row = vim.fn.line(".")
   local current_line = lines.get_line(current_row)
-  assert(current_line, "cursor cannot be on invalid line number")
+  assert(current_line, "Treewalker: cursor is on invalid line number")
   local current_col = lines.get_start_col(current_line)
   return current_row, current_col
 end
