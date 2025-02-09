@@ -26,33 +26,6 @@ function M.highlight(range, duration, hl_group)
   end, duration)
 end
 
----Flash a highlight over the whole lines, including empty lines, for the given
----range
----@param range Range4
----@param duration integer
----@param hl_group string
-function M.highlight_full(range, duration, hl_group)
-  local start_row, start_col, end_row, end_col = range[1], range[2], range[3], range[4]
-  local ns_id = vim.api.nvim_create_namespace("")
-
-  -- This accomplishes the same thing, but filling the entire space with
-  -- highlight, _including empty lines_.
-  -- The only reason I don't want it now is because I can't figure out how
-  -- to get it to not extend the full width of the window.
-  -- Add ext marks for the range
-  local start_mark = vim.api.nvim_buf_set_extmark(0, ns_id, start_row, start_col, {
-    hl_group = hl_group,
-    end_row = end_row,
-    end_col = end_col,
-    hl_eol = true,
-  })
-
-  -- Remove the highlight after delay
-  vim.defer_fn(function()
-    vim.api.nvim_buf_del_extmark(0, ns_id, start_mark)
-  end, duration)
-end
-
 ---@param node TSNode
 ---@param row integer
 function M.jump(node, row)
