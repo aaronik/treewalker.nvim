@@ -28,24 +28,6 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
--- pipes follow a specific pattern of taking a node and always returning a
--- node: either the hopeful that it found, or the passed in original
----@param node TSNode
----@return TSNode
-local function get_highest_coincident_pipe(node)
-  local candidate = nodes.get_highest_coincident(node)
-  return candidate or node
-end
-
--- pipes follow a specific pattern of taking a node and always returning a
--- node: either the hopeful that it found, or the passed in original
----@param node TSNode
----@return TSNode
-local function get_highest_string_node_pipe(node)
-  local candidate = strategies.get_highest_string_node(node)
-  return candidate or node
-end
-
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_on_target_node() then return end
@@ -53,22 +35,23 @@ function M.swap_down()
 
   local current = nodes.get_current()
 
-  local target = targets.down(current)
+  local target = targets.down()
   if not target then return end
 
-  current = get_highest_coincident_pipe(current)
+  current = nodes.get_highest_coincident(current)
+
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
-  local current_all_rows = nodes.whole_range(current_all)
   local current_srow = nodes.get_srow(current)
   local current_erow = nodes.get_erow(current)
+  local current_all_rows = nodes.whole_range(current_all)
 
   local target_augments = augment.get_node_augments(target)
   local target_all = { target, unpack(target_augments) }
-  local target_all_rows = nodes.whole_range(target_all)
   local target_srow = nodes.get_srow(target)
   local target_erow = nodes.get_erow(target)
   local target_scol = nodes.get_scol(target)
+  local target_all_rows = nodes.whole_range(target_all)
 
   operations.swap_rows(current_all_rows, target_all_rows)
 
@@ -85,14 +68,15 @@ function M.swap_up()
   if not is_supported_ft() then return end
 
   local current = nodes.get_current()
-  local target = targets.up(current)
+  local target = targets.up()
   if not target then return end
 
-  current = get_highest_coincident_pipe(current)
+  current = nodes.get_highest_coincident(current)
+
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
-  local current_all_rows = nodes.whole_range(current_all)
   local current_srow = nodes.get_srow(current)
+  local current_all_rows = nodes.whole_range(current_all)
 
   local target_srow = nodes.get_srow(target)
   local target_scol = nodes.get_scol(target)
@@ -122,8 +106,8 @@ function M.swap_right()
 
   -- Iteratively more desirable
   local current = nodes.get_current()
-  current = get_highest_string_node_pipe(current)
-  current = get_highest_coincident_pipe(current)
+  current = strategies.get_highest_string_node(current) or current
+  current = nodes.get_highest_coincident(current)
 
   local target = nodes.next_sib(current)
 
@@ -149,8 +133,8 @@ function M.swap_left()
 
   -- Iteratively more desirable
   local current = nodes.get_current()
-  current = get_highest_string_node_pipe(current)
-  current = get_highest_coincident_pipe(current)
+  current = strategies.get_highest_string_node(current) or current
+  current = nodes.get_highest_coincident(current)
 
   local target = nodes.prev_sib(current)
 

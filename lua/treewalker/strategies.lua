@@ -1,3 +1,38 @@
+-- All strategies follow a similar pattern of taking the information they need,
+-- and also any previous return values from other strategies. This allows for
+-- easy chaining, so instead of the old, we can use the new:
+-- Old:
+--
+-- local candidate, candidate_row =
+--     strategies.get_prev_if_on_empty_line(current_row)
+--
+-- if candidate and candidate_row then
+--   return candidate, candidate_row
+-- end
+--
+-- candidate, candidate_row =
+--   strategies.get_neighbor_at_same_col("up", current_row, current_col)
+--
+-- if candidate and candidate_row then
+--   return candidate, candidate_row
+-- end
+--
+--
+-- New:
+--
+-- local candidate, candidate_row =
+--    local candidate, row
+--    candidate, row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
+--    candidate, row = strategies.get_prev_if_on_empty_line(current_row, candidate, row)
+--    return candidate, row
+--
+-- Notice how the order is switched, so least desirable candidates come first,
+-- and most desirable last.
+--
+-- Also note this is only for multiple return strategies, all strategies that return only
+-- a single node won't use this technique, as the following works better, preserving all types:
+-- node = strategies.whatever(node) or node
+
 local lines = require('treewalker.lines')
 local nodes = require('treewalker.nodes')
 
@@ -7,8 +42,10 @@ local M = {}
 ---@param dir "up" | "down"
 ---@param srow integer
 ---@param scol integer
----@return TSNode | nil, integer | nil, string | nil
-function M.get_neighbor_at_same_col(dir, srow, scol)
+---@param prev_candidate TSNode | nil
+---@param prev_row integer | nil
+---@return  TSNode | nil, integer | nil
+function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
   local candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(srow, dir)
 
   while candidate and candidate_row and candidate_line do
@@ -26,17 +63,23 @@ function M.get_neighbor_at_same_col(dir, srow, scol)
     end
   end
 
-  return candidate, candidate_row
+  if candidate and candidate_row then
+    return candidate, candidate_row
+  else
+    return prev_candidate, prev_row
+  end
 end
 
 -- Go down until there is a valid jump target to the right
 ---@param srow integer
 ---@param scol integer
----@return TSNode | nil, integer | nil, string | nil
-function M.get_down_and_in(srow, scol)
+---@param prev_candidate TSNode | nil
+---@param prev_row integer | nil
+---@return TSNode | nil, integer | nil
+function M.get_down_and_in(srow, scol, prev_candidate, prev_row)
   local last_row = vim.api.nvim_buf_line_count(0)
 
-  if last_row == srow then return end
+  if last_row == srow then return prev_candidate, prev_row end
 
   for candidate_row = srow + 1, last_row, 1 do
     local candidate_line = lines.get_line(candidate_row)
@@ -48,7 +91,7 @@ function M.get_down_and_in(srow, scol)
     if candidate_col == scol or not candidate then
       goto continue
     elseif candidate_col > scol and nodes.is_jump_target(candidate) then
-      return candidate, candidate_row, candidate_line
+      return candidate, candidate_row
     elseif candidate_col < scol and not is_empty then
       break
     end
@@ -60,10 +103,12 @@ end
 -- Special case for when starting on empty line. In that case, find the next
 -- line with stuff on it, and go to that.
 ---@param srow integer
----@return TSNode | nil, integer | nil, string | nil
-function M.get_next_if_on_empty_line(srow)
+---@param prev_candidate TSNode | nil
+---@param prev_row integer | nil
+---@return TSNode | nil, integer | nil
+function M.get_next_if_on_empty_line(srow, prev_candidate, prev_row)
   local start_line = lines.get_line(srow)
-  if start_line ~= "" then return end
+  if start_line ~= "" then return prev_candidate, prev_row end
 
   ---@type string | nil
   local current_line = start_line
@@ -82,18 +127,24 @@ function M.get_next_if_on_empty_line(srow)
     current_node = nodes.get_at_row(current_row)
   end
 
-  if current_row > max_row then return end
+  if current_row > max_row then return prev_candidate, prev_row end
 
-  return current_node, current_row, current_line
+  if current_node and current_row then
+    return current_node, current_row
+  else
+    return prev_candidate, prev_row
+  end
 end
 
 -- Special case for when starting on empty line. In that case, find the prev
 -- line with stuff on it, and go to that.
 ---@param srow integer
----@return TSNode | nil, integer | nil, string | nil
-function M.get_prev_if_on_empty_line(srow)
+---@param prev_candidate TSNode | nil
+---@param prev_row integer | nil
+---@return TSNode | nil, integer | nil
+function M.get_prev_if_on_empty_line(srow, prev_candidate, prev_row)
   local start_line = lines.get_line(srow)
-  if start_line ~= "" then return end
+  if start_line ~= "" then return prev_candidate, prev_row end
 
   ---@type string | nil
   local current_line = start_line
@@ -111,9 +162,13 @@ function M.get_prev_if_on_empty_line(srow)
     current_node = nodes.get_at_row(current_row)
   end
 
-  if current_row < 0 then return end
+  if current_row < 0 then return prev_candidate, prev_row end
 
-  return current_node, current_row, current_line
+  if current_node and current_row then
+    return current_node, current_row
+  else
+    return prev_candidate, prev_row
+  end
 end
 
 ---Get the nearest ancestral node _which has different coordinates than the passed in node_

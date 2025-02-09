@@ -34,7 +34,7 @@ function M.move_up()
   local target, row = targets.up()
   if not target or not row then return end
 
-  -- No neighbor jumps in up
+  -- No neighbor jumplist additions in up
   local is_neighbor = nodes.have_neighbor_srow(node, target)
   if not is_neighbor then
     vim.cmd("normal! m'")

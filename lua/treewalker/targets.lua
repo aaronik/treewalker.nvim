@@ -30,51 +30,24 @@ end
 ---@return TSNode | nil, integer | nil
 function M.inn()
   local current_row, current_col = current()
-
-  local candidate, candidate_row =
-      strategies.get_down_and_in(current_row, current_col)
-
+  local candidate, candidate_row = strategies.get_down_and_in(current_row, current_col, nil, nil)
   return candidate, candidate_row
 end
 
 ---@return TSNode | nil, integer | nil
 function M.up()
   local current_row, current_col = current()
-
-  -- Get next target if we're on an empty line
-  local candidate, candidate_row =
-      strategies.get_prev_if_on_empty_line(current_row)
-
-  if candidate and candidate_row then
-    return candidate, candidate_row
-  end
-
-  --- Get next target at the same column
-  candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col)
-
-  if candidate and candidate_row then
-    return candidate, candidate_row
-  end
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row, candidate, candidate_row)
+  return candidate, candidate_row
 end
 
 ---@return TSNode | nil, integer | nil
 function M.down()
   local current_row, current_col = current()
-
-  -- Get next target if we're on an empty line
-  local candidate, candidate_row =
-      strategies.get_next_if_on_empty_line(current_row)
-
-  if candidate and candidate_row then
-    return candidate, candidate_row
-  end
-
-  --- Get next target, if one is found
-  candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col)
-
-  if candidate and candidate_row then
-    return candidate, candidate_row
-  end
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row, candidate, candidate_row)
+  return candidate, candidate_row
 end
 
 return M
