@@ -293,10 +293,7 @@ function M.get_at_row(row)
   local line = lines.get_line(row)
   if not line then return end
   local col = lines.get_start_col(line)
-  local node = vim.treesitter.get_node({ pos = { row - 1, col } })
-  if node then
-    return node
-  end
+  return vim.treesitter.get_node({ pos = { row - 1, col - 1 } })
 end
 
 ---Get highest node at same row/col

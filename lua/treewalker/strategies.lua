@@ -79,6 +79,7 @@ end
 function M.get_down_and_in(srow, scol, prev_candidate, prev_row)
   local last_row = vim.api.nvim_buf_line_count(0)
 
+  -- Can't go down if we're at the bottom
   if last_row == srow then return prev_candidate, prev_row end
 
   for candidate_row = srow + 1, last_row, 1 do
@@ -98,6 +99,8 @@ function M.get_down_and_in(srow, scol, prev_candidate, prev_row)
 
     ::continue:: -- gross
   end
+
+  return prev_candidate, prev_row
 end
 
 -- Special case for when starting on empty line. In that case, find the next

@@ -140,6 +140,12 @@ describe("Movement in a python file: ", function()
     load_fixture("/python.py")
   end)
 
+  it("move_in doesn't land on non target nodes", function()
+    vim.fn.cursor(54, 1)
+    tw.move_in()
+    h.assert_cursor_at(56, 5, "def __init__")
+  end)
+
   it("You can get into the body of a function with multiline signature", function()
     vim.fn.cursor(131, 3) -- de|f
     tw.move_in()

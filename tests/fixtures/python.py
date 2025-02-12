@@ -52,10 +52,10 @@ class Task:
 
 
 class TodoList:
+    @random_annotation
     def __init__(self, file_name):
         self.file_name = file_name
         self.tasks = []
-        self.load_tasks()
 
     def add_task(self, description):
         task = Task(description)
