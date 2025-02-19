@@ -8,6 +8,7 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "decorat",        -- decorators (py)
   "else",           -- else/elseif statements (lua)
   "elif",           -- else/elseif statements (py)
+  "end_tag",        -- html closing tags
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
@@ -80,9 +81,9 @@ end
 ---@return boolean
 function M.have_neighbor_srow(node1, node2)
   return
-    false
-    or M.get_srow(node1) == M.get_srow(node2) + 1
-    or M.get_srow(node1) == M.get_srow(node2) - 1
+      false
+      or M.get_srow(node1) == M.get_srow(node2) + 1
+      or M.get_srow(node1) == M.get_srow(node2) - 1
 end
 
 ---Do the nodes have the same level of indentation
@@ -293,13 +294,18 @@ function M.get_at_row(row)
   local line = lines.get_line(row)
   if not line then return end
   local col = lines.get_start_col(line)
-  return vim.treesitter.get_node({ pos = { row - 1, col - 1 } })
+  return vim.treesitter.get_node({
+    pos = { row - 1, col - 1 },
+    ignore_injections = false,
+  })
 end
 
 ---Get highest node at same row/col
 ---@return TSNode
 function M.get_current()
-  return assert(vim.treesitter.get_node())
+  return assert(vim.treesitter.get_node({
+    ignore_injections = false,
+  }))
 end
 
 -- util.log some formatted version of the node's properties
