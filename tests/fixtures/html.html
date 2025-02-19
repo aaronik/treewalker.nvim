@@ -62,5 +62,58 @@
 
         console.log("wooooo")
     </script>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #e94560;
+            font-family: 'Arial', sans-serif;
+        }
+        #cardsContainer {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            vertical-align: middle;
+            height: 100%;
+            align-items: center;
+            width: 100%;
+            padding: 0 10px;
+        }
+        #drawButtons {
+            margin-bottom: 20px;
+        }
+        #drawButtons button {
+            background: linear-gradient(135deg, #6a5acd, #ff69b4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+        }
+        #drawButtons button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+        }
+        .card {
+            display: block;
+            opacity: 0;
+            transition: opacity .1s ease-in;
+            max-width: 250px;
+            max-height: 350px;
+            margin: 10px;
+        }
+        .card.show {
+            opacity: 1;
+        }
+    </style>
 </body>
 </html>
