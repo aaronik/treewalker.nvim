@@ -155,12 +155,6 @@ vim.keymap.set('n', '<C-S-l>', '<cmd>Treewalker SwapRight<cr>', { silent = true 
 
 ## Alternatives
 
-* [treesitter-unit](https://github.com/David-Kunz/treesitter-unit)
-provides a textobject, along with highlighting for the current treesitter unit,
-as navigated to by `Treewalker`. When combined with `Treewalker`, it's possible
-to perform edits in a way that's analogous to vim's builtin `{}` motions and `p`
-textobject.
-
 * [syntax-tree-surfer](https://github.com/ziontee113/syntax-tree-surfer)
 is publicly archived and I could not get it to work :/
 `Treewalker` has a robust test suite, makes use of the type system, has CI
@@ -199,4 +193,12 @@ that don't necessarily seem helpful to go to. In my usage, it seems like
 whereas `Treewalker` takes a more linewise approach which allows you to make
 larger movements more easily. For movement inside of a single line, `Treewalker`
 doesn't help much, whereas `tree-climber` does.
+
+## Mentions
+
+* [treesitter-unit](https://github.com/David-Kunz/treesitter-unit)
+provides a textobject, along with highlighting for the current treesitter unit,
+as navigated to by `Treewalker`. When combined with `Treewalker`, it's possible
+to perform edits in a way that's analogous to vim's builtin `{}` motions and `p`
+textobject.
 
