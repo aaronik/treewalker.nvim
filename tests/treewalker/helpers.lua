@@ -1,7 +1,7 @@
 local assert = require('luassert')
 local lines  = require('treewalker.lines')
 
-local M = {}
+local M      = {}
 
 -- Assert the cursor is in the expected position
 ---@param expected_row integer
@@ -11,7 +11,10 @@ function M.assert_cursor_at(expected_row, expected_col, expected_line)
   local cursor_pos = vim.fn.getpos('.')
   local actual_row, actual_col = cursor_pos[2], cursor_pos[3]
   local actual_line = lines.get_line(actual_row)
-  local error_line = string.format("expected to be at [%s/%s](%s) but was at [%s/%s](%s)", expected_row, expected_col, expected_line, actual_row, actual_col, actual_line)
+  local error_line = string.format(
+    "expected to be at [%s/%s](%s) but was at [%s/%s](%s)",
+    expected_row, expected_col, expected_line, actual_row, actual_col, actual_line
+  )
   assert.same({ expected_row, expected_col }, { actual_row, actual_col }, error_line)
 end
 
