@@ -197,8 +197,8 @@ doesn't help much, whereas `tree-climber` does.
 ## Mentions
 
 * [treesitter-unit](https://github.com/David-Kunz/treesitter-unit)
-provides a textobject, along with highlighting for the current treesitter unit,
-as navigated to by `Treewalker`. When combined with `Treewalker`, it's possible
-to perform edits in a way that's analogous to vim's builtin `{}` motions and `p`
+provides a textobject, along with highlighting for the current treesitter unit
+(as navigated to by `Treewalker`). When combined with `Treewalker`, it's possible
+to perform edits in ways analogous to Vim's builtin `{}` motions and `p`
 textobject.
 
