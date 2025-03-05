@@ -28,14 +28,26 @@ end
 
 ---@param node TSNode
 ---@param row integer
-function M.jump(node, row)
+function M.jump(node, row, select)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
   vim.cmd("normal! ^")  -- Jump to start of line
-  if require("treewalker").opts.highlight then
+  if select then
     local range = nodes.range(node)
-    local duration = require("treewalker").opts.highlight_duration
-    local hl_group = require("treewalker").opts.highlight_group
-    M.highlight(range, duration, hl_group)
+    local mode = vim.api.nvim_get_mode().mode
+    if mode ~= "n" then
+      local esc = vim.api.nvim_replace_termcodes('<esc>', true, false, true)
+      vim.api.nvim_feedkeys(esc, 'x', false)
+    end
+    vim.cmd("normal! v")
+    vim.api.nvim_win_set_cursor(0, { range[3] + 1, range[4] })
+    vim.cmd("normal! o")
+  else
+    if require("treewalker").opts.highlight then
+      local range = nodes.range(node)
+      local duration = require("treewalker").opts.highlight_duration
+      local hl_group = require("treewalker").opts.highlight_group
+      M.highlight(range, duration, hl_group)
+    end
   end
 end
 
