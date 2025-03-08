@@ -25,6 +25,21 @@ local subcommands = {
   Right = function()
     tw().move_in()
   end,
+  SelectUp = function()
+    tw().select_up()
+  end,
+
+  SelectLeft = function()
+    tw().select_out()
+  end,
+
+  SelectDown = function()
+    tw().select_down()
+  end,
+
+  SelectRight = function()
+    tw().select_in()
+  end,
 
   SwapUp = function()
     tw().swap_up()

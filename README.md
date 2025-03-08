@@ -44,6 +44,17 @@ and then feel lost, you always have `Ctrl-o` available to bring you back to wher
 
 ---
 
+## Selection
+
+The selection commands are similar to the movement commands, but the node is automatically selected:
+
+* **`:Treewalker SelectUp`** - Moves up to the previous neighbor node, and selects it
+* **`:Treewalker SelectDown`** - Moves down to the next neighbor node, and selects it
+* **`:Treewalker SelectLeft`** - Moves to the first ancestor node that's on a different line from the current node, and selects it
+* **`:Treewalker SelectRight`** - Moves to the next node down that's indented further than the current node, and selects it
+
+---
+
 ## Swapping
 
 `Swap{Up,Down}` operate on a linewise basis, and **bring along their comments, decorators, and annotations**.
@@ -143,6 +154,12 @@ vim.keymap.set({ 'n', 'v' }, '<C-k>', '<cmd>Treewalker Up<cr>', { silent = true 
 vim.keymap.set({ 'n', 'v' }, '<C-j>', '<cmd>Treewalker Down<cr>', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<C-h>', '<cmd>Treewalker Left<cr>', { silent = true })
 vim.keymap.set({ 'n', 'v' }, '<C-l>', '<cmd>Treewalker Right<cr>', { silent = true })
+
+-- selection
+vim.keymap.set('n', '<C-M-k>', '<cmd>Treewalker SelectUp<cr>', { silent = true })
+vim.keymap.set('n', '<C-M-j>', '<cmd>Treewalker SelectDown<cr>', { silent = true })
+vim.keymap.set('n', '<C-M-h>', '<cmd>Treewalker SelectLeft<cr>', { silent = true })
+vim.keymap.set('n', '<C-M-l>', '<cmd>Treewalker SelectRight<cr>', { silent = true })
 
 -- swapping
 vim.keymap.set('n', '<C-S-k>', '<cmd>Treewalker SwapUp<cr>', { silent = true })
