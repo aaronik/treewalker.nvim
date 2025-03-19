@@ -7,6 +7,8 @@ describe("Movement in an html file", function()
     load_fixture("/php.php")
   end)
 
+  h.ensure_has_parser()
+
   -- TODO This also works manually but is failing the test suite. I think
   -- parsers need to be brought in.
   pending("respects embedded html", function()

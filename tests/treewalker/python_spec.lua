@@ -9,6 +9,8 @@ describe("Movement in a python file: ", function()
     load_fixture("/python.py")
   end)
 
+  h.ensure_has_parser()
+
   it("move_in doesn't land on non target nodes", function()
     vim.fn.cursor(54, 1)
     tw.move_in()

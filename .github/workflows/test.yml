@@ -24,12 +24,11 @@ jobs:
         git clone https://github.com/nvim-lua/plenary.nvim.git
         mv plenary.nvim $HOME/.local/share/nvim/lazy/
 
-    - name: Install nvim-treesitter and parsers
+    - name: Install nvim-treesitter
       run: |
         mkdir -p $HOME/.local/share/nvim/lazy/
         git clone https://github.com/nvim-treesitter/nvim-treesitter.git
         mv nvim-treesitter $HOME/.local/share/nvim/lazy/
-        nvim --headless --noplugin -u tests/minimal_init.lua -c "TSInstall! python rust haskell html javascript c_sharp" -c "quit"
 
     - name: Run luacheck type check / linter
       run: |

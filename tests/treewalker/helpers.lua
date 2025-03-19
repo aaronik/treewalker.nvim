@@ -26,4 +26,15 @@ M.feed_keys = function(keys)
   vim.api.nvim_feedkeys(termcodes, 'mtx', false)
 end
 
+-- This is more for the test suite itself and ensuring that it's operating correctly.
+-- Makes sure there's no missing parser for the loaded file in the current buffer
+M.ensure_has_parser = function()
+  it("the test suite has the parser for the requested filetype", function()
+    local ok = pcall(vim.treesitter.get_parser)
+    if not ok then
+      error(string.format("Test suite is missing parser for ft [%s]", vim.bo.ft))
+    end
+  end)
+end
+
 return M

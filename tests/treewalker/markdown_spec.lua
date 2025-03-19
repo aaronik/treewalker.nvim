@@ -9,6 +9,9 @@ describe("Movement in a markdown file", function()
     load_fixture("/markdown.md")
   end)
 
+  -- TODO this needs to work
+  -- h.ensure_has_parser()
+
   -- This is hard, treesitter is showing all java code as a "block_continuation"
   -- at the same level.
   pending("respects embedded java", function()

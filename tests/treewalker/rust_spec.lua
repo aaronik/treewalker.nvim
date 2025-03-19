@@ -9,6 +9,8 @@ describe("Swapping in a rust file:", function()
     load_fixture("/rust.rs")
   end)
 
+  h.ensure_has_parser()
+
   it("Swaps enum values right", function()
     vim.fn.cursor(49, 14)
     assert.same('enum Color { Red, Green, Blue }', lines.get_line(49))

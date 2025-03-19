@@ -7,6 +7,8 @@ describe("Movement in a haskell file: ", function()
     load_fixture("/haskell.hs")
   end)
 
+  h.ensure_has_parser()
+
   it("moves out of a nested node", function()
     vim.fn.cursor(22, 3)
     tw.move_out()

@@ -3,30 +3,30 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local lines = require 'treewalker.lines'
 
-describe("Movement in a C Sharp file", function()
+describe("Movement in a Ruby file", function()
   before_each(function()
-    load_fixture("/c-sharp.cs")
+    load_fixture("/ruby.rb")
   end)
 
   h.ensure_has_parser()
 
   it("works", function()
-    vim.fn.cursor(7, 5)
+    vim.fn.cursor(6, 3)
     tw.move_down()
-    h.assert_cursor_at(27, 5)
+    h.assert_cursor_at(12, 3)
     tw.move_down()
-    h.assert_cursor_at(50, 5)
-    tw.move_in()
-    h.assert_cursor_at(52, 9)
-    tw.move_out()
-    h.assert_cursor_at(50, 5)
+    h.assert_cursor_at(22, 3)
+    tw.move_up()
+    h.assert_cursor_at(12, 3)
   end)
 end)
 
-describe("Swapping in a C Sharp file", function()
+describe("Swapping in a Ruby file", function()
   before_each(function()
     load_fixture("/c-sharp.cs")
   end)
+
+  h.ensure_has_parser()
 
   it("swaps down", function()
     vim.fn.cursor(7, 5)
@@ -48,3 +48,4 @@ describe("Swapping in a C Sharp file", function()
     h.assert_cursor_at(7, 5)
   end)
 end)
+

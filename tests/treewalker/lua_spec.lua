@@ -10,6 +10,8 @@ describe("Movement in a regular lua file: ", function()
     load_fixture("/lua.lua")
   end)
 
+  h.ensure_has_parser()
+
   it("moves up and down at the same pace", function()
     vim.fn.cursor(1, 1) -- Reset cursor
     tw.move_down()

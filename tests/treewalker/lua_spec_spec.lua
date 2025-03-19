@@ -9,6 +9,8 @@ describe("Movement in a lua spec file: ", function()
     load_fixture("/lua-spec.lua")
   end)
 
+  h.ensure_has_parser()
+
   -- go to first describe
   local function go_to_describe()
     vim.fn.cursor(1, 1)

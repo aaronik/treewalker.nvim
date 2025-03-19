@@ -2,11 +2,13 @@
 class BankAccount
   attr_accessor :balance, :owner
 
+  # This is ruby code
   def initialize(balance = 0, owner = 'Unknown')
     @balance = balance
     @owner = owner
   end
 
+  # This does what you think
   def deposit(amount)
     if amount > 0
       @balance += amount
@@ -16,13 +18,16 @@ class BankAccount
     end
   end
 
+  # deposit 5
   deposit(5, deposit(5))
 
+  # allows you to withdraw
   def withdraw(amount)
     return nil unless deposit?(amount)
     @balance -= amount
   end
 
+  # deposit?
   def deposit?(amount)
     lambda { |x| x > 0 }[amount]
   end

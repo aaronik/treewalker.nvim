@@ -7,6 +7,8 @@ describe("Movement in an html file", function()
     load_fixture("/html.html")
   end)
 
+  h.ensure_has_parser()
+
   it("doesn't stop on footers", function()
     vim.fn.cursor(10, 5)
     tw.move_down()
