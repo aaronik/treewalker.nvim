@@ -9,8 +9,7 @@ describe("Movement in a markdown file", function()
     load_fixture("/markdown.md")
   end)
 
-  -- TODO this needs to work
-  -- h.ensure_has_parser()
+  h.ensure_has_parser()
 
   -- This is hard, treesitter is showing all java code as a "block_continuation"
   -- at the same level.
@@ -31,6 +30,8 @@ describe("Swapping in a markdown file:", function()
   before_each(function()
     load_fixture("/markdown.md")
   end)
+
+  h.ensure_has_parser()
 
   it("turns off for down in md files", function()
     vim.fn.cursor(1, 1)

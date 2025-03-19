@@ -31,7 +31,6 @@ require('nvim-treesitter.configs').setup {
 
 -- These are required lest nvim not be able to tell these parsers are installed
 vim.treesitter.language.register('ruby', { 'rb' })
--- TODO Why on earth does this break tests. Isn't the md parser supposed to come by default?
--- vim.treesitter.language.register('markdown', { 'md' })
+vim.treesitter.language.register('markdown', { 'md' })
 
 dofile("plugin/init.lua") -- get the Treewalker command present

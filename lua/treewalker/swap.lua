@@ -19,7 +19,10 @@ end
 local function is_supported_ft()
   local unsupported_filetypes = {
     ["text"] = true,
+    ["txt"] = true,
+
     ["markdown"] = true,
+    ["md"] = true,
   }
 
   local bufnr = vim.api.nvim_get_current_buf()
