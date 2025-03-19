@@ -60,3 +60,21 @@ int main() {
     return 0;
 }
 
+// Some psychos actually structure their code like this
+void doOtherThings(Account* account)
+{
+    printf("Account Number: %d\nBalance: $%.2f\n", account->accountNumber, account->balance);
+}
+
+void doOtherThingsAgain(Account* account)
+{
+    printf("Account Number: %d\nBalance: $%.2f\n", account->accountNumber, account->balance);
+}
+
+#define PI 3.14159  // Define a constant PI (preprocessor directive)
+
+void doOtherThingsAgainAgain(Account* account)
+{
+    printf("Account Number: %d\nBalance: $%.2f\n", account->accountNumber, account->balance);
+}
+

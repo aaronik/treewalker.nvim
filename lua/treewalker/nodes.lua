@@ -4,13 +4,14 @@ local util = require "treewalker.util"
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
-  "attribute_item",   -- decorators (rust)
-  "decorat",          -- decorators (py)
-  "else",             -- else/elseif statements (lua)
-  "elif",             -- else/elseif statements (py)
-  "end_tag",          -- html closing tags
-  "block",            -- C# puts their blocks under their fn names like a psycho
-  "declaration_list", -- C# class blocks
+  "attribute_item",     -- decorators (rust)
+  "decorat",            -- decorators (py)
+  "else",               -- else/elseif statements (lua)
+  "elif",               -- else/elseif statements (py)
+  "end_tag",            -- html closing tags
+  "block",              -- C# puts their blocks under their fn names like a psycho
+  "declaration_list",   -- C# class blocks
+  "compound_statement", -- C blocks when defined under their fn names like a psycho
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {

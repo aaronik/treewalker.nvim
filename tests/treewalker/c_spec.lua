@@ -4,6 +4,24 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local lines = require 'treewalker.lines'
 
+describe("Movement in a c file:", function()
+  before_each(function()
+    load_fixture("/c.c")
+  end)
+
+  h.ensure_has_parser()
+
+  it("Moves around", function()
+    vim.fn.cursor(46, 1)
+    tw.move_down()
+    h.assert_cursor_at(50, 1, "int main")
+    tw.move_down()
+    h.assert_cursor_at(64, 1)
+    tw.move_down()
+    h.assert_cursor_at(69, 1)
+  end)
+end)
+
 describe("Swapping in a c file:", function()
   before_each(function()
     load_fixture("/c.c")
@@ -23,5 +41,23 @@ describe("Swapping in a c file:", function()
     assert.same('        printf("one\\n", "\\ntwo\\n");', lines.get_line(17))
     tw.swap_left()
     assert.same('        printf("\\ntwo\\n", "one\\n");', lines.get_line(17))
+  end)
+
+  it("swaps down on next line bracket structured functions", function()
+    local first_block = lines.get_lines(63, 67)
+    local second_block = lines.get_lines(69, 72)
+    vim.fn.cursor(64, 1)
+    tw.swap_down()
+    assert.same(first_block, lines.get_lines(68, 72))
+    assert.same(second_block, lines.get_lines(63, 66))
+  end)
+
+  it("swaps up on next line bracket structured functions", function()
+    local first_block = lines.get_lines(63, 67)
+    local second_block = lines.get_lines(69, 72)
+    vim.fn.cursor(69, 1)
+    tw.swap_up()
+    assert.same(first_block, lines.get_lines(68, 72))
+    assert.same(second_block, lines.get_lines(63, 66))
   end)
 end)
