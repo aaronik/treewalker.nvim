@@ -50,6 +50,11 @@ Treewalker.move_out = ensuring_parser(movement.move_out)
 Treewalker.move_down = ensuring_parser(movement.move_down)
 Treewalker.move_in = ensuring_parser(movement.move_in)
 
+Treewalker.select_up = ensuring_parser(movement.select_up)
+Treewalker.select_out = ensuring_parser(movement.select_out)
+Treewalker.select_down = ensuring_parser(movement.select_down)
+Treewalker.select_in = ensuring_parser(movement.select_in)
+
 Treewalker.swap_up = ensuring_parser(swap.swap_up)
 Treewalker.swap_down = ensuring_parser(swap.swap_down)
 Treewalker.swap_right = ensuring_parser(swap.swap_right)
