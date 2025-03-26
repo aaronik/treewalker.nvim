@@ -9,7 +9,7 @@ describe("Swapping in a typescript file:", function()
     load_fixture("/typescript.ts")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("typescript")
 
   it("swaps up annotated functions of different length", function()
     vim.fn.cursor(106, 1) -- |  const i = 1

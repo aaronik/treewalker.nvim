@@ -2,12 +2,13 @@ local load_fixture = require "tests.load_fixture"
 local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 
-describe("Movement in an html file", function()
+describe("In an html file", function()
   before_each(function()
     load_fixture("/html.html")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("html")
+  h.ensure_has_parser("javascript")
 
   it("doesn't stop on footers", function()
     vim.fn.cursor(10, 5)

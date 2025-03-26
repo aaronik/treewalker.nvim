@@ -4,12 +4,12 @@ local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
 local h = require 'tests.treewalker.helpers'
 
-describe("Movement in a python file: ", function()
+describe("In a python file: ", function()
   before_each(function()
     load_fixture("/python.py")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("python")
 
   it("move_in doesn't land on non target nodes", function()
     vim.fn.cursor(54, 1)
@@ -17,7 +17,7 @@ describe("Movement in a python file: ", function()
     h.assert_cursor_at(56, 5, "def __init__")
   end)
 
-  it("You can get into the body of a function with multiline signature", function()
+  it("Moves into the body of a function with multiline signature", function()
     vim.fn.cursor(131, 3) -- de|f
     tw.move_in()
     h.assert_cursor_at(132, 5)
@@ -27,12 +27,6 @@ describe("Movement in a python file: ", function()
     h.assert_cursor_at(134, 5)
     tw.move_down()
     h.assert_cursor_at(136, 5, "|print")
-  end)
-end)
-
-describe("Swapping in a python file:", function()
-  before_each(function()
-    load_fixture("/python.py")
   end)
 
   it("swaps up annotated functions of different length", function()

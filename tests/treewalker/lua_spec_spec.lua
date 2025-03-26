@@ -4,12 +4,12 @@ local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
 local h = require 'tests.treewalker.helpers'
 
-describe("Movement in a lua spec file: ", function()
+describe("In a lua spec file: ", function()
   before_each(function()
     load_fixture("/lua-spec.lua")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("lua")
 
   -- go to first describe
   local function go_to_describe()
@@ -39,12 +39,6 @@ describe("Movement in a lua spec file: ", function()
     go_to_load_buf()
     tw.move_down()
     h.assert_cursor_at(21, 5, "it")
-  end)
-end)
-
-describe("Swapping in a lua test file:", function()
-  before_each(function()
-    load_fixture("/lua-spec.lua")
   end)
 
   it("swaps strings right in a list", function()

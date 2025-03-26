@@ -4,12 +4,12 @@ local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
 local h = require 'tests.treewalker.helpers'
 
-describe("Swapping in a rust file:", function()
+describe("In a rust file:", function()
   before_each(function()
     load_fixture("/rust.rs")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("rust")
 
   it("Swaps enum values right", function()
     vim.fn.cursor(49, 14)

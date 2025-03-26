@@ -12,6 +12,7 @@ vim.cmd("runtime! plugin/nvim-treesitter")
 require('nvim-treesitter.configs').setup {
     ensure_installed = {
         "lua",
+        "c",
         "python",
         "rust",
         "haskell",
@@ -32,5 +33,6 @@ require('nvim-treesitter.configs').setup {
 -- These are required lest nvim not be able to tell these parsers are installed
 vim.treesitter.language.register('ruby', { 'rb' })
 vim.treesitter.language.register('markdown', { 'md' })
+vim.treesitter.language.register('javascript', { 'js' })
 
 dofile("plugin/init.lua") -- get the Treewalker command present

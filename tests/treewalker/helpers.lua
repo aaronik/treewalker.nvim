@@ -11,10 +11,22 @@ function M.assert_cursor_at(expected_row, expected_col, expected_line)
   local cursor_pos = vim.fn.getpos('.')
   local actual_row, actual_col = cursor_pos[2], cursor_pos[3]
   local actual_line = lines.get_line(actual_row)
+
+  -- Let's always display something in the test output
+  if expected_line == nil then
+    expected_line = lines.get_line(expected_row)
+  end
+
+  -- It takes up too much room to show all the indentation
+  actual_line = vim.fn.trim(actual_line)
+  expected_line = vim.fn.trim(expected_line)
+
+  -- Just in case the test fails
   local error_line = string.format(
     "expected to be at [%s/%s](%s) but was at [%s/%s](%s)",
     expected_row, expected_col, expected_line, actual_row, actual_col, actual_line
   )
+
   assert.same({ expected_row, expected_col }, { actual_row, actual_col }, error_line)
 end
 
@@ -28,13 +40,15 @@ end
 
 -- This is more for the test suite itself and ensuring that it's operating correctly.
 -- Makes sure there's no missing parser for the loaded file in the current buffer
-M.ensure_has_parser = function()
-  it("the test suite has the parser for the requested filetype", function()
-    local ok = pcall(vim.treesitter.get_parser)
+---@param lang string
+M.ensure_has_parser = function(lang)
+  local ok = pcall(vim.treesitter.get_parser, 0, lang)
+  it(string.format("::The test suite has the [%s] parser::", lang), function()
     if not ok then
-      error(string.format("Test suite is missing parser for ft [%s]", vim.bo.ft))
+      error(string.format("Test suite is missing parser for filetype [%s]", lang))
     end
   end)
 end
+
 
 return M

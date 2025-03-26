@@ -4,12 +4,12 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local lines = require 'treewalker.lines'
 
-describe("Movement in a c file:", function()
+describe("In a c file:", function()
   before_each(function()
     load_fixture("/c.c")
   end)
 
-  h.ensure_has_parser()
+  h.ensure_has_parser("c")
 
   it("Moves around", function()
     vim.fn.cursor(46, 1)
@@ -20,14 +20,6 @@ describe("Movement in a c file:", function()
     tw.move_down()
     h.assert_cursor_at(69, 1)
   end)
-end)
-
-describe("Swapping in a c file:", function()
-  before_each(function()
-    load_fixture("/c.c")
-  end)
-
-  h.ensure_has_parser()
 
   it("swaps right, when cursor is inside a string, the whole string", function()
     vim.fn.cursor(14, 17) -- the o in one
