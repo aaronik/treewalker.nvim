@@ -2,7 +2,7 @@ MINIMAL_INIT=tests/minimal_init.lua
 TESTS_DIR=tests
 NO_UTIL_SPEC=checks
 
-.PHONY: test
+.PHONY: test test-watch check no-utils pass help
 
 test: ## Run the whole test suite
 	@nvim \
