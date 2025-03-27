@@ -161,7 +161,7 @@ is publicly archived and I could not get it to work :/
 (automated testing), and has organized code. So the plugin should be pretty
 stable. I believe `Treewalker` usage is a little bit simpler and more intuitive.
 `Treewalker` is missing the visual selection swap feature that syntax-tree-surfer
-has, though.
+has, though. (See [#32](https://github.com/aaronik/treewalker.nvim/issues/32))
 
 * [nvim-treehopper](https://github.com/mfussenegger/nvim-treehopper)
 is similar in that it uses the AST to navigate, but it takes more of a
