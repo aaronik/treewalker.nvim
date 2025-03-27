@@ -11,13 +11,13 @@ test: ## Run the whole test suite
 		-u ${MINIMAL_INIT} \
 		-c "PlenaryBustedDirectory ${TESTS_DIR} { timeout = 1000, sequential = true, keep_going = false, minimal_init = '${MINIMAL_INIT}' }"
 
-test-watch: ## Watching for changes to lua files
+test-watch: ## uses [nodemon](https://nodemon.io/) - watches for changes to lua files and reruns tests
 	@nodemon -e lua -x "$(MAKE) test || exit 1"
 
-check: ## Run luacheck on the project
+check: ## uses [luacheck](https://github.com/mpeterv/luacheck) - checks for any type errors or style issues
 	@luacheck . --globals vim it describe before_each after_each --exclude-files tests/fixtures --max-comment-line-length 140
 
-no-utils: ## Make sure there are no errant utils hanging around
+no-utils: ## Make sure there are no errant util calls which write to data directories
 	@nvim \
 		--headless \
 		--noplugin \
