@@ -1,12 +1,13 @@
--- local function tw()
---   -- Use this function for development. Makes the plugin auto-reload so you
---   -- don't need to restart nvim to get the changes.
---   local util = require "treewalker.util"
---   return util.R('treewalker')
--- end
-
 local function tw()
-  return require('treewalker')
+  if os.getenv("TREEWALKER_NVIM_ENV") == "development" then
+    -- For development. Makes the plugin auto-reload so you
+    -- don't need to restart nvim to get the changes live.
+    -- F*** it, we're doing it live!
+    local util = require "treewalker.util"
+    return util.R('treewalker')
+  else
+    return require('treewalker')
+  end
 end
 
 local subcommands = {
