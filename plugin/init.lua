@@ -4,7 +4,10 @@ local function tw()
     -- don't need to restart nvim to get the changes live.
     -- F*** it, we're doing it live!
     local util = require "treewalker.util"
-    return util.R('treewalker')
+    local initial_opts = require('treewalker').opts
+    local treewalker = util.R('treewalker')
+    treewalker.setup(initial_opts)
+    return treewalker
   else
     return require('treewalker')
   end
