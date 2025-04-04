@@ -17,6 +17,21 @@ local function assert_highlighted(srow, scol, erow, ecol, desc)
   )
 end
 
+describe("Highlights in a lua spec file: ", function()
+  load_fixture("/lua-spec.lua")
+
+  before_each(function()
+    highlight_stub = stub(operations, "highlight")
+  end)
+
+  it("highlights full block on move_in() (identified in gh #30)", function()
+    vim.fn.cursor(64, 3)
+    tw.move_in()
+    assert_highlighted(67, 5, 85, 8, "it block")
+  end)
+
+end)
+
 describe("Highlights in a regular lua file: ", function()
   load_fixture("/lua.lua")
 
@@ -105,6 +120,18 @@ describe("Highlights in a regular lua file: ", function()
     assert_highlighted(134, 5, 134, 18, "child = iter()")
   end)
 
+  it("highlights out reliably", function()
+    vim.fn.cursor(133, 5)
+    tw.move_out()
+    assert_highlighted(132, 3, 135, 5, "while child")
+  end)
+
+  it("highlights out reliably", function()
+    vim.fn.cursor(132, 3)
+    tw.move_out()
+    assert_highlighted(128, 1, 137, 3, "local f get_children")
+  end)
+
   it("doesn't highlight the whole file", function()
     vim.fn.cursor(3, 1)
     tw.move_up()
@@ -115,7 +142,7 @@ describe("Highlights in a regular lua file: ", function()
   it("highlights only the first item in a block", function()
     vim.fn.cursor(27, 3)
     tw.move_up()
-    assert_highlighted(22, 3, 26, 5, "child = iter()")
+    assert_highlighted(22, 3, 26, 5, "for _")
   end)
 
   it("given in a line with no parent, move_out highlights the whole node", function()

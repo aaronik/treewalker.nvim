@@ -18,19 +18,31 @@ local function current()
   return current_row, current_col
 end
 
+---Get the highest coincident; helper
+---@param node TSNode | nil
+local function coincident(node)
+  if node then
+    return nodes.get_highest_coincident(node)
+  else
+    return node -- aka nil
+  end
+end
+
 ---@param node TSNode
 ---@return TSNode | nil, integer | nil
 function M.out(node)
-  local target = strategies.get_first_ancestor_with_diff_scol(node)
-  if not target then return end
-  local row = nodes.get_srow(target)
-  return target, row
+  local candidate = strategies.get_first_ancestor_with_diff_scol(node)
+  candidate = coincident(candidate)
+  if not candidate then return end
+  local row = nodes.get_srow(candidate)
+  return candidate, row
 end
 
 ---@return TSNode | nil, integer | nil
 function M.inn()
   local current_row, current_col = current()
   local candidate, candidate_row = strategies.get_down_and_in(current_row, current_col, nil, nil)
+  candidate = coincident(candidate)
   return candidate, candidate_row
 end
 
@@ -39,6 +51,7 @@ function M.up()
   local current_row, current_col = current()
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
   candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row, candidate, candidate_row)
+  candidate = coincident(candidate)
   return candidate, candidate_row
 end
 
@@ -47,6 +60,7 @@ function M.down()
   local current_row, current_col = current()
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
   candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row, candidate, candidate_row)
+  candidate = coincident(candidate)
   return candidate, candidate_row
 end
 

@@ -62,7 +62,7 @@ describe("Treewalker", function()
   end)
 
   describe("lua spec file", function()
-    load_buf(fixtures_dir .. "/lua.lua", "lua")
+    -- load_buf(fixtures_dir .. "/lua.lua", "lua")
 
     it("one", function()
       vim.fn.cursor(1, 1) -- Reset cursor
