@@ -308,7 +308,7 @@ end
 function M.get_current()
   return assert(vim.treesitter.get_node({
     ignore_injections = false,
-  }))
+  }), "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
 end
 
 -- util.log some formatted version of the node's properties
