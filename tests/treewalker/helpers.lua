@@ -17,6 +17,9 @@ function M.assert_cursor_at(expected_row, expected_col, expected_line)
     expected_line = lines.get_line(expected_row)
   end
 
+  assert(actual_line)
+  assert(expected_line)
+
   -- It takes up too much room to show all the indentation
   actual_line = vim.fn.trim(actual_line)
   expected_line = vim.fn.trim(expected_line)

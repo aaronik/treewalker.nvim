@@ -306,9 +306,9 @@ end
 ---Get highest node at same row/col
 ---@return TSNode
 function M.get_current()
-  return assert(vim.treesitter.get_node({
-    ignore_injections = false,
-  }), "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
+  local current = vim.treesitter.get_node({ ignore_injections = false })
+  assert(current, "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
+  return current
 end
 
 -- util.log some formatted version of the node's properties
