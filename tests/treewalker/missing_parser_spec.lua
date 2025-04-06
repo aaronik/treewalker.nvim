@@ -16,7 +16,7 @@ local commands = {
 
 describe("For a file in which there is a missing parser", function()
   before_each(function()
-    load_fixture("/scheme.scm")
+    load_fixture("/random.not_real", true)
     vim.opt.fileencoding = 'utf-8'
   end)
 

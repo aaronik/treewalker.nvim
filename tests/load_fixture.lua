@@ -9,8 +9,9 @@ end
 -- Creates a buffer, and loads the contents of a specified filename into it.
 -- Sets it as the current buffer
 ---@param filename string
+---@param withhold_parsing true | nil
 ---@return integer
-local function load_fixture(filename)
+local function load_fixture(filename, withhold_parsing)
   local lang = get_file_extension(filename)
   local buf = vim.api.nvim_create_buf(false, true) -- Create a new buffer (listed) to enable interaction with it
   local lines = {}
@@ -28,6 +29,11 @@ local function load_fixture(filename)
 
   -- Ensure the filetype is correctly set
   vim.bo.filetype = lang
+
+  if not withhold_parsing then
+    -- Get the parser and parse - error will be thrown if we don't have it
+    vim.treesitter.get_parser(buf):parse(true)
+  end
 
   return buf
 end

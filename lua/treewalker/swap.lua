@@ -56,6 +56,8 @@ function M.swap_down()
   local target_scol = nodes.get_scol(target)
   local target_all_rows = nodes.whole_range(target_all)
 
+  print("current_augments, target_augments:", vim.inspect(current_augments), vim.inspect(target_augments))
+
   operations.swap_rows(current_all_rows, target_all_rows)
 
   -- Place cursor
@@ -116,19 +118,24 @@ function M.swap_right()
 
   if not current or not target then return end
 
+  -- set a mark to track where the target started, so we may later go there after the swap
+  local ns_id = vim.api.nvim_create_namespace("treewalker#swap_right")
+  local ext_id = vim.api.nvim_buf_set_extmark(0, ns_id, nodes.get_srow(target) - 1, nodes.get_scol(target) - 1, {})
+
   operations.swap_nodes(current, target)
 
-  -- Place cursor
-  local new_current = nodes.next_sib(current)
+  local ext = vim.api.nvim_buf_get_extmark_by_id(0, ns_id, ext_id, {})
+  local new_current = nodes.get_at_rowcol(ext[1] + 1, ext[2] - 1)
 
-  -- Now next will be the same node as current is,
-  -- but with an updated range
   if not new_current then return end
 
   vim.fn.cursor(
     nodes.get_srow(new_current),
     nodes.get_scol(new_current)
   )
+
+  -- cleanup
+  vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 end
 
 function M.swap_left()

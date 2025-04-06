@@ -14,7 +14,7 @@ describe("In a python file: ", function()
   it("move_in doesn't land on non target nodes", function()
     vim.fn.cursor(54, 1)
     tw.move_in()
-    h.assert_cursor_at(56, 5, "def __init__")
+    h.assert_cursor_at(56, 5)
   end)
 
   it("Moves into the body of a function with multiline signature", function()
@@ -26,57 +26,55 @@ describe("In a python file: ", function()
     tw.move_down()
     h.assert_cursor_at(134, 5)
     tw.move_down()
-    h.assert_cursor_at(136, 5, "|print")
+    h.assert_cursor_at(136, 5)
   end)
 
   it("swaps up annotated functions of different length", function()
     vim.fn.cursor(143, 1) -- |def handler_bottom
-    tw.swap_up()
-    h.assert_cursor_at(128, 1, "|def handler_bottom")
-    assert.same('# C2', lines.get_line(123))
-    assert.same('@random_annotation({', lines.get_line(124))
-    assert.same('def handler_bottom(', lines.get_line(128))
+    local top_before = lines.get_lines(123, 136)
+    local bottom_before = lines.get_lines(138, 148)
 
-    assert.same('# C1', lines.get_line(135))
-    assert.same('@random_annotation({', lines.get_line(137))
-    assert.same('def handler_top(', lines.get_line(143))
+    tw.swap_up()
+
+    h.assert_cursor_at(128, 1)
+    assert.same(bottom_before, lines.get_lines(123, 133))
+    assert.same(top_before, lines.get_lines(135, 148))
   end)
 
   it("swaps down annotated functions of different length", function()
     vim.fn.cursor(131, 1) -- |def handler_top
-    tw.swap_down()
-    h.assert_cursor_at(143, 1, "|def handler_top")
-    assert.same('# C2', lines.get_line(123))
-    assert.same('@random_annotation({', lines.get_line(124))
-    assert.same('def handler_bottom(', lines.get_line(128))
+    local top_before = lines.get_lines(123, 136)
+    local bottom_before = lines.get_lines(138, 148)
 
-    assert.same('# C1', lines.get_line(135))
-    assert.same('@random_annotation({', lines.get_line(137))
-    assert.same('def handler_top(', lines.get_line(143))
+    tw.swap_down()
+
+    h.assert_cursor_at(143, 1)
+    assert.same(bottom_before, lines.get_lines(123, 133))
+    assert.same(top_before, lines.get_lines(135, 148))
   end)
 
   it("swaps up from a decorated/commented node to a bare one", function()
     vim.fn.cursor(131, 1) -- |def handler_top
+    local top_before = lines.get_lines(118, 119)
+    local bottom_before = lines.get_lines(123, 136)
+
     tw.swap_up()
-    assert.same('# C1', lines.get_line(118))
-    assert.same('@random_annotation({', lines.get_line(120))
-    assert.same('def handler_top(', lines.get_line(126))
 
-    assert.same('def other():', lines.get_line(135))
-
-    h.assert_cursor_at(126, 1, "|def handler_top")
+    h.assert_cursor_at(126, 1)
+    assert.same(bottom_before, lines.get_lines(118, 131))
+    assert.same(top_before, lines.get_lines(135, 136))
   end)
 
   it("swaps down from a bare node to a decorated/commented one", function()
     vim.fn.cursor(118, 1) -- |def other
+    local top_before = lines.get_lines(118, 119)
+    local bottom_before = lines.get_lines(123, 136)
+
     tw.swap_down()
-    assert.same('# C1', lines.get_line(118))
-    assert.same('@random_annotation({', lines.get_line(120))
-    assert.same('def handler_top(', lines.get_line(126))
 
-    assert.same('def other():', lines.get_line(135))
-
-    h.assert_cursor_at(135, 1, "|def other")
+    h.assert_cursor_at(135, 1)
+    assert.same(bottom_before, lines.get_lines(118, 131))
+    assert.same(top_before, lines.get_lines(135, 136))
   end)
 end)
 

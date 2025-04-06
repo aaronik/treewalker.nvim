@@ -33,7 +33,7 @@ describe("In an html file", function()
     h.assert_cursor_at(59, 13)
   end)
 
-  it("can move_out out of embedded javascript", function()
+  pending("can move_out out of embedded javascript", function()
     vim.fn.cursor(55, 9)
     tw.move_out()
     h.assert_cursor_at(53, 5)

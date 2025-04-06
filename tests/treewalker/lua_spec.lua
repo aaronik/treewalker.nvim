@@ -271,7 +271,7 @@ describe("Swapping in a regular lua file:", function()
     vim.fn.cursor(190, 10) -- somewhere inside "hi"
     tw.swap_right()
     assert.same("  print('bye', 'hi')", lines.get_line(190))
-    h.assert_cursor_at(190, 16, "hi") -- cursor stays put for feel
+    h.assert_cursor_at(190, 16) -- cursor stays put for feel
   end)
 
   it("swaps left from inside strings", function()

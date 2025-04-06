@@ -4,6 +4,7 @@ local util = require "treewalker.util"
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
+  "source",             -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
   "attribute_item",     -- decorators (rust)
   "decorat",            -- decorators (py)
   "else",               -- else/elseif statements (lua)
@@ -21,6 +22,7 @@ local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
 
 local AUGMENT_TARGET_TYPE_MATCHERS = {
   "comment",
+  "source",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
   "attribute_item", -- decorators (rust)
   "decorat",        -- decorators (py)
 }
@@ -42,7 +44,10 @@ end
 ---@param node TSNode
 ---@return boolean
 local function is_root_node(node)
-  return node:parent() == nil
+  return
+      true
+      and node:parent() == nil
+      and node:range() == 0
 end
 
 ---@param node TSNode
@@ -306,9 +311,9 @@ end
 ---Get highest node at same row/col
 ---@return TSNode
 function M.get_current()
-  return assert(vim.treesitter.get_node({
-    ignore_injections = false,
-  }), "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
+  local current = vim.treesitter.get_node({ ignore_injections = false })
+  assert(current, "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
+  return current
 end
 
 -- util.log some formatted version of the node's properties

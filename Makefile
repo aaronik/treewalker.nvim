@@ -9,7 +9,7 @@ test: ## Run the whole test suite
 		--headless \
 		--noplugin \
 		-u ${MINIMAL_INIT} \
-		-c "PlenaryBustedDirectory ${TESTS_DIR} { timeout = 1000, sequential = true, keep_going = false, minimal_init = '${MINIMAL_INIT}' }"
+		-c "PlenaryBustedDirectory ${TESTS_DIR} { timeout = 1000, sequential = true, keep_going = true, minimal_init = '${MINIMAL_INIT}' }"
 
 test-watch: ## uses [nodemon](https://nodemon.io/) - watches for changes to lua files and reruns tests
 	@nodemon -e lua -x "$(MAKE) test || exit 1"
