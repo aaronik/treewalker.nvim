@@ -2,7 +2,7 @@ MINIMAL_INIT=tests/minimal_init.lua
 TESTS_DIR=tests
 NO_UTIL_SPEC=checks
 
-.PHONY: test test-watch check no-utils pass help
+.PHONY: test test-watch check no-utils pass help fmt check-fmt
 
 test: ## Run the whole test suite
 	@nvim \
@@ -24,7 +24,13 @@ no-utils: ## Make sure there are no errant util calls which write to data direct
 		-u ${MINIMAL_INIT} \
 		-c "PlenaryBustedDirectory ${NO_UTIL_SPEC} { minimal_init = '${MINIMAL_INIT}' }"
 
-pass: test no-utils check ## Run everything, if it's a 0 code, everything's good
+pass: test no-utils check check-fmt ## Run everything, if it's a 0 code, everything's good
+	
+fmt: ## Run stylua on the project (lua code style linter), including automatic changes
+	stylua ./
+
+check-fmt: ## Check stylua on the project, only emitting errors, not modifying project at all
+	stylua --check ./
 
 help: ## Displays this information.
 	@printf '%s\n' "Usage: make <command>"
