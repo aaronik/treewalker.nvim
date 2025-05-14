@@ -30,10 +30,18 @@ jobs:
         git clone https://github.com/nvim-treesitter/nvim-treesitter.git
         mv nvim-treesitter $HOME/.local/share/nvim/lazy/
 
+    - name: Install Stylua
+      run: |
+        sudo apt-get install npm -y --no-install-recommends
+        sudo npm install -g @johnnymorganz/stylua-bin
+
     - name: Run luacheck type check / linter
       run: |
         sudo apt-get install lua-check -y --no-install-recommends
         make check
+
+    - name: Check formatting
+      run: make check-fmt
 
     - name: Check for errant util calls
       run: make no-utils
