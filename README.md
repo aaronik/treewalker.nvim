@@ -32,12 +32,25 @@
 
 ## Movement
 
+### Code files
+
 The movement commands move you through your code in an intuitive way, skipping nodes that don't help you move quickly:
 
 * **`:Treewalker Up`** - Moves up to the previous neighbor node
 * **`:Treewalker Down`** - Moves down to the next neighbor node
 * **`:Treewalker Left`** - Moves to the first ancestor node that's on a different line from the current node
 * **`:Treewalker Right`** - Moves to the next node down that's indented further than the current node
+
+### Markdown
+
+For markdown files, Treewalker provides specialized heading navigation:
+
+* **`:Treewalker Up`** - Moves to the previous heading at the same level (e.g., from one h2 to the previous h2)
+* **`:Treewalker Down`** - Moves to the next heading at the same level (e.g., from one h2 to the next h2)
+* **`:Treewalker Left`** - Moves to the parent heading (e.g., from an h3 to its parent h2)
+* **`:Treewalker Right`** - Moves to the first child heading (e.g., from an h2 to the first h3 under it)
+
+This enables navigating markdown documents by their hierarchical structure.
 
 All movement commands add to the [`jumplist`](https://neovim.io/doc/user/motion.html#jumplist), so if you use a movement command
 and then feel lost, you always have `Ctrl-o` available to bring you back to where you last were.

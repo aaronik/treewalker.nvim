@@ -11,18 +11,66 @@ describe("Movement in a markdown file", function()
 
   h.ensure_has_parser("markdown")
 
-  -- This is hard, treesitter is showing all java code as a "block_continuation"
-  -- at the same level.
-  pending("respects embedded java", function()
-    vim.fn.cursor(120, 1)
-    tw.move_down()
-    h.assert_cursor_at(126, 1)
-  end)
-
-  pending("jumps from one header to another", function()
+  it("jumps from one header to another at same level", function()
     vim.fn.cursor(4, 1)
     tw.move_down()
     h.assert_cursor_at(19, 1, "## Text Formatting")
+    tw.move_up()
+    h.assert_cursor_at(4, 1, "## Header")
+  end)
+
+  pending("moves to inner headings with move_in", function()
+    vim.fn.cursor(4, 1)
+    tw.move_in()
+    h.assert_cursor_at(9, 1, "### Subheader")
+  end)
+
+  pending("moves to parent headings with move_out", function()
+    vim.fn.cursor(9, 1)
+    tw.move_out()
+    h.assert_cursor_at(4, 1, "## Header")
+  end)
+
+  pending("correctly handles h1 headings with underline style (===)", function()
+    vim.fn.cursor(1, 1)
+    tw.move_down()
+    h.assert_cursor_at(2, 1)
+    tw.move_down()
+    h.assert_cursor_at(4, 1)
+    tw.move_down()
+    h.assert_cursor_at(19, 1)
+  end)
+
+  pending("correctly handles h2 headings with underline style (---)", function()
+    vim.fn.cursor(19, 1)
+    tw.move_down()
+    h.assert_cursor_at(38, 1)
+  end)
+
+  pending("doesn't move from h1 upward", function()
+    vim.fn.cursor(1, 1)
+    tw.move_up()
+    h.assert_cursor_at(1, 1)
+  end)
+
+  pending("doesn't move outward from h1 headings", function()
+    vim.fn.cursor(1, 1)
+    tw.move_out()
+    h.assert_cursor_at(1, 1)
+  end)
+
+  pending("stops at document boundaries when moving down", function()
+    vim.cmd("normal G")   -- Go to end of document
+    vim.cmd("?^#")        -- Search backwards for a heading
+    local last_heading_pos = vim.fn.line(".")
+    tw.move_down()
+    h.assert_cursor_at(last_heading_pos, 1)
+  end)
+
+  pending("handles no inner headings gracefully", function()
+    vim.fn.cursor(14, 1)
+    tw.move_in()
+    h.assert_cursor_at(14, 1)
   end)
 end)
 
@@ -65,3 +113,4 @@ describe("Swapping in a markdown file:", function()
     assert.same(lines_after, lines_before)
   end)
 end)
+

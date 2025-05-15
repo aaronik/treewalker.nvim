@@ -1,4 +1,5 @@
 local assert = require('luassert')
+local stub = require 'luassert.stub'
 local lines  = require('treewalker.lines')
 
 local M      = {}
@@ -52,15 +53,23 @@ M.ensure_has_parser = function(lang)
   local ok_given = pcall(vim.treesitter.get_parser, 0, lang)
   local ok_gotten = pcall(vim.treesitter.get_parser)
 
-  local filetype = vim.bo[vim.api.nvim_get_current_buf()].filetype
+  local notify_once_stub = stub(vim, "notify_once")
+  assert.stub(notify_once_stub).was.called(0)
 
-  it(string.format("::The test suite has the [%s/%s] parser::", lang, filetype), function()
+  local ft = vim.bo.ft
+
+  it(string.format("::The test suite has the [%s/%s] parser::", lang, ft), function()
+    -- Three ways to check, this is the way implementation uses
+    if not vim.treesitter.language.get_lang(lang) then
+        error("Missing parser for: " .. lang)
+    end
+
     if not ok_given then
       error(string.format("Test suite is missing parser for filetype [%s]", lang))
     end
 
     if not ok_gotten then
-      error(string.format("Test suite is missing parser for filetype [%s]", filetype))
+      error(string.format("Test suite is missing parser for filetype [%s]", ft))
     end
   end)
 end
