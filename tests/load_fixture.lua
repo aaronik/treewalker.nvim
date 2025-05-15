@@ -1,4 +1,4 @@
-local fixtures_dir = vim.fn.expand 'tests/fixtures'
+local fixtures_dir = vim.fn.expand("tests/fixtures")
 
 ---@param filename string
 ---@return string

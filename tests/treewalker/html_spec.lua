@@ -1,6 +1,6 @@
-local load_fixture = require "tests.load_fixture"
-local tw = require 'treewalker'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local tw = require("treewalker")
+local h = require("tests.treewalker.helpers")
 
 describe("In an html file", function()
   before_each(function()
@@ -27,7 +27,8 @@ describe("In an html file", function()
     vim.fn.cursor(59, 13)
     tw.move_out()
     h.assert_cursor_at(58, 9)
-    tw.move_up() tw.move_up()
+    tw.move_up()
+    tw.move_up()
     h.assert_cursor_at(55, 9)
     tw.move_in()
     h.assert_cursor_at(59, 13)

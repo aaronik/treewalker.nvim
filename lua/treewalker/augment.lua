@@ -1,4 +1,4 @@
-local nodes = require "treewalker.nodes"
+local nodes = require("treewalker.nodes")
 
 local M = {}
 

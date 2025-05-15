@@ -1,8 +1,8 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local tw = require 'treewalker'
-local lines = require 'treewalker.lines'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local tw = require("treewalker")
+local lines = require("treewalker.lines")
+local h = require("tests.treewalker.helpers")
 
 describe("In a lua spec file: ", function()
   before_each(function()
@@ -23,15 +23,18 @@ describe("In a lua spec file: ", function()
   -- go to first load_buf
   local function go_to_load_buf()
     go_to_describe()
-    tw.move_in(); tw.move_in()
+    tw.move_in()
+    tw.move_in()
     h.assert_cursor_at(19, 5, "load_buf")
   end
 
   it("moves up and down at the same pace", function()
     go_to_load_buf()
-    tw.move_down(); tw.move_down()
+    tw.move_down()
+    tw.move_down()
     h.assert_cursor_at(41, 5, "it")
-    tw.move_up(); tw.move_up()
+    tw.move_up()
+    tw.move_up()
     h.assert_cursor_at(19, 5, "load_buf")
   end)
 
@@ -58,7 +61,7 @@ describe("In a lua spec file: ", function()
   it("follows right swaps across rows (like in these it args)", function()
     vim.fn.cursor(21, 13)
     tw.swap_right()
-    assert.same('    it(function()', lines.get_line(21))
+    assert.same("    it(function()", lines.get_line(21))
     assert.same('    end, "moves up and down at the same pace")', lines.get_line(39))
     h.assert_cursor_at(39, 10)
   end)
@@ -67,7 +70,7 @@ describe("In a lua spec file: ", function()
     vim.fn.cursor(50, 13) -- go|es
     tw.swap_left()
     assert.same('    it("goes into functions eagerly", function()', lines.get_line(41))
-    assert.same('    end)', lines.get_line(50))
+    assert.same("    end)", lines.get_line(50))
     h.assert_cursor_at(41, 8)
   end)
 
@@ -90,6 +93,4 @@ describe("In a lua spec file: ", function()
     assert.same('    it("one", function()', lines.get_line(77))
     h.assert_cursor_at(67, 5)
   end)
-
 end)
-

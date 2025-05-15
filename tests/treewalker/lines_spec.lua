@@ -3,7 +3,7 @@ local assert = require("luassert")
 local load_fixture = require("tests.load_fixture")
 
 describe("lines", function()
-  before_each(function ()
+  before_each(function()
     load_fixture("lua.lua")
   end)
 
@@ -47,7 +47,7 @@ describe("lines", function()
 
   describe(".insert_lines", function()
     it("inserts lines without deleting any", function()
-      lines.insert_lines(1, {"hiya"})
+      lines.insert_lines(1, { "hiya" })
       assert.same({ "local util = require('treewalker.util')", "hiya", "", "local M = {}" }, lines.get_lines(1, 4))
     end)
 

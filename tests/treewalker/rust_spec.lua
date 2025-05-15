@@ -1,8 +1,8 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local tw = require 'treewalker'
-local lines = require 'treewalker.lines'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local tw = require("treewalker")
+local lines = require("treewalker.lines")
+local h = require("tests.treewalker.helpers")
 
 describe("In a rust file:", function()
   before_each(function()
@@ -13,17 +13,17 @@ describe("In a rust file:", function()
 
   it("Swaps enum values right", function()
     vim.fn.cursor(49, 14)
-    assert.same('enum Color { Red, Green, Blue }', lines.get_line(49))
+    assert.same("enum Color { Red, Green, Blue }", lines.get_line(49))
     tw.swap_right()
-    assert.same('enum Color { Green, Red, Blue }', lines.get_line(49))
+    assert.same("enum Color { Green, Red, Blue }", lines.get_line(49))
     h.assert_cursor_at(49, 21, "Red")
   end)
 
   it("Swaps enum values left", function()
     vim.fn.cursor(49, 19)
-    assert.same('enum Color { Red, Green, Blue }', lines.get_line(49))
+    assert.same("enum Color { Red, Green, Blue }", lines.get_line(49))
     tw.swap_left()
-    assert.same('enum Color { Green, Red, Blue }', lines.get_line(49))
+    assert.same("enum Color { Green, Red, Blue }", lines.get_line(49))
     h.assert_cursor_at(49, 14, "Red")
   end)
 
@@ -44,5 +44,3 @@ describe("In a rust file:", function()
     assert.same('    println!(calculate_area(shape), "shape_area");', lines.get_line(46))
   end)
 end)
-
-

@@ -33,8 +33,8 @@
 -- a single node won't use this technique, as the following works better, preserving all types:
 -- node = strategies.whatever(node) or node
 
-local lines = require('treewalker.lines')
-local nodes = require('treewalker.nodes')
+local lines = require("treewalker.lines")
+local nodes = require("treewalker.nodes")
 
 local M = {}
 
@@ -52,12 +52,12 @@ function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
     local candidate_col = lines.get_start_col(candidate_line)
     local strow = candidate:range()
     if
-        nodes.is_jump_target(candidate)   -- only node types we consider jump targets
-        and candidate_line ~= ""          -- no empty lines
-        and candidate_col == scol         -- stay at current indent level
-        and candidate_row == strow + 1    -- top of block; no end's or else's etc.
+      nodes.is_jump_target(candidate) -- only node types we consider jump targets
+      and candidate_line ~= "" -- no empty lines
+      and candidate_col == scol -- stay at current indent level
+      and candidate_row == strow + 1 -- top of block; no end's or else's etc.
     then
-      break                               -- use most recent assignment below
+      break -- use most recent assignment below
     else
       candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(candidate_row, dir)
     end
@@ -80,11 +80,15 @@ function M.get_down_and_in(srow, scol, prev_candidate, prev_row)
   local last_row = vim.api.nvim_buf_line_count(0)
 
   -- Can't go down if we're at the bottom
-  if last_row == srow then return prev_candidate, prev_row end
+  if last_row == srow then
+    return prev_candidate, prev_row
+  end
 
   for candidate_row = srow + 1, last_row, 1 do
     local candidate_line = lines.get_line(candidate_row)
-    if not candidate_line then goto continue end
+    if not candidate_line then
+      goto continue
+    end
     local candidate_col = lines.get_start_col(candidate_line)
     local candidate = nodes.get_at_row(candidate_row)
     local is_empty = candidate_line == ""
@@ -111,7 +115,9 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_next_if_on_empty_line(srow, prev_candidate, prev_row)
   local start_line = lines.get_line(srow)
-  if start_line ~= "" then return prev_candidate, prev_row end
+  if start_line ~= "" then
+    return prev_candidate, prev_row
+  end
 
   ---@type string | nil
   local current_line = start_line
@@ -120,17 +126,17 @@ function M.get_next_if_on_empty_line(srow, prev_candidate, prev_row)
   local current_node = nodes.get_at_row(current_row)
 
   while
-    true
-    and current_line == ""
-    or current_node and not nodes.is_jump_target(current_node)
-    and current_row <= max_row
+    true and current_line == ""
+    or current_node and not nodes.is_jump_target(current_node) and current_row <= max_row
   do
     current_row = current_row + 1
     current_line = lines.get_line(current_row)
     current_node = nodes.get_at_row(current_row)
   end
 
-  if current_row > max_row then return prev_candidate, prev_row end
+  if current_row > max_row then
+    return prev_candidate, prev_row
+  end
 
   if current_node and current_row then
     return current_node, current_row
@@ -147,25 +153,24 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_prev_if_on_empty_line(srow, prev_candidate, prev_row)
   local start_line = lines.get_line(srow)
-  if start_line ~= "" then return prev_candidate, prev_row end
+  if start_line ~= "" then
+    return prev_candidate, prev_row
+  end
 
   ---@type string | nil
   local current_line = start_line
   local current_row = srow
   local current_node = nodes.get_at_row(current_row)
 
-  while
-    true
-    and current_line == ""
-    or current_node and not nodes.is_jump_target(current_node)
-    and current_row >= 0
-  do
+  while true and current_line == "" or current_node and not nodes.is_jump_target(current_node) and current_row >= 0 do
     current_row = current_row - 1
     current_line = lines.get_line(current_row)
     current_node = nodes.get_at_row(current_row)
   end
 
-  if current_row < 0 then return prev_candidate, prev_row end
+  if current_row < 0 then
+    return prev_candidate, prev_row
+  end
 
   if current_node and current_row then
     return current_node, current_row
@@ -180,11 +185,7 @@ end
 function M.get_first_ancestor_with_diff_scol(node)
   local iter_ancestor = node:parent()
   while iter_ancestor do
-    if
-        true
-        and nodes.is_jump_target(iter_ancestor)
-        and not nodes.have_same_scol(node, iter_ancestor)
-    then
+    if true and nodes.is_jump_target(iter_ancestor) and not nodes.have_same_scol(node, iter_ancestor) then
       return iter_ancestor
     end
 

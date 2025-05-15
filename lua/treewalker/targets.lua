@@ -1,6 +1,6 @@
-local lines = require "treewalker.lines"
-local nodes = require "treewalker.nodes"
-local strategies = require "treewalker.strategies"
+local lines = require("treewalker.lines")
+local nodes = require("treewalker.nodes")
+local strategies = require("treewalker.strategies")
 
 local M = {}
 
@@ -33,7 +33,9 @@ end
 function M.out(node)
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
   candidate = coincident(candidate)
-  if not candidate then return end
+  if not candidate then
+    return
+  end
   local row = nodes.get_srow(candidate)
   return candidate, row
 end

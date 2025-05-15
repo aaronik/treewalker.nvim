@@ -1,5 +1,5 @@
-local nodes = require 'treewalker.nodes'
-local lines = require 'treewalker.lines'
+local nodes = require("treewalker.nodes")
+local lines = require("treewalker.lines")
 
 local M = {}
 
@@ -30,7 +30,7 @@ end
 ---@param row integer
 function M.jump(node, row)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
-  vim.cmd("normal! ^")  -- Jump to start of line
+  vim.cmd("normal! ^") -- Jump to start of line
   if require("treewalker").opts.highlight then
     local range = nodes.range(node)
     local duration = require("treewalker").opts.highlight_duration
@@ -74,11 +74,11 @@ function M.swap_nodes(left, right)
   local edit1 = { range = range1, newText = table.concat(text2, "\n") }
   local edit2 = { range = range2, newText = table.concat(text1, "\n") }
   local bufnr = vim.api.nvim_get_current_buf()
-  local encoding = vim.api.nvim_get_option_value('fileencoding', {})
-  if not encoding or encoding == "" then encoding = "utf-8" end -- #23
+  local encoding = vim.api.nvim_get_option_value("fileencoding", {})
+  if not encoding or encoding == "" then
+    encoding = "utf-8"
+  end -- #23
   vim.lsp.util.apply_text_edits({ edit1, edit2 }, bufnr, encoding)
 end
 
 return M
-
-

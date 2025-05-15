@@ -1,6 +1,6 @@
-local load_fixture = require "tests.load_fixture"
-local tw = require 'treewalker'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local tw = require("treewalker")
+local h = require("tests.treewalker.helpers")
 
 describe("In a haskell file: ", function()
   before_each(function()
@@ -10,7 +10,7 @@ describe("In a haskell file: ", function()
   h.ensure_has_parser("haskell")
 
   -- Oh dang when did this break?
-  pending("moves around in a haskell file", function ()
+  pending("moves around in a haskell file", function()
     vim.fn.cursor(1, 1)
     tw.move_down()
     h.assert_cursor_at(2, 1)
@@ -28,5 +28,3 @@ describe("In a haskell file: ", function()
     h.assert_cursor_at(19, 1)
   end)
 end)
-
-

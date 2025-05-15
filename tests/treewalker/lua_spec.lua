@@ -1,9 +1,9 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local stub = require "luassert.stub"
-local tw = require 'treewalker'
-local lines = require 'treewalker.lines'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local stub = require("luassert.stub")
+local tw = require("treewalker")
+local lines = require("treewalker.lines")
+local h = require("tests.treewalker.helpers")
 
 describe("Movement in a regular lua file: ", function()
   before_each(function()
@@ -69,7 +69,7 @@ describe("Movement in a regular lua file: ", function()
 
   -- aka doesn't error
   it("is chill when down is invoked from empty last line", function()
-    h.feed_keys('G')
+    h.feed_keys("G")
     tw.move_down()
   end)
 
@@ -92,11 +92,10 @@ describe("Movement in a regular lua file: ", function()
   end)
 end)
 
-
 describe("Swapping in a regular lua file:", function()
   before_each(function()
     load_fixture("/lua.lua")
-    vim.o.fileencoding = 'utf-8'
+    vim.o.fileencoding = "utf-8"
   end)
 
   it("swap down bails early if user is on empty top level line", function()
@@ -141,7 +140,7 @@ describe("Swapping in a regular lua file:", function()
     assert.same({
       "local M = {}",
       "",
-      "local util = require('treewalker.util')"
+      "local util = require('treewalker.util')",
     }, lines.get_lines(1, 3))
     h.assert_cursor_at(3, 1)
   end)
@@ -183,14 +182,14 @@ describe("Swapping in a regular lua file:", function()
       "---Strictly sibling, no fancy business",
       "---@param node TSNode",
       "---@return TSNode | nil",
-      "local function get_prev_sibling(node)"
+      "local function get_prev_sibling(node)",
     }, lines.get_lines(34, 37))
     assert.same({
       "---Do the nodes have the same starting point",
       "---@param node1 TSNode",
       "---@param node2 TSNode",
       "---@return boolean",
-      "local function have_same_range(node1, node2)"
+      "local function have_same_range(node1, node2)",
     }, lines.get_lines(49, 53))
     h.assert_cursor_at(53, 1)
   end)
@@ -202,14 +201,14 @@ describe("Swapping in a regular lua file:", function()
       "---Strictly sibling, no fancy business",
       "---@param node TSNode",
       "---@return TSNode | nil",
-      "local function get_prev_sibling(node)"
+      "local function get_prev_sibling(node)",
     }, lines.get_lines(34, 37))
     assert.same({
       "---Do the nodes have the same starting point",
       "---@param node1 TSNode",
       "---@param node2 TSNode",
       "---@return boolean",
-      "local function have_same_range(node1, node2)"
+      "local function have_same_range(node1, node2)",
     }, lines.get_lines(49, 53))
     h.assert_cursor_at(37, 1)
   end)
@@ -247,8 +246,7 @@ describe("Swapping in a regular lua file:", function()
   end)
 
   it("swaps right diff number of lines", function()
-    assert.same("if true then", lines.get_line(185)
-    )
+    assert.same("if true then", lines.get_line(185))
     assert.same("return M", lines.get_line(193))
     vim.fn.cursor(185, 1)
     tw.swap_right()
@@ -287,7 +285,7 @@ describe("Swapping in a regular lua file:", function()
     local apply_text_edits_stub = stub(vim.lsp.util, "apply_text_edits")
 
     -- Prep the file encoding
-    local expected_encoding = 'utf-16'
+    local expected_encoding = "utf-16"
     vim.o.fileencoding = expected_encoding
 
     tw.swap_right()
@@ -307,8 +305,8 @@ describe("Swapping in a regular lua file:", function()
     local apply_text_edits_stub = stub(vim.lsp.util, "apply_text_edits")
 
     -- Prep the file encoding
-    local expected_encoding = 'utf-8'
-    vim.o.fileencoding = ''
+    local expected_encoding = "utf-8"
+    vim.o.fileencoding = ""
 
     tw.swap_right()
 
@@ -341,4 +339,3 @@ describe("Swapping in a regular lua file:", function()
     assert.same("  print('one' .. 'two' .. 'three')", lines.get_line(188))
   end)
 end)
-

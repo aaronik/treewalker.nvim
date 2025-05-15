@@ -1,8 +1,8 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local tw = require 'treewalker'
-local lines = require 'treewalker.lines'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local tw = require("treewalker")
+local lines = require("treewalker.lines")
+local h = require("tests.treewalker.helpers")
 
 describe("In a python file: ", function()
   before_each(function()
@@ -77,4 +77,3 @@ describe("In a python file: ", function()
     assert.same(top_before, lines.get_lines(135, 136))
   end)
 end)
-

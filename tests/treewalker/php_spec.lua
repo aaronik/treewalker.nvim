@@ -1,6 +1,6 @@
-local load_fixture = require "tests.load_fixture"
-local tw = require 'treewalker'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local tw = require("treewalker")
+local h = require("tests.treewalker.helpers")
 
 describe("In a php file", function()
   before_each(function()
@@ -16,6 +16,4 @@ describe("In a php file", function()
     tw.move_down()
     h.assert_cursor_at(19, 1)
   end)
-
 end)
-

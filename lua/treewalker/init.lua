@@ -1,6 +1,6 @@
-local movement = require('treewalker.movement')
-local swap = require('treewalker.swap')
-local options = require('treewalker.options')
+local movement = require("treewalker.movement")
+local swap = require("treewalker.swap")
+local options = require("treewalker.options")
 
 local Treewalker = {}
 
@@ -15,14 +15,16 @@ Treewalker.opts = {
 -- This does not need to be called for Treewalker to work. The defaults are preinitialized and aim to be sane.
 ---@param opts Opts | nil
 function Treewalker.setup(opts)
-  if opts == nil then return end -- nil is valid, in which case we stick to the defaults
+  if opts == nil then
+    return
+  end -- nil is valid, in which case we stick to the defaults
 
   local is_opts_valid, validation_errors = options.validate_opts(opts)
   if not is_opts_valid then
     return options.handle_opts_validation_errors(validation_errors)
   end
 
-  Treewalker.opts = vim.tbl_deep_extend('force', Treewalker.opts, opts)
+  Treewalker.opts = vim.tbl_deep_extend("force", Treewalker.opts, opts)
 end
 
 -- Makes sure the treesitter parser is available, otherwise makes a notification

@@ -3,13 +3,13 @@ local function tw()
     -- For development. Makes the plugin auto-reload so you
     -- don't need to restart nvim to get the changes live.
     -- F*** it, we're doing it live!
-    local util = require "treewalker.util"
-    local initial_opts = require('treewalker').opts
-    local treewalker = util.R('treewalker')
+    local util = require("treewalker.util")
+    local initial_opts = require("treewalker").opts
+    local treewalker = util.R("treewalker")
     treewalker.setup(initial_opts)
     return treewalker
   else
-    return require('treewalker')
+    return require("treewalker")
   end
 end
 
@@ -44,7 +44,7 @@ local subcommands = {
 
   SwapRight = function()
     tw().swap_right()
-  end
+  end,
 }
 
 local command_opts = {
@@ -53,7 +53,7 @@ local command_opts = {
     return vim.tbl_filter(function(cmd)
       return cmd:match("^" .. ArgLead)
     end, vim.tbl_keys(subcommands))
-  end
+  end,
 }
 
 local function treewalker(opts)

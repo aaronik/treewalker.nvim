@@ -40,7 +40,9 @@ M.log = function(...)
   -- Swallow further errors
   -- This is a utility for development, it should never cause issues
   -- during real use.
-  if not log_file then return end
+  if not log_file then
+    return
+  end
 
   -- Write each arg to disk
   for _, arg in ipairs(args) do
@@ -56,16 +58,16 @@ M.log = function(...)
 end
 
 M.guid = function()
-  local template = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-  return string.gsub(template, '[xy]', function(c)
-    local v = (c == 'x') and math.random(0, 0xf) or math.random(8, 0xb)
-    return string.format('%x', v)
+  local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+  return string.gsub(template, "[xy]", function(c)
+    local v = (c == "x") and math.random(0, 0xf) or math.random(8, 0xb)
+    return string.format("%x", v)
   end)
 end
 
 ---reverse an array table
 ---@param t table
-M.reverse = function (t)
+M.reverse = function(t)
   local reversed = {}
   for _, el in ipairs(t) do
     table.insert(reversed, 1, el)

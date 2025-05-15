@@ -1,7 +1,7 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require 'luassert'
-local stub = require 'luassert.stub'
-local tw = require 'treewalker'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local stub = require("luassert.stub")
+local tw = require("treewalker")
 
 local commands = {
   move_up = tw.move_up,
@@ -17,7 +17,7 @@ local commands = {
 describe("For a file in which there is a missing parser", function()
   before_each(function()
     load_fixture("/random.not_real", true)
-    vim.opt.fileencoding = 'utf-8'
+    vim.opt.fileencoding = "utf-8"
   end)
 
   for nam, command in pairs(commands) do

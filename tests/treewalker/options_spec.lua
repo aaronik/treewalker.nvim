@@ -1,6 +1,6 @@
-local assert = require 'luassert'
-local stub = require 'luassert.stub'
-local tw = require 'treewalker'
+local assert = require("luassert")
+local stub = require("luassert.stub")
+local tw = require("treewalker")
 
 describe("When given bad options", function()
   it("notifies the user of all wrong options", function()

@@ -1,17 +1,17 @@
-local lines = require "treewalker.lines"
-local util = require "treewalker.util"
+local lines = require("treewalker.lines")
+local util = require("treewalker.util")
 
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
-  "source",             -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
-  "attribute_item",     -- decorators (rust)
-  "decorat",            -- decorators (py)
-  "else",               -- else/elseif statements (lua)
-  "elif",               -- else/elseif statements (py)
-  "end_tag",            -- html closing tags
-  "block",              -- C# puts their blocks under their fn names like a psycho
-  "declaration_list",   -- C# class blocks
+  "source", -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
+  "attribute_item", -- decorators (rust)
+  "decorat", -- decorators (py)
+  "else", -- else/elseif statements (lua)
+  "elif", -- else/elseif statements (py)
+  "end_tag", -- html closing tags
+  "block", -- C# puts their blocks under their fn names like a psycho
+  "declaration_list", -- C# class blocks
   "compound_statement", -- C blocks when defined under their fn names like a psycho
 }
 
@@ -22,9 +22,9 @@ local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
 
 local AUGMENT_TARGET_TYPE_MATCHERS = {
   "comment",
-  "source",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
+  "source", -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
   "attribute_item", -- decorators (rust)
-  "decorat",        -- decorators (py)
+  "decorat", -- decorators (py)
 }
 
 local M = {}
@@ -44,35 +44,23 @@ end
 ---@param node TSNode
 ---@return boolean
 local function is_root_node(node)
-  return
-      true
-      and node:parent() == nil
-      and node:range() == 0
+  return true and node:parent() == nil and node:range() == 0
 end
 
 ---@param node TSNode
 ---@return boolean
 function M.is_jump_target(node)
-  return
-      true
-      and not is_matched_in(node, TARGET_BLACKLIST_TYPE_MATCHERS)
-      and not is_root_node(node)
+  return true and not is_matched_in(node, TARGET_BLACKLIST_TYPE_MATCHERS) and not is_root_node(node)
 end
 
 ---@param node TSNode
 ---@return boolean
 function M.is_highlight_target(node)
-  return
-      true
-      and not is_matched_in(node, HIGHLIGHT_BLACKLIST_TYPE_MATCHERS)
-      and not is_root_node(node)
+  return true and not is_matched_in(node, HIGHLIGHT_BLACKLIST_TYPE_MATCHERS) and not is_root_node(node)
 end
 
 function M.is_augment_target(node)
-  return
-      true
-      and is_matched_in(node, AUGMENT_TARGET_TYPE_MATCHERS)
-      and not is_root_node(node)
+  return true and is_matched_in(node, AUGMENT_TARGET_TYPE_MATCHERS) and not is_root_node(node)
 end
 
 ---Do the nodes have the same starting row
@@ -88,10 +76,7 @@ end
 ---@param node2 TSNode
 ---@return boolean
 function M.have_neighbor_srow(node1, node2)
-  return
-      false
-      or M.get_srow(node1) == M.get_srow(node2) + 1
-      or M.get_srow(node1) == M.get_srow(node2) - 1
+  return false or M.get_srow(node1) == M.get_srow(node2) + 1 or M.get_srow(node1) == M.get_srow(node2) - 1
 end
 
 ---Do the nodes have the same level of indentation
@@ -153,7 +138,9 @@ function M.get_from_neighboring_line(current_row, dir)
     candidate_row = current_row + 1
   end
   local max_row = vim.api.nvim_buf_line_count(0)
-  if candidate_row > max_row or candidate_row <= 0 then return end
+  if candidate_row > max_row or candidate_row <= 0 then
+    return
+  end
   local candidate = M.get_at_row(candidate_row)
   local candidate_line = lines.get_line(candidate_row)
 
@@ -172,14 +159,18 @@ end
 -- Convenience for give me back next sibling of a potentially nil node
 ---@param node TSNode | nil
 function M.next_sib(node)
-  if not node then return nil end
+  if not node then
+    return nil
+  end
   return node:next_named_sibling()
 end
 
 -- Convenience for give me back prev sibling of a potentially nil node
 ---@param node TSNode | nil
 function M.prev_sib(node)
-  if not node then return nil end
+  if not node then
+    return nil
+  end
   return node:prev_named_sibling()
 end
 
@@ -192,7 +183,9 @@ function M.get_highest_row_coincident(node)
   ---@type TSNode | nil
   local iter = node
   while iter and M.have_same_srow(node, iter) do
-    if M.is_highlight_target(iter) then node = iter end
+    if M.is_highlight_target(iter) then
+      node = iter
+    end
     iter = iter:parent()
   end
   return node
@@ -204,7 +197,9 @@ end
 function M.get_highest_coincident(node)
   local iter = node:parent()
   while iter and M.have_same_srow(node, iter) and M.have_same_scol(node, iter) do
-    if M.is_highlight_target(iter) then node = iter end
+    if M.is_highlight_target(iter) then
+      node = iter
+    end
     iter = iter:parent()
   end
   return node
@@ -227,8 +222,12 @@ function M.whole_range(nodes)
 
   for _, node in ipairs(nodes) do
     local srow, _, erow = node:range()
-    if srow < min_row then min_row = srow end
-    if erow > max_row then max_row = erow end
+    if srow < min_row then
+      min_row = srow
+    end
+    if erow > max_row then
+      max_row = erow
+    end
   end
 
   return { min_row, max_row }
@@ -242,7 +241,7 @@ function M.lsp_range(node)
   local start_line, start_col, end_line, end_col = node:range()
   return {
     start = { line = start_line, character = start_col },
-    ["end"] = { line = end_line, character = end_col }
+    ["end"] = { line = end_line, character = end_col },
   }
 end
 
@@ -300,7 +299,9 @@ end
 ---@return TSNode|nil
 function M.get_at_row(row)
   local line = lines.get_line(row)
-  if not line then return end
+  if not line then
+    return
+  end
   local col = lines.get_start_col(line)
   return vim.treesitter.get_node({
     pos = { row - 1, col - 1 },
@@ -336,7 +337,9 @@ end
 ---@param depth number | nil
 ---@return nil
 function M.log_parents(node, depth)
-  if not depth then depth = 4 end
+  if not depth then
+    depth = 4
+  end
   ---@type TSNode | nil
   local current_node = node
   local log_string = node:type()
@@ -345,7 +348,9 @@ function M.log_parents(node, depth)
   -- Loop to traverse up to 3 parent nodes
   while current_node and current_depth <= depth do
     current_node = current_node:parent()
-    if not current_node then break end
+    if not current_node then
+      break
+    end
     log_string = current_node:type() .. "->" .. log_string
     current_depth = current_depth + 1
   end

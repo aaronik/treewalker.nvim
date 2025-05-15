@@ -1,17 +1,23 @@
-local nodes = require "treewalker.nodes"
-local operations = require "treewalker.operations"
-local targets = require "treewalker.targets"
-local augment = require "treewalker.augment"
-local strategies = require "treewalker.strategies"
+local nodes = require("treewalker.nodes")
+local operations = require("treewalker.operations")
+local targets = require("treewalker.targets")
+local augment = require("treewalker.augment")
+local strategies = require("treewalker.strategies")
 
 local M = {}
 
 ---@return boolean
 local function is_on_target_node()
   local node = vim.treesitter.get_node()
-  if not node then return false end
-  if not nodes.is_jump_target(node) then return false end
-  if vim.fn.line('.') - 1 ~= node:range() then return false end
+  if not node then
+    return false
+  end
+  if not nodes.is_jump_target(node) then
+    return false
+  end
+  if vim.fn.line(".") - 1 ~= node:range() then
+    return false
+  end
   return true
 end
 
@@ -33,13 +39,19 @@ end
 
 function M.swap_down()
   vim.cmd("normal! ^")
-  if not is_on_target_node() then return end
-  if not is_supported_ft() then return end
+  if not is_on_target_node() then
+    return
+  end
+  if not is_supported_ft() then
+    return
+  end
 
   local current = nodes.get_current()
 
   local target = targets.down()
-  if not target then return end
+  if not target then
+    return
+  end
 
   current = nodes.get_highest_coincident(current)
 
@@ -69,12 +81,18 @@ end
 
 function M.swap_up()
   vim.cmd("normal! ^")
-  if not is_on_target_node() then return end
-  if not is_supported_ft() then return end
+  if not is_on_target_node() then
+    return
+  end
+  if not is_supported_ft() then
+    return
+  end
 
   local current = nodes.get_current()
   local target = targets.up()
-  if not target then return end
+  if not target then
+    return
+  end
 
   current = nodes.get_highest_coincident(current)
 
@@ -107,7 +125,9 @@ function M.swap_up()
 end
 
 function M.swap_right()
-  if not is_supported_ft() then return end
+  if not is_supported_ft() then
+    return
+  end
 
   -- Iteratively more desirable
   local current = nodes.get_current()
@@ -116,7 +136,9 @@ function M.swap_right()
 
   local target = nodes.next_sib(current)
 
-  if not current or not target then return end
+  if not current or not target then
+    return
+  end
 
   -- set a mark to track where the target started, so we may later go there after the swap
   local ns_id = vim.api.nvim_create_namespace("treewalker#swap_right")
@@ -127,19 +149,20 @@ function M.swap_right()
   local ext = vim.api.nvim_buf_get_extmark_by_id(0, ns_id, ext_id, {})
   local new_current = nodes.get_at_rowcol(ext[1] + 1, ext[2] - 1)
 
-  if not new_current then return end
+  if not new_current then
+    return
+  end
 
-  vim.fn.cursor(
-    nodes.get_srow(new_current),
-    nodes.get_scol(new_current)
-  )
+  vim.fn.cursor(nodes.get_srow(new_current), nodes.get_scol(new_current))
 
   -- cleanup
   vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 end
 
 function M.swap_left()
-  if not is_supported_ft() then return end
+  if not is_supported_ft() then
+    return
+  end
 
   -- Iteratively more desirable
   local current = nodes.get_current()
@@ -148,15 +171,14 @@ function M.swap_left()
 
   local target = nodes.prev_sib(current)
 
-  if not current or not target then return end
+  if not current or not target then
+    return
+  end
 
   operations.swap_nodes(target, current)
 
   -- Place cursor
-  vim.fn.cursor(
-    nodes.get_srow(target),
-    nodes.get_scol(target)
-  )
+  vim.fn.cursor(nodes.get_srow(target), nodes.get_scol(target))
 end
 
 return M

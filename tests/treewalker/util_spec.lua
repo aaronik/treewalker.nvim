@@ -1,5 +1,5 @@
 local util = require("treewalker.util")
-local stub = require('luassert.stub')
+local stub = require("luassert.stub")
 local assert = require("luassert")
 
 describe("util", function()
@@ -39,14 +39,14 @@ describe("util", function()
         end,
         close = function()
           num_closes = num_closes + 1
-        end
+        end,
       }
 
       io_open_stub.returns(log_file)
 
       util.log(1, 2, 3, 4, 5)
 
-      assert.same({ "1\n", "2\n", "3\n", "4\n", "5\n", }, writes)
+      assert.same({ "1\n", "2\n", "3\n", "4\n", "5\n" }, writes)
       assert.equal(1, num_flushes)
       assert.equal(1, num_closes)
     end)

@@ -2,10 +2,10 @@
 -- util functions like R and log. This isn't perfect, as it tries to exercise
 -- each command, but doesn't seek edge cases.
 
-local load_fixture = require "tests.load_fixture"
-local assert = require 'luassert'
-local stub = require 'luassert.stub'
-local util = require 'treewalker.util'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local stub = require("luassert.stub")
+local util = require("treewalker.util")
 
 local commands = {
   "Treewalker Up",
@@ -39,7 +39,7 @@ describe("Extent util calls:", function()
 
   before_each(function()
     load_fixture("/lua.lua")
-    vim.opt.fileencoding = 'utf-8'
+    vim.opt.fileencoding = "utf-8"
     vim.fn.cursor(31, 26)
   end)
 

@@ -1,8 +1,8 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local tw = require 'treewalker'
-local h = require 'tests.treewalker.helpers'
-local lines = require 'treewalker.lines'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local tw = require("treewalker")
+local h = require("tests.treewalker.helpers")
+local lines = require("treewalker.lines")
 
 describe("In a c file:", function()
   before_each(function()

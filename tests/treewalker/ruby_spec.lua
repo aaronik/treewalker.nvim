@@ -1,7 +1,7 @@
-local load_fixture = require "tests.load_fixture"
-local tw = require 'treewalker'
-local h = require 'tests.treewalker.helpers'
-local lines = require 'treewalker.lines'
+local load_fixture = require("tests.load_fixture")
+local tw = require("treewalker")
+local h = require("tests.treewalker.helpers")
+local lines = require("treewalker.lines")
 
 describe("In a ruby file: ", function()
   before_each(function()
@@ -40,4 +40,3 @@ describe("In a ruby file: ", function()
     h.assert_cursor_at(16, 3)
   end)
 end)
-

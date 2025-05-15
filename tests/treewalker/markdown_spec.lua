@@ -1,8 +1,8 @@
-local load_fixture = require "tests.load_fixture"
-local assert = require "luassert"
-local tw = require 'treewalker'
-local lines = require 'treewalker.lines'
-local h = require 'tests.treewalker.helpers'
+local load_fixture = require("tests.load_fixture")
+local assert = require("luassert")
+local tw = require("treewalker")
+local lines = require("treewalker.lines")
+local h = require("tests.treewalker.helpers")
 
 describe("Movement in a markdown file", function()
   before_each(function()
