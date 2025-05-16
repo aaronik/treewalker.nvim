@@ -1,6 +1,6 @@
 local util = require "treewalker.util"
 local navigation = require "treewalker.markdown.navigation"
-local line_utils = require "treewalker.markdown.line_utils"
+-- local line_utils = require "treewalker.markdown.line_utils"
 local levels = require "treewalker.markdown.levels"
 
 local M = {}
@@ -9,11 +9,9 @@ local M = {}
 ---@return TSNode | nil, integer | nil
 function M.get_next_same_level_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-  local norm_row = (line_utils.normalize_markdown_heading_row(row))
-  if type(norm_row) == "table" then norm_row = norm_row[1] end
-  if not levels.is_heading(norm_row) then return nil, nil end
-  local current_level = levels.heading_level(norm_row)
-  return navigation.find_heading(norm_row, {
+  if not levels.is_heading(row) then return nil, nil end
+  local current_level = levels.heading_level(row)
+  return navigation.find_heading(row, {
     dir = 1,
     matcher = function(_, check_row)
       return levels.is_heading(check_row) and levels.heading_level(check_row) == current_level
@@ -25,13 +23,11 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_prev_same_level_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-  local norm_row = (line_utils.normalize_markdown_heading_row(row))
-  if type(norm_row) == "table" then norm_row = norm_row[1] end
-  if not levels.is_heading(norm_row) then
+  if not levels.is_heading(row) then
     return M.get_nearest_prev_heading(row)
   end
-  local current_level = levels.heading_level(norm_row)
-  return navigation.find_heading(norm_row, {
+  local current_level = levels.heading_level(row)
+  return navigation.find_heading(row, {
     dir = -1,
     matcher = function(_, check_row)
       return levels.is_heading(check_row) and levels.heading_level(check_row) == current_level
@@ -67,13 +63,11 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_next_inner_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-  local norm_row = (line_utils.normalize_markdown_heading_row(row))
-  if type(norm_row) == "table" then norm_row = norm_row[1] end
-  if not levels.is_heading(norm_row) then return nil, nil end
-  local current_level = levels.heading_level(norm_row)
+  if not levels.is_heading(row) then return nil, nil end
+  local current_level = levels.heading_level(row)
   local target_level = current_level + 1
   local stopped_on_out = false
-  local node, found_row = navigation.find_heading(norm_row, {
+  local node, found_row = navigation.find_heading(row, {
     dir = 1,
     matcher = function(_, check_row)
       if not levels.is_heading(check_row) then return false end
@@ -94,11 +88,9 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_prev_outer_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-  local norm_row = (line_utils.normalize_markdown_heading_row(row))
-  if type(norm_row) == "table" then norm_row = norm_row[1] end
-  if not levels.is_heading(norm_row) or levels.heading_level(norm_row) <= 1 then return nil, nil end
-  local target_level = levels.heading_level(norm_row) - 1
-  return navigation.find_heading(norm_row, {
+  if not levels.is_heading(row) or levels.heading_level(row) <= 1 then return nil, nil end
+  local target_level = levels.heading_level(row) - 1
+  return navigation.find_heading(row, {
     dir = -1,
     matcher = function(_, check_row)
       return levels.is_heading(check_row) and levels.heading_level(check_row) == target_level

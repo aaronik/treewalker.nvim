@@ -20,13 +20,4 @@ function M.classify_line(row)
   return { type = "none" }
 end
 
---- Normalize a line to return the row and info of the canonical heading at or above.
----@param row integer
----@return integer|nil, table
-function M.normalize_markdown_heading_row(row)
-  local info = M.classify_line(row)
-  -- No underline handling here, only consider ATX headings
-  return row, info
-end
-
 return M
