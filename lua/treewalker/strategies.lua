@@ -52,12 +52,12 @@ function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
     local candidate_col = lines.get_start_col(candidate_line)
     local strow = candidate:range()
     if
-        nodes.is_jump_target(candidate)   -- only node types we consider jump targets
-        and candidate_line ~= ""          -- no empty lines
-        and candidate_col == scol         -- stay at current indent level
-        and candidate_row == strow + 1    -- top of block; no end's or else's etc.
+        nodes.is_jump_target(candidate) -- only node types we consider jump targets
+        and candidate_line ~= ""        -- no empty lines
+        and candidate_col == scol       -- stay at current indent level
+        and candidate_row == strow + 1  -- top of block; no end's or else's etc.
     then
-      break                               -- use most recent assignment below
+      break                             -- use most recent assignment below
     else
       candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(candidate_row, dir)
     end
@@ -217,19 +217,20 @@ end
 ---@return integer | nil
 function M.get_markdown_heading_level(row)
   if not row then return nil end
-  
+
   local ft = vim.bo.ft
-  if ft ~= "markdown" then return nil end
-  
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil end
+
   local line = lines.get_line(row)
   if not line then return nil end
-  
+
   -- Check if this is a heading line starting with #
   local level_match = line:match("^(#+)%s")
   if level_match then
     return #level_match
   end
-  
+
   -- Check if this is an h1 with ======= underline
   if row == 1 and line:match("^%S") then
     local next_line = lines.get_line(row + 1)
@@ -237,21 +238,21 @@ function M.get_markdown_heading_level(row)
       return 1
     end
   end
-  
+
   -- Check for other underlined headings (= for h1, - for h2)
   if row < vim.api.nvim_buf_line_count(0) and line:match("^%S") then
     local next_line = lines.get_line(row + 1)
-    if not next_line then 
-      return nil 
+    if not next_line then
+      return nil
     end
-    
+
     if next_line:match("^=+%s*$") then
       return 1
     elseif next_line:match("^-+%s*$") then
       return 2
     end
   end
-  
+
   return nil
 end
 
@@ -260,28 +261,29 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_next_same_level_heading(row)
   local ft = vim.bo.ft
-  if ft ~= "markdown" then return nil, nil end
-  
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
   -- Get heading level from current position
   local current_level = M.get_markdown_heading_level(row)
   if not current_level then return nil, nil end
-  
+
   local max_row = vim.api.nvim_buf_line_count(0)
-  
+
   -- Search for next heading of same level
   for next_row = row + 1, max_row do
     local line = lines.get_line(next_row)
     if not line then goto continue end
-    
+
     local level = M.get_markdown_heading_level(next_row)
     if level and level == current_level then
       local node = nodes.get_at_row(next_row)
       return node, next_row
     end
-    
+
     ::continue::
   end
-  
+
   return nil, nil
 end
 
@@ -290,26 +292,27 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_prev_same_level_heading(row)
   local ft = vim.bo.ft
-  if ft ~= "markdown" then return nil, nil end
-  
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
   -- Get heading level from current position
   local current_level = M.get_markdown_heading_level(row)
   if not current_level then return nil, nil end
-  
+
   -- Search for previous heading of same level
   for prev_row = row - 1, 1, -1 do
     local line = lines.get_line(prev_row)
     if not line then goto continue end
-    
+
     local level = M.get_markdown_heading_level(prev_row)
     if level and level == current_level then
       local node = nodes.get_at_row(prev_row)
       return node, prev_row
     end
-    
+
     ::continue::
   end
-  
+
   return nil, nil
 end
 
@@ -318,20 +321,21 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_next_inner_heading(row)
   local ft = vim.bo.ft
-  if ft ~= "markdown" then return nil, nil end
-  
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
   -- Get heading level from current position
   local current_level = M.get_markdown_heading_level(row)
   if not current_level then return nil, nil end
-  
+
   local target_level = current_level + 1
   local max_row = vim.api.nvim_buf_line_count(0)
-  
+
   -- Search for next heading one level deeper
   for next_row = row + 1, max_row do
     local line = lines.get_line(next_row)
     if not line then goto continue end
-    
+
     local level = M.get_markdown_heading_level(next_row)
     if level then
       if level == target_level then
@@ -343,10 +347,10 @@ function M.get_next_inner_heading(row)
         return nil, nil
       end
     end
-    
+
     ::continue::
   end
-  
+
   return nil, nil
 end
 
@@ -355,29 +359,31 @@ end
 ---@return TSNode | nil, integer | nil
 function M.get_prev_outer_heading(row)
   local ft = vim.bo.ft
-  if ft ~= "markdown" then return nil, nil end
-  
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
   -- Get heading level from current position
   local current_level = M.get_markdown_heading_level(row)
   if not current_level or current_level <= 1 then return nil, nil end
-  
+
   local target_level = current_level - 1
-  
+
   -- Search for previous heading one level higher
   for prev_row = row - 1, 1, -1 do
     local line = lines.get_line(prev_row)
     if not line then goto continue end
-    
+
     local level = M.get_markdown_heading_level(prev_row)
     if level and level == target_level then
       local node = nodes.get_at_row(prev_row)
       return node, prev_row
     end
-    
+
     ::continue::
   end
-  
+
   return nil, nil
 end
 
 return M
+

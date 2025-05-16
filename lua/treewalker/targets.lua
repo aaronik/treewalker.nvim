@@ -35,7 +35,7 @@ function M.out(node)
   local current_row = vim.fn.line(".")
   
   -- Special handling for markdown files
-  if ft == "markdown" then
+  if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
     if strategies.get_markdown_heading_level(current_row) then
       if current_row == 1 then
@@ -75,7 +75,7 @@ function M.inn()
   local current_row = vim.fn.line(".")
   
   -- Special handling for markdown files
-  if ft == "markdown" then
+  if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
@@ -100,7 +100,7 @@ function M.up()
   local current_row = vim.fn.line(".")
   
   -- Special handling for markdown files
-  if ft == "markdown" then
+  if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
@@ -131,7 +131,7 @@ function M.down()
   local current_row = vim.fn.line(".")
   
   -- Special handling for markdown files
-  if ft == "markdown" then
+  if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
