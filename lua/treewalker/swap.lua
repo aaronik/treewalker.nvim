@@ -133,13 +133,17 @@ function M.swap_down()
     if level then
       -- Find the next heading at the same level
       local target_node, target_row = strategies.get_next_same_level_heading(current_row)
-      if target_node and target_row then
-        -- Swap the sections
-        if swap_markdown_sections(current_row, target_row) then
-          -- Position cursor at the target position
-          vim.fn.cursor(target_row, 1)
-          return
-        end
+      -- If no target found, just return (don't proceed to default behavior)
+      -- This is important for H1 headings where there might be only one
+      if not target_node or not target_row then
+        return
+      end
+      
+      -- Swap the sections
+      if swap_markdown_sections(current_row, target_row) then
+        -- Position cursor at the target position
+        vim.fn.cursor(target_row, 1)
+        return
       end
       -- If we couldn't swap with next header of same level, try to default behavior
     end
@@ -189,13 +193,17 @@ function M.swap_up()
     if level then
       -- Find the previous heading at the same level
       local target_node, target_row = strategies.get_prev_same_level_heading(current_row)
-      if target_node and target_row then
-        -- Swap the sections
-        if swap_markdown_sections(current_row, target_row) then
-          -- Position cursor at the target position
-          vim.fn.cursor(target_row, 1)
-          return
-        end
+      -- If no target found, just return (don't proceed to default behavior)
+      -- This is important for H1 headings where there might be only one
+      if not target_node or not target_row then
+        return
+      end
+      
+      -- Swap the sections
+      if swap_markdown_sections(current_row, target_row) then
+        -- Position cursor at the target position
+        vim.fn.cursor(target_row, 1)
+        return
       end
       -- If we couldn't swap with previous header of same level, try default behavior
     end

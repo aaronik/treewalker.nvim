@@ -84,6 +84,18 @@ describe("Movement in a markdown file", function()
     tw.move_out()
     h.assert_cursor_at(19, 1, "## Text Formatting")
   end)
+
+  pending("Moves up to same level node the same way it moves down", function()
+    vim.fn.cursor(41, 1)
+    tw.move_up()
+    h.assert_cursor_at(9, 1)
+  end)
+
+  pending("Moves down to same level node the same way it moves up", function()
+    vim.fn.cursor(9, 1)
+    tw.move_down()
+    h.assert_cursor_at(41, 1)
+  end)
 end)
 
 describe("Swapping in a markdown file:", function()
@@ -201,27 +213,23 @@ describe("Swapping in a markdown file:", function()
     assert.same(original_content2, content3, "Buffer changed when swapping down from code block")
   end)
 
-  pending("doesn't break when swapping single h1", function()
-    -- Position on main title (h1)
+  it("doesn't break when swapping single h1", function()
     vim.fn.cursor(1, 1)
-
-    -- Get original content
-    local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-
-    -- Try to swap up (should do nothing as there's no h1 above)
+    local original_content = lines.get_lines(0, -1)
     tw.swap_up()
-    local content_after_up = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local content_after_up = lines.get_lines(0, -1)
     assert.same(original_content, content_after_up, "Buffer changed when swapping h1 up with no target")
 
-    -- Try to swap down (should do nothing as there's no h1 below)
+    -- Try to swap down (test requires there's no second h1)
+    vim.fn.cursor(1, 1)
     tw.swap_down()
-    local content_after_down = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local content_after_down = lines.get_lines(0, -1)
     assert.same(original_content, content_after_down, "Buffer changed when swapping h1 down with no target")
   end)
 
   pending("doesn't swap headers of different levels", function()
     -- Get original content
-    local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local original_content = lines.get_lines(0, -1)
 
     -- Position on h3 header and try to swap with h4 below
     vim.fn.cursor(41, 1) -- ### Another Header
@@ -232,7 +240,7 @@ describe("Swapping in a markdown file:", function()
     tw.swap_up()
 
     -- Get content after attempted swaps
-    local content_after = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local content_after = lines.get_lines(0, -1)
 
     -- Verify no change occurred
     assert.same(original_content, content_after, "Headers of different levels should not be swapped")
