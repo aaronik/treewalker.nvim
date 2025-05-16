@@ -1,4 +1,4 @@
-local range_ops = require "treewalker.markdown.range_ops"
+local ops = require "treewalker.operations"
 local validate = require "treewalker.markdown.validation"
 local swap_cursor_utils = require "treewalker.markdown.swap_cursor_utils"
 local markdown_selectors = require "treewalker.markdown.selectors"
@@ -6,7 +6,6 @@ local markdown_line_utils = require "treewalker.markdown.line_utils"
 
 local M = {}
 
----
 -- Public API: Swap two Markdown header sections (and their content)
 -- See get_validated_swap_context for safety rules.
 -- @param current_row integer: The row of the currently selected header
@@ -18,7 +17,7 @@ function M.swap_markdown_sections(current_row, target_row, direction)
   if not ctx then return false, nil end
   local current = ctx.current
   local target = ctx.target
-  local ok, _ = range_ops.swap_buffer_ranges(
+  local ok, _ = ops.swap_buffer_ranges(
     current.start, current.finish,
     target.start, target.finish
   )
@@ -29,7 +28,6 @@ function M.swap_markdown_sections(current_row, target_row, direction)
   return true, new_pos
 end
 
----
 -- Swap down in markdown file: handling finding neighbor heading and calling swap_markdown_sections
 function M.swap_down_markdown()
   local current_row = vim.fn.line(".")
@@ -53,7 +51,6 @@ function M.swap_down_markdown()
   end
 end
 
----
 -- Swap up in markdown file: handling finding neighbor heading and calling swap_markdown_sections
 function M.swap_up_markdown()
   local current_row = vim.fn.line(".")
@@ -76,8 +73,5 @@ function M.swap_up_markdown()
     end
   end
 end
-
--- Returns the new cursor position after a markdown swap.
--- (Moved to swap_cursor_utils.lua)
 
 return M

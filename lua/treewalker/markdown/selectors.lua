@@ -1,6 +1,5 @@
 local util = require "treewalker.util"
 local navigation = require "treewalker.markdown.navigation"
--- local line_utils = require "treewalker.markdown.line_utils"
 local levels = require "treewalker.markdown.levels"
 
 local M = {}
