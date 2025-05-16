@@ -1,6 +1,7 @@
 local lines = require "treewalker.lines"
 local nodes = require "treewalker.nodes"
 local strategies = require "treewalker.strategies"
+local util = require "treewalker.util"
 
 local M = {}
 
@@ -31,11 +32,10 @@ end
 ---@param node TSNode
 ---@return TSNode | nil, integer | nil
 function M.out(node)
-  local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
 
   -- Special handling for markdown files
-  if ft == "markdown" or ft == "md" then
+  if util.is_markdown_file() then
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
 
@@ -80,11 +80,10 @@ end
 
 ---@return TSNode | nil, integer | nil
 function M.inn()
-  local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
 
   -- Special handling for markdown files
-  if ft == "markdown" or ft == "md" then
+  if util.is_markdown_file() then
     -- Only proceed if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
@@ -111,11 +110,10 @@ end
 
 ---@return TSNode | nil, integer | nil
 function M.up()
-  local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
 
   -- Special handling for markdown files
-  if ft == "markdown" or ft == "md" then
+  if util.is_markdown_file() then
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
 
@@ -149,11 +147,10 @@ end
 
 ---@return TSNode | nil, integer | nil
 function M.down()
-  local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
 
   -- Special handling for markdown files
-  if ft == "markdown" or ft == "md" then
+  if util.is_markdown_file() then
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
 

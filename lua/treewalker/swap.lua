@@ -3,13 +3,13 @@ local operations = require "treewalker.operations"
 local targets = require "treewalker.targets"
 local augment = require "treewalker.augment"
 local strategies = require "treewalker.strategies"
+local util = require "treewalker.util"
 
 local M = {}
 
 ---@return boolean
 local function is_markdown_file()
-  local ft = vim.bo.ft
-  return ft == "markdown" or ft == "md"
+  return util.is_markdown_file()
 end
 
 ---@return boolean
@@ -18,7 +18,7 @@ local function is_on_target_node()
   if not node then return false end
 
   -- Special case for markdown - we need to check if we're on a heading
-  if is_markdown_file() then
+  if util.is_markdown_file() then
     local row = vim.fn.line(".")
     local level = strategies.get_markdown_heading_level(row)
     return level ~= nil
@@ -47,7 +47,7 @@ end
 ---@param row integer
 ---@return integer | nil, integer | nil, integer | nil
 local function get_markdown_section_bounds(row)
-  if not is_markdown_file() then return nil, nil, nil end
+  if not util.is_markdown_file() then return nil, nil, nil end
   -- Get the level of the current header
   local level = strategies.get_markdown_heading_level(row)
   if not level then return nil, nil, nil end
@@ -106,7 +106,7 @@ end
 ---@param direction "up" | "down"
 ---@return boolean, integer|nil
 local function swap_markdown_sections(current_row, target_row, direction)
-  if not is_markdown_file() then return false, nil end
+  if not util.is_markdown_file() then return false, nil end
   -- Get info for current section
   local current_level, current_start, current_end = get_markdown_section_bounds(current_row)
   if not current_level then return false, nil end
@@ -206,7 +206,7 @@ function M.swap_down()
   if not is_supported_ft() then return end
   if not is_on_target_node() then return end
   -- Special handling for markdown files
-  if is_markdown_file() then
+  if util.is_markdown_file() then
     local current_row = vim.fn.line(".")
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
@@ -270,7 +270,7 @@ function M.swap_up()
   if not is_supported_ft() then return end
   if not is_on_target_node() then return end
   -- Special handling for markdown files
-  if is_markdown_file() then
+  if util.is_markdown_file() then
     local current_row = vim.fn.line(".")
 
     -- Check if we're on a heading
@@ -338,7 +338,7 @@ end
 function M.swap_right()
   if not is_supported_ft() then return end
   -- Left/right swapping is disabled for markdown files
-  if is_markdown_file() then return end
+  if util.is_markdown_file() then return end
   -- Iteratively more desirable
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current
@@ -363,7 +363,7 @@ end
 function M.swap_left()
   if not is_supported_ft() then return end
   -- Left/right swapping is disabled for markdown files
-  if is_markdown_file() then return end
+  if util.is_markdown_file() then return end
   -- Iteratively more desirable
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current

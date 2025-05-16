@@ -1,40 +1,6 @@
--- All strategies follow a similar pattern of taking the information they need,
--- and also any previous return values from other strategies. This allows for
--- easy chaining, so instead of the old, we can use the new:
--- Old:
---
--- local candidate, candidate_row =
---     strategies.get_prev_if_on_empty_line(current_row)
---
--- if candidate and candidate_row then
---   return candidate, candidate_row
--- end
---
--- candidate, candidate_row =
---   strategies.get_neighbor_at_same_col("up", current_row, current_col)
---
--- if candidate and candidate_row then
---   return candidate, candidate_row
--- end
---
---
--- New:
---
--- local candidate, candidate_row =
---    local candidate, row
---    candidate, row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
---    candidate, row = strategies.get_prev_if_on_empty_line(current_row, candidate, row)
---    return candidate, row
---
--- Notice how the order is switched, so least desirable candidates come first,
--- and most desirable last.
---
--- Also note this is only for multiple return strategies, all strategies that return only
--- a single node won't use this technique, as the following works better, preserving all types:
--- node = strategies.whatever(node) or node
-
 local lines = require('treewalker.lines')
 local nodes = require('treewalker.nodes')
+local util = require('treewalker.util')
 
 local M = {}
 
@@ -218,9 +184,7 @@ end
 function M.get_markdown_heading_level(row)
   if not row then return nil, nil end
 
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   local line = lines.get_line(row)
   if not line then return nil, nil end
@@ -255,9 +219,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_next_same_level_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Get heading level from current position
   local current_level, is_underline = M.get_markdown_heading_level(row)
@@ -297,9 +259,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_prev_same_level_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Get heading level from current position
   local current_level, is_underline = M.get_markdown_heading_level(row)
@@ -350,9 +310,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_nearest_prev_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Search for any previous heading
   for prev_row = row - 1, 1, -1 do
@@ -378,9 +336,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_nearest_next_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Search for any next heading
   local max_row = vim.api.nvim_buf_line_count(0)
@@ -407,9 +363,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_next_inner_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Get heading level from current position
   local current_level, is_underline = M.get_markdown_heading_level(row)
@@ -455,9 +409,7 @@ end
 ---@param row integer
 ---@return TSNode | nil, integer | nil
 function M.get_prev_outer_heading(row)
-  local ft = vim.bo.ft
-  -- Check for both "markdown" and "md" as valid filetypes
-  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+  if not util.is_markdown_file() then return nil, nil end
 
   -- Get heading level from current position
   local current_level, is_underline = M.get_markdown_heading_level(row)
