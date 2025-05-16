@@ -16,14 +16,14 @@ end
 local function is_on_target_node()
   local node = vim.treesitter.get_node()
   if not node then return false end
-  
+
   -- Special case for markdown - we need to check if we're on a heading
   if is_markdown_file() then
     local row = vim.fn.line(".")
     local level = strategies.get_markdown_heading_level(row)
     return level ~= nil
   end
-  
+
   -- For other languages, use the standard Treesitter-based approach
   if not nodes.is_jump_target(node) then return false end
   if vim.fn.line('.') - 1 ~= node:range() then return false end
@@ -279,3 +279,4 @@ function M.swap_left()
 end
 
 return M
+

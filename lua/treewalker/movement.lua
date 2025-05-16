@@ -50,7 +50,7 @@ function M.move_down()
   if not node then
     return
   end
-  
+
   local target, row = targets.down()
   if not target or not row then return end
 

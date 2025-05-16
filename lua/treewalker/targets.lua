@@ -33,28 +33,28 @@ end
 function M.out(node)
   local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
-  
+
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
-    
+
     -- If not on a heading, find the nearest previous heading
     if not level then
       local target_node, target_row = strategies.get_nearest_prev_heading(current_row)
       if target_node and target_row then
         return target_node, target_row
       end
-    -- Only proceed if we're on a heading with level > 1
+      -- Only proceed if we're on a heading with level > 1
     elseif level then
       if current_row == 1 then
         -- We're already at the top heading (h1), so nothing to do
         return nil, nil
       end
-      
+
       -- For any heading (h2+), try to go to the next heading level up
       local target_node, target_row = strategies.get_prev_outer_heading(current_row)
-      
+
       if target_node and target_row then
         return target_node, target_row
       elseif level > 1 then
@@ -69,7 +69,7 @@ function M.out(node)
       end
     end
   end
-  
+
   -- Default behavior for other file types
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
   candidate = coincident(candidate)
@@ -82,7 +82,7 @@ end
 function M.inn()
   local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
-  
+
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
@@ -98,10 +98,10 @@ function M.inn()
       end
     end
   end
-  
+
   -- Default behavior for other file types
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_down_and_in(current_row, current_col, nil, nil)
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_down_and_in(current_row_, current_col, nil, nil)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end
@@ -110,12 +110,12 @@ end
 function M.up()
   local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
-  
+
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
-    
+
     -- If not on a heading, find the nearest previous heading
     if not level then
       local target_node, target_row = strategies.get_nearest_prev_heading(current_row)
@@ -127,7 +127,7 @@ function M.up()
       if current_row == 1 then
         return nil, nil
       end
-      
+
       -- For heading, try to go to the previous heading at the same level
       local target_node, target_row = strategies.get_prev_same_level_heading(current_row)
       if target_node and target_row then
@@ -135,11 +135,11 @@ function M.up()
       end
     end
   end
-  
+
   -- Default behavior for other file types
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
-  candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row, candidate, candidate_row)
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row_, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row_, candidate, candidate_row)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end
@@ -148,7 +148,7 @@ end
 function M.down()
   local ft = vim.bo.ft
   local current_row = vim.fn.line(".")
-  
+
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
     -- Only proceed if we're on a heading
@@ -157,22 +157,22 @@ function M.down()
       -- Special case for h1 with underline style - skip the underline
       local current_line = lines.get_line(current_row)
       local next_line = lines.get_line(current_row + 1)
-      
+
       -- For the test case specifically handling h1 underlines (=====), allow that specific test to pass
       if current_row == 1 and current_line == "# Example Markdown File" and
-         next_line and next_line:match("^=+%s*$") then
+          next_line and next_line:match("^=+%s*$") then
         return nodes.get_at_row(current_row + 1), current_row + 1
       end
-      
+
       -- For actual navigation cases, if on a heading with underline, skip the underline
-      if current_row > 0 and next_line and 
-         (next_line:match("^=+%s*$") or next_line:match("^-+%s*$")) then
+      if current_row > 0 and next_line and
+          (next_line:match("^=+%s*$") or next_line:match("^-+%s*$")) then
         local target_node, target_row = strategies.get_next_same_level_heading(current_row + 1)
         if target_node and target_row then
           return target_node, target_row
         end
       end
-      
+
       -- For heading, try to go to the next heading at the same level
       local target_node, target_row = strategies.get_next_same_level_heading(current_row)
       if target_node and target_row then
@@ -183,13 +183,14 @@ function M.down()
       end
     end
   end
-  
+
   -- Default behavior for other file types
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
-  candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row, candidate, candidate_row)
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row_, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row_, candidate, candidate_row)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end
 
 return M
+
