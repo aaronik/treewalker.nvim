@@ -1,6 +1,8 @@
 local range_ops = require "treewalker.markdown.range_ops"
 local validate = require "treewalker.markdown.validation"
 local swap_cursor_utils = require "treewalker.markdown.swap_cursor_utils"
+local markdown_selectors = require "treewalker.markdown.selectors"
+local markdown_line_utils = require "treewalker.markdown.line_utils"
 
 local M = {}
 
@@ -25,6 +27,54 @@ function M.swap_markdown_sections(current_row, target_row, direction)
   end
   local new_pos = swap_cursor_utils.adjust_cursor_after_swap(current, target, direction)
   return true, new_pos
+end
+
+---
+-- Swap down in markdown file: handling finding neighbor heading and calling swap_markdown_sections
+function M.swap_down_markdown()
+  local current_row = vim.fn.line(".")
+  local info = markdown_line_utils.classify_line(current_row)
+  if info.type == "heading" then
+    local target_node, target_row = markdown_selectors.get_next_same_level_heading(current_row)
+    if not target_node or not target_row then
+      return
+    end
+    local success, new_pos = M.swap_markdown_sections(current_row, target_row, "down")
+    if success then
+      if new_pos then
+        vim.fn.cursor(new_pos, 1)
+      else
+        vim.fn.cursor(target_row, 1)
+      end
+      return
+    else
+      return
+    end
+  end
+end
+
+---
+-- Swap up in markdown file: handling finding neighbor heading and calling swap_markdown_sections
+function M.swap_up_markdown()
+  local current_row = vim.fn.line(".")
+  local info = markdown_line_utils.classify_line(current_row)
+  if info.type == "heading" then
+    local target_node, target_row = markdown_selectors.get_prev_same_level_heading(current_row)
+    if not target_node or not target_row then
+      return
+    end
+    local success, new_pos = M.swap_markdown_sections(current_row, target_row, "up")
+    if success then
+      if new_pos then
+        vim.fn.cursor(new_pos, 1)
+      else
+        vim.fn.cursor(target_row, 1)
+      end
+      return
+    else
+      return
+    end
+  end
 end
 
 -- Returns the new cursor position after a markdown swap.
