@@ -306,6 +306,9 @@ function M.get_prev_same_level_heading(row)
   if not current_level then
     return M.get_nearest_prev_heading(row)
   end
+  
+  -- Debug logging to help diagnose test issues
+  -- print(string.format("Looking for previous heading at level %d from row %d", current_level, row))
 
   -- Search for previous heading of same level
   for prev_row = row - 1, 1, -1 do
@@ -313,9 +316,18 @@ function M.get_prev_same_level_heading(row)
     if not line then goto continue end
 
     local level = M.get_markdown_heading_level(prev_row)
-    if level and level == current_level then
-      local node = nodes.get_at_row(prev_row)
-      return node, prev_row
+    if level then
+      -- Debug logging to help diagnose test issues
+      -- print(string.format("Found heading at level %d at row %d", level, prev_row))
+      
+      if level == current_level then
+        local node = nodes.get_at_row(prev_row)
+        return node, prev_row
+      elseif level < current_level then
+        -- Found a heading of higher level (smaller number), so stop searching
+        -- We only want to find headings at the same level
+        break
+      end
     end
 
     ::continue::
