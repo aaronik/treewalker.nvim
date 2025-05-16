@@ -96,6 +96,9 @@ function M.inn()
         -- If no inner heading found, stay at current position
         return nodes.get_at_row(current_row), current_row
       end
+    else
+      -- If not on a heading, we should stay at the current position and not move
+      return nodes.get_at_row(current_row), current_row
     end
   end
 
@@ -175,6 +178,12 @@ function M.down()
       else
         -- If no next heading at same level, stay at current heading
         return nodes.get_at_row(current_row), current_row
+      end
+    else
+      -- If not on a heading, find the nearest next heading
+      local target_node, target_row = strategies.get_nearest_next_heading(current_row)
+      if target_node and target_row then
+        return target_node, target_row
       end
     end
   end

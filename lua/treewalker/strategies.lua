@@ -374,6 +374,35 @@ function M.get_nearest_prev_heading(row)
   return nil, nil
 end
 
+-- For markdown - finds the nearest heading below the current row
+---@param row integer
+---@return TSNode | nil, integer | nil
+function M.get_nearest_next_heading(row)
+  local ft = vim.bo.ft
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
+  -- Search for any next heading
+  local max_row = vim.api.nvim_buf_line_count(0)
+  for next_row = row + 1, max_row do
+    local line = lines.get_line(next_row)
+    if not line then goto continue end
+
+    local level, is_under = M.get_markdown_heading_level(next_row)
+    -- Skip underlines
+    if is_under then goto continue end
+
+    if level then
+      local node = nodes.get_at_row(next_row)
+      return node, next_row
+    end
+
+    ::continue::
+  end
+
+  return nil, nil
+end
+
 -- For markdown heading navigation - get inner heading (one level deeper)
 ---@param row integer
 ---@return TSNode | nil, integer | nil
