@@ -67,7 +67,7 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(110, 1)
   end)
 
-  pending("handles no inner headings gracefully", function()
+  it("handles no inner headings gracefully", function()
     vim.fn.cursor(14, 1)
     tw.move_in()
     h.assert_cursor_at(14, 1)

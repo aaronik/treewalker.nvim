@@ -83,6 +83,9 @@ function M.inn()
       local target_node, target_row = strategies.get_next_inner_heading(current_row)
       if target_node and target_row then
         return target_node, target_row
+      else
+        -- If no inner heading found, stay at current position
+        return nodes.get_at_row(current_row), current_row
       end
     end
   end
