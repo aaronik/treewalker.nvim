@@ -107,47 +107,39 @@ describe("Swapping in a markdown file:", function()
 
   it("swaps only work when on headers", function()
     -- Test from various non-header positions
-    local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    local original_content = lines.get_lines(0, -1)
 
     -- Test from paragraph text
     vim.fn.cursor(7, 1)
     tw.swap_up()
-    local content1 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content1, "Buffer changed when swapping up from paragraph")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     tw.swap_down()
-    local content2 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content2, "Buffer changed when swapping down from paragraph")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     -- Test from list item
     vim.fn.cursor(22, 1)
     tw.swap_up()
-    local content3 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content3, "Buffer changed when swapping up from list item")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     tw.swap_down()
-    local content4 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content4, "Buffer changed when swapping down from list item")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     -- Test from code block
     vim.fn.cursor(31, 1)
     tw.swap_up()
-    local content5 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content5, "Buffer changed when swapping up from code block")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     tw.swap_down()
-    local content6 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content6, "Buffer changed when swapping down from code block")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     -- Test from inline code
     vim.fn.cursor(36, 1)
     tw.swap_up()
-    local content7 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content7, "Buffer changed when swapping up from inline code")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     tw.swap_down()
-    local content8 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content8, "Buffer changed when swapping down from inline code")
+    assert.same(original_content, lines.get_lines(0, -1))
   end)
 
   it("swaps h2 headers down with their content", function()
@@ -169,80 +161,60 @@ describe("Swapping in a markdown file:", function()
   end)
 
   it("left and right swap are disabled", function()
-    -- Position on a header
-    vim.fn.cursor(4, 1)
+    -- Lines to test cursor positions on
+    local test_lines = { 4, 5, 10, 20, 30, 40, 50 }
 
-    -- Get original content
-    local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    for _, line_num in ipairs(test_lines) do
+      vim.fn.cursor(line_num, 1)
+      local original_content = lines.get_lines(0, -1)
 
-    -- Try to use left swap (should be disabled for markdown)
-    tw.swap_left()
-    local content_after_left = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content_after_left, "Buffer changed when using left swap on markdown")
+      tw.swap_left()
+    assert.same(original_content, lines.get_lines(0, -1))
 
-    -- Try to use right swap (should be disabled for markdown)
-    tw.swap_right()
-    local content_after_right = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content_after_right, "Buffer changed when using right swap on markdown")
+      tw.swap_right()
+    assert.same(original_content, lines.get_lines(0, -1))
+    end
   end)
 
   it("doesn't swap when not on header", function()
-    -- Position on paragraph (non-header)
     vim.fn.cursor(7, 1)
+    local original_content = lines.get_lines(0, -1)
 
-    -- Get original content
-    local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-
-    -- Try to swap up from non-header position
     tw.swap_up()
-    local content1 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content1, "Buffer changed when swapping up from non-header")
+    assert.same(original_content, lines.get_lines(0, -1))
 
-    -- Try to swap down from non-header position
     tw.swap_down()
-    local content2 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content, content2, "Buffer changed when swapping down from non-header")
+    assert.same(original_content, lines.get_lines(0, -1))
 
-    -- Position on code block (another non-header)
     vim.fn.cursor(30, 1)
-    local original_content2 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+    assert.same(original_content, lines.get_lines(0, -1))
 
-    -- Try to swap from code block
     tw.swap_down()
-    local content3 = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-    assert.same(original_content2, content3, "Buffer changed when swapping down from code block")
+    assert.same(original_content, lines.get_lines(0, -1))
   end)
 
   it("doesn't break when swapping single h1", function()
     vim.fn.cursor(1, 1)
     local original_content = lines.get_lines(0, -1)
     tw.swap_up()
-    local content_after_up = lines.get_lines(0, -1)
-    assert.same(original_content, content_after_up, "Buffer changed when swapping h1 up with no target")
+    assert.same(original_content, lines.get_lines(0, -1))
 
     -- Try to swap down (test requires there's no second h1)
     vim.fn.cursor(1, 1)
     tw.swap_down()
-    local content_after_down = lines.get_lines(0, -1)
-    assert.same(original_content, content_after_down, "Buffer changed when swapping h1 down with no target")
+    assert.same(original_content, lines.get_lines(0, -1))
   end)
 
   pending("doesn't swap headers of different levels", function()
-    -- Get original content
     local original_content = lines.get_lines(0, -1)
+    vim.fn.cursor(41, 1)
 
-    -- Position on h3 header and try to swap with h4 below
-    vim.fn.cursor(41, 1) -- ### Another Header
-    tw.swap_down()
-
-    -- Position on h4 header and try to swap with h3 above
-    vim.fn.cursor(43, 1) -- #### Yet Another One
     tw.swap_up()
+    assert.same(original_content, lines.get_lines(0, -1))
+    h.assert_cursor_at(41, 1)
 
-    -- Get content after attempted swaps
-    local content_after = lines.get_lines(0, -1)
-
-    -- Verify no change occurred
-    assert.same(original_content, content_after, "Headers of different levels should not be swapped")
+    tw.swap_up()
+    assert.same(original_content, lines.get_lines(0, -1))
+    h.assert_cursor_at(41, 1)
   end)
 end)
