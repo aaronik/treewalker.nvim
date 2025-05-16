@@ -232,7 +232,7 @@ describe("Swapping in a markdown file:", function()
     h.assert_cursor_at(41, 1)
   end)
 
-  pending("doesn't swap headers outside of their parent blocks", function()
+  it("doesn't swap headers outside of their parent blocks", function()
     local original_content = lines.get_lines(0, -1)
     vim.fn.cursor(14, 1)
 

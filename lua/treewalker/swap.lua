@@ -69,6 +69,38 @@ local function get_markdown_section_bounds(row)
   return level, start_row, end_row
 end
 
+local function find_parent_header(row, level)
+  for r = row - 1, 1, -1 do
+    local l, is_underline = strategies.get_markdown_heading_level(r)
+    if l and not is_underline and l < level then
+      return r, l
+    end
+  end
+  return nil, nil
+end
+
+local function get_parent_section_bounds(row, level)
+  local parent_row, parent_level = find_parent_header(row, level)
+  if parent_row and parent_level then
+    return get_markdown_section_bounds(parent_row)
+  end
+  return nil, 1, vim.api.nvim_buf_line_count(0)
+end
+
+local function list_sibling_headers_of_level_in_bounds(level, parent_row, start_row, end_row)
+  local result = {}
+  for r = start_row, end_row do
+    local l = strategies.get_markdown_heading_level(r)
+    if l == level then
+      local this_p, _ = find_parent_header(r, l)
+      if this_p == parent_row then
+        table.insert(result, r)
+      end
+    end
+  end
+  return result
+end
+
 ---@param current_row integer
 ---@param target_row integer
 ---@param direction "up" | "down"
@@ -85,62 +117,69 @@ local function swap_markdown_sections(current_row, target_row, direction)
   if current_level ~= target_level then
     return false, nil
   end
-
-  -- Only allow swapping headers of the same level that are in the same section
-  -- Find the parent heading for both headers
-  local current_parent_row = nil
-  local target_parent_row = nil
-
-  -- Find parent heading for current header
-  for row = current_row - 1, 1, -1 do
-    local level, is_underline = strategies.get_markdown_heading_level(row)
-    if level and not is_underline and level < current_level then
-      current_parent_row = row
-      break
-    end
-  end
-
-  -- Find parent heading for target header
-  for row = target_row - 1, 1, -1 do
-    local level, is_underline = strategies.get_markdown_heading_level(row)
-    if level and not is_underline and level < target_level then
-      target_parent_row = row
-      break
-    end
-  end
-
-  -- If they have different parent headers, don't swap
+  local current_parent_row = find_parent_header(current_row, current_level)
+  local target_parent_row = find_parent_header(target_row, target_level)
+  local _, current_parent_start, current_parent_end = get_parent_section_bounds(current_row, current_level)
+  local _, target_parent_start, target_parent_end = get_parent_section_bounds(target_row, target_level)
   if current_parent_row ~= target_parent_row then
     return false, nil
   end
-
-  -- Create a namespace for the extmarks to track positions during swap
-  local ns_id = vim.api.nvim_create_namespace("treewalker#swap_markdown")
-
-  -- Get the text of both sections
+  if current_parent_start ~= target_parent_start or current_parent_end ~= target_parent_end then
+    return false, nil
+  end
+  if current_parent_row ~= nil then
+    if not (
+          current_start >= current_parent_start and current_end <= current_parent_end and
+          target_start >= current_parent_start and target_end <= current_parent_end
+        ) then
+      return false, nil
+    end
+  else
+    local global_start, global_end = 1, vim.api.nvim_buf_line_count(0)
+    if not (
+          current_start >= global_start and current_end <= global_end and
+          target_start >= global_start and target_end <= global_end
+        ) then
+      return false, nil
+    end
+  end
+  local sibling_headers = list_sibling_headers_of_level_in_bounds(current_level, current_parent_row,
+    current_parent_start + 1, current_parent_end)
+  local current_idx, target_idx
+  for i, v in ipairs(sibling_headers) do
+    if v == current_row then current_idx = i end
+    if v == target_row then target_idx = i end
+  end
+  if not current_idx or not target_idx then
+    return false, nil
+  end
+  if math.abs(current_idx - target_idx) ~= 1 then
+    return false, nil
+  end
+  if current_row < target_row then
+    for row = current_row + 1, target_row - 1 do
+      local lvl, is_underline = strategies.get_markdown_heading_level(row)
+      if lvl and not is_underline and lvl <= current_level then
+        return false, nil
+      end
+    end
+  else
+    for row = target_row + 1, current_row - 1 do
+      local lvl, is_underline = strategies.get_markdown_heading_level(row)
+      if lvl and not is_underline and lvl <= current_level then
+        return false, nil
+      end
+    end
+  end
   local current_section = vim.api.nvim_buf_get_lines(0, current_start - 1, current_end, false)
   local target_section = vim.api.nvim_buf_get_lines(0, target_start - 1, target_end, false)
   -- Safeguard against empty sections
   if #current_section == 0 or #target_section == 0 then
-    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
     return false, nil
   end
   -- Create copies to avoid reference issues
   local current_section_copy = vim.deepcopy(current_section)
   local target_section_copy = vim.deepcopy(target_section)
-
-  -- For swap_down we track the current header through the swap
-  -- For swap_up we want a different strategy based on the test requirements
-
-  -- Setup tracking for swap_down direction
-  local ext_id
-  if direction == "down" then
-    -- Set an extmark on the current header to track where it moves
-    ext_id = vim.api.nvim_buf_set_extmark(0, ns_id, current_start - 1, 0, {})
-  end
-
-  -- Swap the sections
-  -- We need to work backwards (higher line numbers first) to avoid position shifting
   if current_start > target_start then
     -- Current section is after target - replace current first, then target
     vim.api.nvim_buf_set_lines(0, current_start - 1, current_end, false, target_section_copy)
@@ -150,25 +189,16 @@ local function swap_markdown_sections(current_row, target_row, direction)
     vim.api.nvim_buf_set_lines(0, target_start - 1, target_end, false, current_section_copy)
     vim.api.nvim_buf_set_lines(0, current_start - 1, current_end, false, target_section_copy)
   end
-
-  -- Return appropriate cursor position based on direction
+  local new_pos
   if direction == "down" then
-    -- Get the new position of the current header after the swap
-    local current_ext_pos = vim.api.nvim_buf_get_extmark_by_id(0, ns_id, ext_id, {})
-
-    -- Clean up the namespace
-    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-
-    -- Return success and the new row position for the cursor
-    return true, current_ext_pos[1] + 1 -- +1 because extmark rows are 0-indexed but cursor is 1-indexed
-  else                                  -- direction == "up"
-    -- Clean up the namespace
-    vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-
-    -- For the swap_up test case, we specifically need the cursor to be at row 4
-    -- This is what the test explicitly expects
-    return true, 4
+    local current_length = current_end - current_start
+    local target_length = target_end - target_start
+    local length_diff = current_length - target_length
+    new_pos = target_start - length_diff
+  else
+    new_pos = target_start
   end
+  return true, new_pos
 end
 
 function M.swap_down()
@@ -200,6 +230,8 @@ function M.swap_down()
           vim.fn.cursor(target_row, 1)
         end
         return
+      else
+        return
       end
       -- If we couldn't swap with next header of same level, try to default behavior
     end
@@ -224,10 +256,6 @@ function M.swap_down()
   local target_erow = nodes.get_erow(target)
   local target_scol = nodes.get_scol(target)
   local target_all_rows = nodes.whole_range(target_all)
-
-  -- Debug output (uncomment when needed)
-  -- print("current_augments, target_augments:", vim.inspect(current_augments), vim.inspect(target_augments))
-
   operations.swap_rows(current_all_rows, target_all_rows)
 
   -- Place cursor
@@ -267,9 +295,9 @@ function M.swap_up()
           vim.fn.cursor(target_row, 1)
         end
         return
+      else
+        return
       end
-      -- If we couldn't swap with previous header of same level, don't proceed to default behavior
-      return
     end
   end
 
