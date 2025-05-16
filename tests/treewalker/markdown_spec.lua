@@ -2,7 +2,6 @@ local load_fixture = require "tests.load_fixture"
 local assert = require "luassert"
 local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
-local strategies = require 'treewalker.strategies'
 local h = require 'tests.treewalker.helpers'
 
 describe("Movement in a markdown file", function()
@@ -157,7 +156,7 @@ describe("Swapping in a markdown file:", function()
     assert.same(second, lines.get_lines(4, 21))
   end)
 
-  pending("left and right swap are disabled", function()
+  it("left and right swap are disabled", function()
     -- Position on a header
     vim.fn.cursor(4, 1)
 
@@ -175,7 +174,7 @@ describe("Swapping in a markdown file:", function()
     assert.same(original_content, content_after_right, "Buffer changed when using right swap on markdown")
   end)
 
-  pending("doesn't swap when not on header", function()
+  it("doesn't swap when not on header", function()
     -- Position on paragraph (non-header)
     vim.fn.cursor(7, 1)
 

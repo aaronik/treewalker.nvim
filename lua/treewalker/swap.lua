@@ -48,15 +48,12 @@ end
 ---@return integer | nil, integer | nil, integer | nil
 local function get_markdown_section_bounds(row)
   if not is_markdown_file() then return nil, nil, nil end
-  
   -- Get the level of the current header
   local level = strategies.get_markdown_heading_level(row)
   if not level then return nil, nil, nil end
-  
   local start_row = row
   local end_row = nil
   local max_row = vim.api.nvim_buf_line_count(0)
-  
   -- Find the end of this section (next header of same or higher level)
   for next_row = row + 1, max_row do
     local next_level = strategies.get_markdown_heading_level(next_row)
@@ -65,12 +62,10 @@ local function get_markdown_section_bounds(row)
       break
     end
   end
-  
   -- If we didn't find an end, the section goes to the end of file
   if not end_row then
     end_row = max_row
   end
-  
   return level, start_row, end_row
 end
 
@@ -79,15 +74,12 @@ end
 ---@return boolean
 local function swap_markdown_sections(current_row, target_row)
   if not is_markdown_file() then return false end
-  
   -- Get info for current section
   local current_level, current_start, current_end = get_markdown_section_bounds(current_row)
   if not current_level then return false end
-  
   -- Get info for target section
   local target_level, target_start, target_end = get_markdown_section_bounds(target_row)
   if not target_level then return false end
-  
   -- Only swap sections of the same level
   -- Debug output (uncomment for debugging)
   -- print(string.format("current_level=%d, target_level=%d", current_level, target_level))
@@ -95,28 +87,22 @@ local function swap_markdown_sections(current_row, target_row)
     -- print("Levels don't match, aborting swap")
     return false
   end
-  
   -- Debug output can be uncommented when needed
-  -- print(string.format("Swapping sections: current [%d-%d], target [%d-%d]", 
+  -- print(string.format("Swapping sections: current [%d-%d], target [%d-%d]",
   --   current_start, current_end, target_start, target_end))
-  
   -- Get the text of both sections
   local current_section = vim.api.nvim_buf_get_lines(0, current_start - 1, current_end, false)
   local target_section = vim.api.nvim_buf_get_lines(0, target_start - 1, target_end, false)
-  
   -- Safeguard against empty sections
   if #current_section == 0 or #target_section == 0 then
     -- print("Warning: Empty section detected - aborting swap")
     return false
   end
-  
   -- Create copies to avoid reference issues
   local current_section_copy = vim.deepcopy(current_section)
   local target_section_copy = vim.deepcopy(target_section)
-  
   -- Store original content for debugging (uncomment when needed)
   -- local original_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-  
   -- Swap the sections
   -- We need to work backwards (higher line numbers first) to avoid position shifting
   if current_start > target_start then
@@ -128,31 +114,25 @@ local function swap_markdown_sections(current_row, target_row)
     vim.api.nvim_buf_set_lines(0, target_start - 1, target_end, false, current_section_copy)
     vim.api.nvim_buf_set_lines(0, current_start - 1, current_end, false, target_section_copy)
   end
-  
   -- Print debug info (uncomment when needed)
   -- local new_content = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-  -- print(string.format("Swap complete: original content length %d, new content length %d", 
+  -- print(string.format("Swap complete: original content length %d, new content length %d",
   --   #original_content, #new_content))
-    
   return true
 end
 
 function M.swap_down()
   vim.cmd("normal! ^")
-  
   if not is_supported_ft() then return end
   if not is_on_target_node() then return end
-  
   -- Special handling for markdown files
   if is_markdown_file() then
     local current_row = vim.fn.line(".")
-    
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
       -- Find the next heading at the same level
       local target_node, target_row = strategies.get_next_same_level_heading(current_row)
-      
       if target_node and target_row then
         -- Swap the sections
         if swap_markdown_sections(current_row, target_row) then
@@ -161,7 +141,6 @@ function M.swap_down()
           return
         end
       end
-      
       -- If we couldn't swap with next header of same level, try to default behavior
     end
   end
@@ -200,20 +179,16 @@ end
 
 function M.swap_up()
   vim.cmd("normal! ^")
-  
   if not is_supported_ft() then return end
   if not is_on_target_node() then return end
-  
   -- Special handling for markdown files
   if is_markdown_file() then
     local current_row = vim.fn.line(".")
-    
     -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
     if level then
       -- Find the previous heading at the same level
       local target_node, target_row = strategies.get_prev_same_level_heading(current_row)
-      
       if target_node and target_row then
         -- Swap the sections
         if swap_markdown_sections(current_row, target_row) then
@@ -222,7 +197,6 @@ function M.swap_up()
           return
         end
       end
-      
       -- If we couldn't swap with previous header of same level, try default behavior
     end
   end
@@ -263,50 +237,40 @@ end
 
 function M.swap_right()
   if not is_supported_ft() then return end
-
+  -- Left/right swapping is disabled for markdown files
+  if is_markdown_file() then return end
   -- Iteratively more desirable
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
-
   local target = nodes.next_sib(current)
-
   if not current or not target then return end
-
   -- set a mark to track where the target started, so we may later go there after the swap
   local ns_id = vim.api.nvim_create_namespace("treewalker#swap_right")
   local ext_id = vim.api.nvim_buf_set_extmark(0, ns_id, nodes.get_srow(target) - 1, nodes.get_scol(target) - 1, {})
-
   operations.swap_nodes(current, target)
-
   local ext = vim.api.nvim_buf_get_extmark_by_id(0, ns_id, ext_id, {})
   local new_current = nodes.get_at_rowcol(ext[1] + 1, ext[2] - 1)
-
   if not new_current then return end
-
   vim.fn.cursor(
     nodes.get_srow(new_current),
     nodes.get_scol(new_current)
   )
-
   -- cleanup
   vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 end
 
 function M.swap_left()
   if not is_supported_ft() then return end
-
+  -- Left/right swapping is disabled for markdown files
+  if is_markdown_file() then return end
   -- Iteratively more desirable
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
-
   local target = nodes.prev_sib(current)
-
   if not current or not target then return end
-
   operations.swap_nodes(target, current)
-
   -- Place cursor
   vim.fn.cursor(
     nodes.get_srow(target),
