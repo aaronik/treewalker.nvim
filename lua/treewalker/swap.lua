@@ -5,6 +5,7 @@ local augment = require "treewalker.augment"
 local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
 local markdown_swap = require "treewalker.markdown.swap.section"
+local heading_utils = require "treewalker.markdown.heading_utils"
 
 local M = {}
 
@@ -13,12 +14,9 @@ local function is_on_target_node()
   local node = vim.treesitter.get_node()
   if not node then return false end
 
-  -- Special case for markdown - we need to check if we're on a heading
+  -- Special case for markdown - use heading_utils
   if util.is_markdown_file() then
-    local row = vim.fn.line(".")
-    local classify_line = require("treewalker.markdown.line_utils").classify_line
-    local info = classify_line(row)
-    return info.type == "heading"
+    return heading_utils.is_on_markdown_heading()
   end
 
   -- For other languages, use the standard Treesitter-based approach
