@@ -205,7 +205,7 @@ describe("Swapping in a markdown file:", function()
     assert.same(original_content, lines.get_lines(0, -1))
   end)
 
-  pending("doesn't swap headers of different levels", function()
+  it("doesn't swap headers of different levels", function()
     local original_content = lines.get_lines(0, -1)
     vim.fn.cursor(41, 1)
 
