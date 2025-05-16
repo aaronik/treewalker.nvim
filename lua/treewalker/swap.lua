@@ -6,7 +6,7 @@ local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
 local markdown_line_utils = require "treewalker.markdown.line_utils"
 local markdown_selectors = require "treewalker.markdown.selectors"
-local markdown_swap = require "treewalker.markdown.swap"
+local markdown_swap = require "treewalker.markdown.swap.section"
 
 local classify_line = markdown_line_utils.classify_line
 
