@@ -36,8 +36,17 @@ function M.out(node)
   
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
-    -- Only proceed if we're on a heading
-    if strategies.get_markdown_heading_level(current_row) then
+    -- Check if we're on a heading
+    local level = strategies.get_markdown_heading_level(current_row)
+    
+    -- If not on a heading, find the nearest previous heading
+    if not level then
+      local target_node, target_row = strategies.get_nearest_prev_heading(current_row)
+      if target_node and target_row then
+        return target_node, target_row
+      end
+    -- Only proceed if we're on a heading with level > 1
+    elseif level then
       if current_row == 1 then
         -- We're already at the top heading (h1), so nothing to do
         return nil, nil
@@ -48,11 +57,11 @@ function M.out(node)
       
       if target_node and target_row then
         return target_node, target_row
-      elseif strategies.get_markdown_heading_level(current_row) > 1 then
+      elseif level > 1 then
         -- If we can't find a parent heading but we're not h1, go to the first h1
         for row = 1, current_row - 1 do
-          local level = strategies.get_markdown_heading_level(row)
-          if level == 1 then
+          local found_level = strategies.get_markdown_heading_level(row)
+          if found_level == 1 then
             local h1_node = nodes.get_at_row(row)
             return h1_node, row
           end
@@ -104,9 +113,16 @@ function M.up()
   
   -- Special handling for markdown files
   if ft == "markdown" or ft == "md" then
-    -- Only proceed if we're on a heading
+    -- Check if we're on a heading
     local level = strategies.get_markdown_heading_level(current_row)
-    if level then
+    
+    -- If not on a heading, find the nearest previous heading
+    if not level then
+      local target_node, target_row = strategies.get_nearest_prev_heading(current_row)
+      if target_node and target_row then
+        return target_node, target_row
+      end
+    elseif level then
       -- Don't try to move up from the first heading
       if current_row == 1 then
         return nil, nil

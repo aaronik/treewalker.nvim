@@ -301,7 +301,11 @@ function M.get_prev_same_level_heading(row)
 
   -- Get heading level from current position
   local current_level = M.get_markdown_heading_level(row)
-  if not current_level then return nil, nil end
+  
+  -- If not on a heading, find the nearest previous heading
+  if not current_level then
+    return M.get_nearest_prev_heading(row)
+  end
 
   -- Search for previous heading of same level
   for prev_row = row - 1, 1, -1 do
@@ -310,6 +314,31 @@ function M.get_prev_same_level_heading(row)
 
     local level = M.get_markdown_heading_level(prev_row)
     if level and level == current_level then
+      local node = nodes.get_at_row(prev_row)
+      return node, prev_row
+    end
+
+    ::continue::
+  end
+
+  return nil, nil
+end
+
+-- For markdown - finds the nearest heading above the current row
+---@param row integer
+---@return TSNode | nil, integer | nil
+function M.get_nearest_prev_heading(row)
+  local ft = vim.bo.ft
+  -- Check for both "markdown" and "md" as valid filetypes
+  if ft ~= "markdown" and ft ~= "md" then return nil, nil end
+
+  -- Search for any previous heading
+  for prev_row = row - 1, 1, -1 do
+    local line = lines.get_line(prev_row)
+    if not line then goto continue end
+
+    local level = M.get_markdown_heading_level(prev_row)
+    if level then
       local node = nodes.get_at_row(prev_row)
       return node, prev_row
     end

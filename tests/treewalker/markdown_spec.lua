@@ -72,6 +72,18 @@ describe("Movement in a markdown file", function()
     tw.move_in()
     h.assert_cursor_at(14, 1)
   end)
+
+  it("navigates up from text content to the nearest header", function()
+    vim.fn.cursor(26, 1)
+    tw.move_up()
+    h.assert_cursor_at(19, 1, "## Text Formatting")
+  end)
+
+  it("navigates out from text content to the nearest header", function()
+    vim.fn.cursor(26, 1)
+    tw.move_out()
+    h.assert_cursor_at(19, 1, "## Text Formatting")
+  end)
 end)
 
 describe("Swapping in a markdown file:", function()

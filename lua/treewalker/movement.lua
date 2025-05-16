@@ -46,6 +46,11 @@ end
 ---@return nil
 function M.move_down()
   local node = nodes.get_current()
+  -- If we can't get a current node, handle it gracefully
+  if not node then
+    return
+  end
+  
   local target, row = targets.down()
   if not target or not row then return end
 
