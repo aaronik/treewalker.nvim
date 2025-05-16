@@ -73,4 +73,15 @@ M.reverse = function (t)
   return reversed
 end
 
+--- Returns true if current buffer's filetype is markdown
+---@return boolean
+M.is_markdown_file = function()
+  local ft = (
+    vim.bo and vim.bo.ft
+    or (vim.api and vim.api.nvim_buf_get_option and vim.api.nvim_buf_get_option(0, 'filetype'))
+    or ''
+  )
+  return ft == "markdown" or ft == "md"
+end
+
 return M

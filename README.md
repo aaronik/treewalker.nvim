@@ -32,6 +32,8 @@
 
 ## Movement
 
+### Code files
+
 The movement commands move you through your code in an intuitive way, skipping nodes that don't help you move quickly:
 
 * **`:Treewalker Up`** - Moves up to the previous neighbor node
@@ -39,12 +41,26 @@ The movement commands move you through your code in an intuitive way, skipping n
 * **`:Treewalker Left`** - Moves to the first ancestor node that's on a different line from the current node
 * **`:Treewalker Right`** - Moves to the next node down that's indented further than the current node
 
+### Markdown
+
+For markdown files, Treewalker provides specialized heading navigation:
+
+* **`:Treewalker Up`** - Moves to the previous heading at the same level (e.g., from one h2 to the previous h2)
+* **`:Treewalker Down`** - Moves to the next heading at the same level (e.g., from one h2 to the next h2)
+* **`:Treewalker Left`** - Moves to the parent heading (e.g., from an h3 to its parent h2)
+* **`:Treewalker Right`** - Moves to the first child heading (e.g., from an h2 to the first h3 under it)
+
+The goal is to enable fluid navigation through markdown documents.
+Focusing on headers enables navigating by the document's hierarchical structure.
+
 All movement commands add to the [`jumplist`](https://neovim.io/doc/user/motion.html#jumplist), so if you use a movement command
 and then feel lost, you always have `Ctrl-o` available to bring you back to where you last were.
 
 ---
 
 ## Swapping
+
+### Code files
 
 `Swap{Up,Down}` operate on a linewise basis, and **bring along their comments, decorators, and annotations**.
 These are meant for swapping declarations and definitions - things that take up whole lines.
@@ -56,6 +72,19 @@ In some cases these will operate on the same nodes as Up/Down, but won't take th
 * **`:Treewalker SwapDown`** - Swaps the biggest node on the line downward in the document
 * **`:Treewalker SwapLeft`** - Swap the node under the cursor with its previous neighbor
 * **`:Treewalker SwapRight`** - Swap the node under the cursor with its next neighbor
+
+### Markdown
+
+`Swap{Up,Down}` operate on whole heading sections, swapping a heading along with all its subheadings and content.
+
+`Swap{Left,Right}` operate on sibling headings at the same level, allowing you to reorder headings within the same parent.
+
+* **`:Treewalker SwapUp`** - Swaps the current heading and its subtree with the previous heading at the same level, moving the whole section upward
+* **`:Treewalker SwapDown`** - Swaps the current heading and its subtree with the next heading at the same level, moving the whole section downward
+* **`:Treewalker SwapLeft`** - Swaps the current heading with its previous sibling heading at the same level
+* **`:Treewalker SwapRight`** - Swaps the current heading with its next sibling heading at the same level
+
+It's unclear in markdown treesitter which nodes are siblings, parents, or children. So horizontal swapping is disabled.
 
 ---
 

@@ -12,8 +12,6 @@ Core features:
 
 ## Development Commands
 
-### Testing
-
 ```bash
 # Run all tests
 make test
@@ -28,11 +26,17 @@ make no-utils
 make pass
 ```
 
-### Debugging
+## Testing
 
-- Debug logs are written to `~/.local/share/nvim/treewalker/debug.log`
-- Use `util.log(message)` to add debug messages
-- For node inspection, use `nodes.log(node)` and `nodes.log_parents(node)`
+Every new feature added to this repository is meticulously tested in multiple languages.
+
+Tests use Plenary.nvim's busted-style framework (describe, it, before_each) and rely on:
+- `minimal_init.lua` for setting up the test environment
+- `fixtures/` directory containing test files for various languages
+- `helpers.lua` with utility functions for tests
+- `load_fixture.lua` to prepare test buffers
+
+Each test spec focuses on a specific language or feature, loading the appropriate fixture and verifying cursor movement and text manipulation behavior.
 
 ## Architecture
 
@@ -58,14 +62,9 @@ The plugin is organized into several core components:
    - General utility functions and logging
    - Node augmentation for related nodes (comments, decorators)
 
-## Testing
+## Debugging
 
-Every new feature added to this repository is meticulously tested in multiple languages.
+- Debug logs are written to `~/.local/share/nvim/treewalker/debug.log`
+- Use `util.log(message)` to add debug messages
+- For node inspection, use `nodes.log(node)` and `nodes.log_parents(node)`
 
-Tests use Plenary.nvim's busted-style framework (describe, it, before_each) and rely on:
-- `minimal_init.lua` for setting up the test environment
-- `fixtures/` directory containing test files for various languages
-- `helpers.lua` with utility functions for tests
-- `load_fixture.lua` to prepare test buffers
-
-Each test spec focuses on a specific language or feature, loading the appropriate fixture and verifying cursor movement and text manipulation behavior.
