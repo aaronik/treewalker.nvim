@@ -6,6 +6,7 @@ local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
 local markdown_line_utils = require "treewalker.markdown.line_utils"
 local markdown_selectors = require "treewalker.markdown.selectors"
+local markdown_swap = require "treewalker.markdown.swap"
 
 local classify_line = markdown_line_utils.classify_line
 
@@ -40,154 +41,6 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
----@param row integer
----@return integer | nil, integer | nil, integer | nil
-local function get_markdown_section_bounds(row)
-  if not util.is_markdown_file() then return nil, nil, nil end
-  local info = classify_line(row)
-  if info.type ~= "heading" then return nil, nil, nil end
-  local level = info.level
-  local start_row = row
-  local end_row = nil
-  local max_row = vim.api.nvim_buf_line_count(0)
-  for next_row = row + 1, max_row do
-    local next_info = classify_line(next_row)
-    if next_info.type == "heading" and next_info.level <= level then
-      end_row = next_row - 1
-      break
-    end
-  end
-  if not end_row then
-    end_row = max_row
-  end
-  return level, start_row, end_row
-end
-
-local function find_parent_header(row, level)
-  for r = row - 1, 1, -1 do
-    local info = classify_line(r)
-    if info.type == "heading" and info.level < level then
-      return r, info.level
-    end
-  end
-  return nil, nil
-end
-
-local function get_parent_section_bounds(row, level)
-  local parent_row, parent_level = find_parent_header(row, level)
-  if parent_row and parent_level then
-    return get_markdown_section_bounds(parent_row)
-  end
-  return nil, 1, vim.api.nvim_buf_line_count(0)
-end
-
-local function list_sibling_headers_of_level_in_bounds(level, parent_row, start_row, end_row)
-  local result = {}
-  for r = start_row, end_row do
-    local info = classify_line(r)
-    if info.type == "heading" and info.level == level then
-      local this_p, _ = find_parent_header(r, info.level)
-      if this_p == parent_row then
-        table.insert(result, r)
-      end
-    end
-  end
-  return result
-end
-
----@param current_row integer
----@param target_row integer
----@param direction "up" | "down"
----@return boolean, integer|nil
-local function swap_markdown_sections(current_row, target_row, direction)
-  if not util.is_markdown_file() then return false, nil end
-  local current_level, current_start, current_end = get_markdown_section_bounds(current_row)
-  if not current_level then return false, nil end
-  local target_level, target_start, target_end = get_markdown_section_bounds(target_row)
-  if not target_level then return false, nil end
-  if current_level ~= target_level then
-    return false, nil
-  end
-  local current_parent_row = find_parent_header(current_row, current_level)
-  local target_parent_row = find_parent_header(target_row, target_level)
-  local _, current_parent_start, current_parent_end = get_parent_section_bounds(current_row, current_level)
-  local _, target_parent_start, target_parent_end = get_parent_section_bounds(target_row, target_level)
-  if current_parent_row ~= target_parent_row then
-    return false, nil
-  end
-  if current_parent_start ~= target_parent_start or current_parent_end ~= target_parent_end then
-    return false, nil
-  end
-  if current_parent_row ~= nil then
-    if not (
-          current_start >= current_parent_start and current_end <= current_parent_end and
-          target_start >= current_parent_start and target_end <= current_parent_end
-        ) then
-      return false, nil
-    end
-  else
-    local global_start, global_end = 1, vim.api.nvim_buf_line_count(0)
-    if not (
-          current_start >= global_start and current_end <= global_end and
-          target_start >= global_start and target_end <= global_end
-        ) then
-      return false, nil
-    end
-  end
-  local sibling_headers = list_sibling_headers_of_level_in_bounds(current_level, current_parent_row,
-    current_parent_start + 1, current_parent_end)
-  local current_idx, target_idx
-  for i, v in ipairs(sibling_headers) do
-    if v == current_row then current_idx = i end
-    if v == target_row then target_idx = i end
-  end
-  if not current_idx or not target_idx then
-    return false, nil
-  end
-  if math.abs(current_idx - target_idx) ~= 1 then
-    return false, nil
-  end
-  if current_row < target_row then
-    for row = current_row + 1, target_row - 1 do
-      local info = classify_line(row)
-      if info.type == "heading" and info.level <= current_level then
-        return false, nil
-      end
-    end
-  else
-    for row = target_row + 1, current_row - 1 do
-      local info = classify_line(row)
-      if info.type == "heading" and info.level <= current_level then
-        return false, nil
-      end
-    end
-  end
-  local current_section = vim.api.nvim_buf_get_lines(0, current_start - 1, current_end, false)
-  local target_section = vim.api.nvim_buf_get_lines(0, target_start - 1, target_end, false)
-  if #current_section == 0 or #target_section == 0 then
-    return false, nil
-  end
-  local current_section_copy = vim.deepcopy(current_section)
-  local target_section_copy = vim.deepcopy(target_section)
-  if current_start > target_start then
-    vim.api.nvim_buf_set_lines(0, current_start - 1, current_end, false, target_section_copy)
-    vim.api.nvim_buf_set_lines(0, target_start - 1, target_end, false, current_section_copy)
-  else
-    vim.api.nvim_buf_set_lines(0, target_start - 1, target_end, false, current_section_copy)
-    vim.api.nvim_buf_set_lines(0, current_start - 1, current_end, false, target_section_copy)
-  end
-  local new_pos
-  if direction == "down" then
-    local current_length = current_end - current_start
-    local target_length = target_end - target_start
-    local length_diff = current_length - target_length
-    new_pos = target_start - length_diff
-  else
-    new_pos = target_start
-  end
-  return true, new_pos
-end
-
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
@@ -200,7 +53,7 @@ function M.swap_down()
       if not target_node or not target_row then
         return
       end
-      local success, new_pos = swap_markdown_sections(current_row, target_row, "down")
+      local success, new_pos = markdown_swap.swap_markdown_sections(current_row, target_row, "down")
       if success then
         if new_pos then
           vim.fn.cursor(new_pos, 1)
@@ -247,7 +100,7 @@ function M.swap_up()
       if not target_node or not target_row then
         return
       end
-      local success, new_pos = swap_markdown_sections(current_row, target_row, "up")
+      local success, new_pos = markdown_swap.swap_markdown_sections(current_row, target_row, "up")
       if success then
         if new_pos then
           vim.fn.cursor(new_pos, 1)
