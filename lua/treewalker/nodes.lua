@@ -1,5 +1,6 @@
 local lines = require "treewalker.lines"
 local util = require "treewalker.util"
+local nodes = require "treewalker.nodes"
 
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
@@ -297,6 +298,26 @@ end
 function M.get_scol(node)
   local _, col = node:range()
   return col + 1
+end
+
+--- Given a TSNode (preferred) or nil, returns (row, col). If nil, uses start of line col if as_line_start is true.
+---@param node TSNode|nil
+---@param as_line_start boolean|nil
+---@return integer row, integer col
+function M.get_row_col(node, as_line_start)
+  if node and node.range then
+    return nodes.get_srow(node), nodes.get_scol(node)
+  end
+
+  local row = vim.fn.line('.')
+  local col
+  if as_line_start then
+    local line = lines.get_line(row)
+    col = lines.get_start_col(line)
+  else
+    col = vim.fn.col('.')
+  end
+  return row, col
 end
 
 ---Get highest node at row/col

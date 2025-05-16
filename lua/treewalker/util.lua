@@ -105,26 +105,4 @@ function M.normalize_markdown_header_row(row)
   return row, level
 end
 
---- Given a TSNode (preferred) or nil, returns (row, col). If nil, uses start of line col if as_line_start is true.
----@param node TSNode|nil
----@param as_line_start boolean|nil
----@return integer row, integer col
-function M.resolve_row_col(node, as_line_start)
-  local nodes = require 'treewalker.nodes'
-  local lines = require 'treewalker.lines'
-  if node and node.range then
-    return nodes.get_srow(node), nodes.get_scol(node)
-  else
-    local row = vim.fn.line('.')
-    local col
-    if as_line_start then
-      local line = lines.get_line(row)
-      col = lines.get_start_col(line)
-    else
-      col = vim.fn.col('.')
-    end
-    return row, col
-  end
-end
-
 return M

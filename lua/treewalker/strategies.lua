@@ -456,7 +456,7 @@ function M.markdown_direction_target(direction, node)
     error("Unknown markdown direction: " .. tostring(direction))
   end
   -- Use new util to extract row from node or fallback to cursor
-  local row = util.resolve_row_col(node)
+  local row = nodes.get_row_col(node)
   -- row will be (row, col), but we want just row (1st ret)
   if type(row) == "table" then
     row = row[1]

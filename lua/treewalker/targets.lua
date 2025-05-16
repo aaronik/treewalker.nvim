@@ -1,7 +1,12 @@
-local lines = require "treewalker.lines"
 local nodes = require "treewalker.nodes"
 local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
+
+-- GAME PLAN
+-- This was like $20 worth of asking the AI to refactor.
+-- And it really delivered.
+-- There were parts of the codebase that were still a total mess.
+-- But targets.. holy moly.
 
 local M = {}
 
@@ -42,7 +47,7 @@ end
 ---@param node TSNode|nil
 ---@return TSNode|nil, integer|nil
 function M._inn(node)
-  local row, col = util.resolve_row_col(node, true)
+  local row, col = nodes.get_row_col(node, true)
   local candidate, candidate_row = strategies.get_down_and_in(row, col, nil, nil)
   if candidate then
     candidate = nodes.get_highest_coincident(candidate)
@@ -53,7 +58,7 @@ end
 ---@param node TSNode|nil
 ---@return TSNode|nil, integer|nil
 function M._up(node)
-  local row, col = util.resolve_row_col(node, true)
+  local row, col = nodes.get_row_col(node, true)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", row, col, nil, nil)
   candidate, candidate_row = strategies.get_prev_if_on_empty_line(row, candidate, candidate_row)
   if candidate then
@@ -65,7 +70,7 @@ end
 ---@param node TSNode|nil
 ---@return TSNode|nil, integer|nil
 function M._down(node)
-  local row, col = util.resolve_row_col(node, true)
+  local row, col = nodes.get_row_col(node, true)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", row, col, nil, nil)
   candidate, candidate_row = strategies.get_next_if_on_empty_line(row, candidate, candidate_row)
   if candidate then
