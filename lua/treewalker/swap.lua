@@ -138,7 +138,7 @@ function M.swap_down()
       if not target_node or not target_row then
         return
       end
-      
+
       -- Swap the sections
       if swap_markdown_sections(current_row, target_row) then
         -- Position cursor at the target position
@@ -198,7 +198,7 @@ function M.swap_up()
       if not target_node or not target_row then
         return
       end
-      
+
       -- Swap the sections
       if swap_markdown_sections(current_row, target_row) then
         -- Position cursor at the target position
@@ -287,4 +287,3 @@ function M.swap_left()
 end
 
 return M
-
