@@ -80,4 +80,51 @@ M.is_markdown_file = function()
   return ft == "markdown" or ft == "md"
 end
 
+---Returns true if the given row (or the current row) is the start of a markdown header
+---@param row integer|nil
+---@return boolean
+function M.is_on_markdown_header(row)
+  if not M.is_markdown_file() then return false end
+  row = row or vim.fn.line(".")
+  local level = require("treewalker.strategies").get_markdown_heading_level(row)
+  return level ~= nil
+end
+
+-- Returns normalized (row, heading_level) for markdown, adjusting for underline-style headers.
+-- If not header: returns (row, nil)
+---@param row integer
+---@return integer, integer|nil
+function M.normalize_markdown_header_row(row)
+  if not M.is_markdown_file() then return row, nil end
+  local strategies = require 'treewalker.strategies'
+  local level, is_underline = strategies.get_markdown_heading_level(row)
+  if is_underline and row > 1 then
+    row = row - 1
+    level, _ = strategies.get_markdown_heading_level(row)
+  end
+  return row, level
+end
+
+--- Given a TSNode (preferred) or nil, returns (row, col). If nil, uses start of line col if as_line_start is true.
+---@param node TSNode|nil
+---@param as_line_start boolean|nil
+---@return integer row, integer col
+function M.resolve_row_col(node, as_line_start)
+  local nodes = require 'treewalker.nodes'
+  local lines = require 'treewalker.lines'
+  if node and node.range then
+    return nodes.get_srow(node), nodes.get_scol(node)
+  else
+    local row = vim.fn.line('.')
+    local col
+    if as_line_start then
+      local line = lines.get_line(row)
+      col = lines.get_start_col(line)
+    else
+      col = vim.fn.col('.')
+    end
+    return row, col
+  end
+end
+
 return M

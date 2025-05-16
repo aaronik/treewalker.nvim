@@ -4,6 +4,20 @@ local util = require('treewalker.util')
 
 local M = {}
 
+-- Markdown heading level cache (local, clear each load)
+local _md_heading_level_cache = {}
+
+local function get_markdown_heading_level_cached(row)
+  if _md_heading_level_cache[row] ~= nil then
+    return _md_heading_level_cache[row][1], _md_heading_level_cache[row][2]
+  end
+  local level, is_underline = M.get_markdown_heading_level_uncached(row)
+  _md_heading_level_cache[row] = {level, is_underline}
+  return level, is_underline
+end
+
+-- Now public, in util: util.normalize_markdown_header_row(row)
+
 -- Gets the next target in the up/down directions
 ---@param dir "up" | "down"
 ---@param srow integer
@@ -178,10 +192,10 @@ function M.get_highest_string_node(node)
   return highest
 end
 
--- Helper function to determine markdown heading level
+-- Helper function to determine markdown heading level (real, uncached)
 ---@param row integer
 ---@return integer | nil, boolean | nil
-function M.get_markdown_heading_level(row)
+function M.get_markdown_heading_level_uncached(row)
   if not row then return nil, nil end
 
   if not util.is_markdown_file() then return nil, nil end
@@ -215,233 +229,238 @@ function M.get_markdown_heading_level(row)
   return nil, false -- Not a heading
 end
 
--- For markdown heading navigation - get next heading at same level
----@param row integer
----@return TSNode | nil, integer | nil
+-- The rest is search/loop logic: swap all uses of .get_markdown_heading_level
+
+M.get_markdown_heading_level = get_markdown_heading_level_cached
+
 function M.get_next_same_level_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Get heading level from current position
-  local current_level, is_underline = M.get_markdown_heading_level(row)
-
-  -- If we're on an underline, go back to the heading
-  if is_underline and row > 1 then
-    row = row - 1
-    current_level = M.get_markdown_heading_level(row)
-  end
-
+  local normalized_row, current_level = util.normalize_markdown_header_row(row)
   if not current_level then return nil, nil end
 
   local max_row = vim.api.nvim_buf_line_count(0)
-
-  -- Search for next heading of same level
-  for next_row = row + 1, max_row do
+  for next_row = normalized_row + 1, max_row do
     local line = lines.get_line(next_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(next_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(next_row)
     if is_under then goto continue end
-
-    -- Found a heading of the same level
     if level and level == current_level then
       local node = nodes.get_at_row(next_row)
       return node, next_row
     end
-
     ::continue::
   end
-
   return nil, nil
 end
 
--- For markdown heading navigation - get previous heading at same level
----@param row integer
----@return TSNode | nil, integer | nil
 function M.get_prev_same_level_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Get heading level from current position
-  local current_level, is_underline = M.get_markdown_heading_level(row)
-
-  -- If we're on an underline, go back to the heading
-  if is_underline and row > 1 then
-    row = row - 1
-    current_level = M.get_markdown_heading_level(row)
-  end
-
-  -- If not on a heading, find the nearest previous heading
+  local normalized_row, current_level = util.normalize_markdown_header_row(row)
   if not current_level then
     return M.get_nearest_prev_heading(row)
   end
-
-  -- Search for previous heading of same level
-  for prev_row = row - 1, 1, -1 do
+  for prev_row = normalized_row - 1, 1, -1 do
     local line = lines.get_line(prev_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(prev_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(prev_row)
     if is_under then goto continue end
-
-    if level then
-      -- For the "Moves up to same level node the same way it moves down" test
-      -- We want to find a heading of the same level, no matter what level it is
-      if level == current_level then
-        local node = nodes.get_at_row(prev_row)
-        return node, prev_row
-      end
-      -- Remove this check to fix the test case
-      -- It was preventing finding H3 after encountering any higher level heading
-      -- elseif level < current_level then
-      --   -- Found a heading of higher level (smaller number), so stop searching
-      --   -- We only want to find headings at the same level
-      --   break
-      -- end
+    if level and level == current_level then
+      local node = nodes.get_at_row(prev_row)
+      return node, prev_row
     end
-
     ::continue::
   end
-
   return nil, nil
 end
 
--- For markdown - finds the nearest heading above the current row
----@param row integer
----@return TSNode | nil, integer | nil
 function M.get_nearest_prev_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Search for any previous heading
   for prev_row = row - 1, 1, -1 do
     local line = lines.get_line(prev_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(prev_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(prev_row)
     if is_under then goto continue end
-
     if level then
       local node = nodes.get_at_row(prev_row)
       return node, prev_row
     end
-
     ::continue::
   end
-
   return nil, nil
 end
 
--- For markdown - finds the nearest heading below the current row
----@param row integer
----@return TSNode | nil, integer | nil
 function M.get_nearest_next_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Search for any next heading
   local max_row = vim.api.nvim_buf_line_count(0)
   for next_row = row + 1, max_row do
     local line = lines.get_line(next_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(next_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(next_row)
     if is_under then goto continue end
-
     if level then
       local node = nodes.get_at_row(next_row)
       return node, next_row
     end
-
     ::continue::
   end
-
   return nil, nil
 end
 
--- For markdown heading navigation - get inner heading (one level deeper)
----@param row integer
----@return TSNode | nil, integer | nil
 function M.get_next_inner_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Get heading level from current position
-  local current_level, is_underline = M.get_markdown_heading_level(row)
-
-  -- If we're on an underline, go back to the heading
-  if is_underline and row > 1 then
-    row = row - 1
-    current_level = M.get_markdown_heading_level(row)
-  end
-
+  local normalized_row, current_level = util.normalize_markdown_header_row(row)
   if not current_level then return nil, nil end
-
   local target_level = current_level + 1
   local max_row = vim.api.nvim_buf_line_count(0)
-
-  -- Search for next heading one level deeper
-  for next_row = row + 1, max_row do
+  for next_row = normalized_row + 1, max_row do
     local line = lines.get_line(next_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(next_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(next_row)
     if is_under then goto continue end
-
     if level then
       if level == target_level then
         local node = nodes.get_at_row(next_row)
         return node, next_row
       elseif level <= current_level then
-        -- We found a heading of the same or higher level before finding
-        -- a deeper heading, so stop searching
         return nil, nil
       end
     end
-
     ::continue::
   end
-
   return nil, nil
 end
 
--- For markdown heading navigation - get outer heading (one level higher)
----@param row integer
----@return TSNode | nil, integer | nil
 function M.get_prev_outer_heading(row)
   if not util.is_markdown_file() then return nil, nil end
-
-  -- Get heading level from current position
-  local current_level, is_underline = M.get_markdown_heading_level(row)
-
-  -- If we're on an underline, go back to the heading
-  if is_underline and row > 1 then
-    row = row - 1
-    current_level = M.get_markdown_heading_level(row)
-  end
-
+  local normalized_row, current_level = util.normalize_markdown_header_row(row)
   if not current_level or current_level <= 1 then return nil, nil end
-
   local target_level = current_level - 1
-
-  -- Search for previous heading one level higher
-  for prev_row = row - 1, 1, -1 do
+  for prev_row = normalized_row - 1, 1, -1 do
     local line = lines.get_line(prev_row)
     if not line then goto continue end
-
-    local level, is_under = M.get_markdown_heading_level(prev_row)
-    -- Skip underlines
+    local level, is_under = get_markdown_heading_level_cached(prev_row)
     if is_under then goto continue end
-
     if level and level == target_level then
       local node = nodes.get_at_row(prev_row)
       return node, prev_row
     end
-
     ::continue::
   end
-
   return nil, nil
+end
+
+-- =====================
+-- Markdown Movement Logic Refactor
+-- =====================
+M.markdown_targets = {}
+
+function M.markdown_targets.up(row)
+  local normalized_row, level = util.normalize_markdown_header_row(row)
+  local _, _unused = M.get_markdown_heading_level(normalized_row)
+  if not level then
+    return M.get_nearest_prev_heading(row)
+  else
+    if normalized_row == 1 then return nil, nil end
+    return M.get_prev_same_level_heading(normalized_row)
+  end
+end
+
+function M.markdown_targets.down(row)
+  -- Normalize to ensure row refers to header text (not underline)
+  local orig_row = row
+  local normalized_row, level = util.normalize_markdown_header_row(row)
+  local _, is_underline = M.get_markdown_heading_level(orig_row)
+  -- If start on underline (e.g. line 2 after H1 with `===`), skip to actual next heading
+  if is_underline then
+    -- Find next actual header after the underline
+    local max_row = vim.api.nvim_buf_line_count(0)
+    for r = orig_row + 1, max_row do
+      local l, under = M.get_markdown_heading_level(r)
+      if l and not under then
+        return nodes.get_at_row(r), r
+      end
+    end
+    return nodes.get_at_row(orig_row), orig_row
+  end
+
+  -- The rest: as before after normalization
+  if normalized_row == 1 and level == 1 then
+    local next_row = normalized_row + 1
+    local _, is_next_underline = M.get_markdown_heading_level(next_row)
+    if is_next_underline then
+      return nodes.get_at_row(next_row), next_row
+    end
+  end
+  if level then
+    local target_node, target_row = M.get_next_same_level_heading(normalized_row)
+    if target_node and target_row then
+      return target_node, target_row
+    else
+      return nodes.get_at_row(normalized_row), normalized_row
+    end
+  else
+    return M.get_nearest_next_heading(row)
+  end
+end
+
+function M.markdown_targets.out(row)
+  local normalized_row, level = util.normalize_markdown_header_row(row)
+  local _, _unused = M.get_markdown_heading_level(normalized_row)
+  if not level then
+    return M.get_nearest_prev_heading(row)
+  elseif normalized_row == 1 then
+    return nil, nil
+  else
+    local target_node, target_row = M.get_prev_outer_heading(normalized_row)
+    if target_node and target_row then
+      return target_node, target_row
+    elseif level > 1 then
+      for i = 1, normalized_row - 1 do
+        local found_level = select(1, M.get_markdown_heading_level(i))
+        if found_level == 1 then
+          return nodes.get_at_row(i), i
+        end
+      end
+    end
+  end
+  return nil, nil
+end
+
+function M.markdown_targets.inn(row)
+  local normalized_row, level = util.normalize_markdown_header_row(row)
+  local _, _unused = M.get_markdown_heading_level(normalized_row)
+  if level then
+    local target_node, target_row = M.get_next_inner_heading(normalized_row)
+    if target_node and target_row then
+      return target_node, target_row
+    else
+      return nodes.get_at_row(normalized_row), normalized_row
+    end
+  else
+    return nodes.get_at_row(normalized_row), normalized_row
+  end
+end
+
+-- Unified logic for markdown direction targets
+-- Accepts a node (preferred) or nil (uses cursor as fallback)
+function M.markdown_direction_target(direction, node)
+  local dir_map = {
+    out = M.markdown_targets.out,
+    inn = M.markdown_targets.inn,
+    up = M.markdown_targets.up,
+    down = M.markdown_targets.down,
+  }
+  local fn = dir_map[direction]
+  if not fn then
+    error("Unknown markdown direction: " .. tostring(direction))
+  end
+  -- Use new util to extract row from node or fallback to cursor
+  local row = util.resolve_row_col(node)
+  -- row will be (row, col), but we want just row (1st ret)
+  if type(row) == "table" then
+    row = row[1]
+  end
+  return fn(row)
 end
 
 return M

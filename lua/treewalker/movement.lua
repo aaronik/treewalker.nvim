@@ -6,22 +6,22 @@ local M = {}
 
 ---@return nil
 function M.move_out()
-  vim.cmd("normal! ^") -- TODO can somehow use nodes.get_at_row for this instead of this junk?
+  vim.cmd("normal! ^")
   local node = nodes.get_current()
-  local target, row = targets.out(node)
+  local target, row = targets.get_direction_target('out', node)
   if not (target and row) then
-    -- highlight the node anyways, for when normal! ^ does something
     operations.jump(node, nodes.get_srow(node))
     return
   end
-  vim.cmd("normal! m'") -- Add originating node to jump list
+  vim.cmd("normal! m'")
   operations.jump(target, row)
-  vim.cmd("normal! m'") -- Add destination node to jump list
+  vim.cmd("normal! m'")
 end
 
 ---@return nil
 function M.move_in()
-  local target, row = targets.inn()
+  local node = nodes.get_current()
+  local target, row = targets.get_direction_target('inn', node)
   if not target or not row then return end
   vim.cmd("normal! m'")
   operations.jump(target, row)
@@ -31,10 +31,9 @@ end
 ---@return nil
 function M.move_up()
   local node = nodes.get_current()
-  local target, row = targets.up()
+  local target, row = targets.get_direction_target('up', node)
   if not target or not row then return end
 
-  -- No neighbor jumplist additions in up
   local is_neighbor = nodes.have_neighbor_srow(node, target)
   if not is_neighbor then
     vim.cmd("normal! m'")
@@ -46,15 +45,13 @@ end
 ---@return nil
 function M.move_down()
   local node = nodes.get_current()
-  -- If we can't get a current node, handle it gracefully
   if not node then
     return
   end
 
-  local target, row = targets.down()
+  local target, row = targets.get_direction_target('down', node)
   if not target or not row then return end
 
-  -- down needs neighbor before and after jump
   local is_neighbor = nodes.have_neighbor_srow(node, target)
   if not is_neighbor then
     vim.cmd("normal! m'")
