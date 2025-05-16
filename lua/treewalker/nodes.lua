@@ -210,6 +210,21 @@ function M.get_highest_coincident(node)
   return node
 end
 
+-- OUTERMOST JUMP TARGET AT ROW:
+---Get the outer-most node at this row which is also a jump target.
+---@param node TSNode
+---@return TSNode
+function M.get_outermost_jump_target_at_row(node)
+  local iter = node
+  local candidate = nil
+  local row = M.get_srow(node)
+  while iter and M.get_srow(iter) == row do
+    if M.is_jump_target(iter) then candidate = iter end
+    iter = iter:parent()
+  end
+  return candidate or node
+end
+
 -- Easy conversion to table
 ---@param node TSNode
 ---@return [ integer, integer, integer, integer ]

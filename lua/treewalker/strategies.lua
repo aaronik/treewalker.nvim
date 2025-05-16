@@ -37,6 +37,7 @@ function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
         and candidate_col == scol       -- stay at current indent level
         and candidate_row == strow + 1  -- top of block; no end's or else's etc.
     then
+      candidate = nodes.get_highest_row_coincident(candidate)
       break                             -- use most recent assignment below
     else
       candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(candidate_row, dir)
@@ -113,7 +114,7 @@ function M.get_next_if_on_empty_line(srow, prev_candidate, prev_row)
   if current_row > max_row then return prev_candidate, prev_row end
 
   if current_node and current_row then
-    return current_node, current_row
+    return nodes.get_highest_row_coincident(current_node), current_row
   else
     return prev_candidate, prev_row
   end
@@ -148,7 +149,7 @@ function M.get_prev_if_on_empty_line(srow, prev_candidate, prev_row)
   if current_row < 0 then return prev_candidate, prev_row end
 
   if current_node and current_row then
-    return current_node, current_row
+    return nodes.get_highest_row_coincident(current_node), current_row
   else
     return prev_candidate, prev_row
   end

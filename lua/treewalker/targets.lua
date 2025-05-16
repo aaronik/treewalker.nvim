@@ -57,7 +57,7 @@ function M._up(node)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", row, col, nil, nil)
   candidate, candidate_row = strategies.get_prev_if_on_empty_line(row, candidate, candidate_row)
   if candidate then
-    candidate = nodes.get_highest_coincident(candidate)
+    candidate = nodes.get_outermost_jump_target_at_row(candidate)
   end
   return candidate, candidate_row
 end
@@ -69,7 +69,7 @@ function M._down(node)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", row, col, nil, nil)
   candidate, candidate_row = strategies.get_next_if_on_empty_line(row, candidate, candidate_row)
   if candidate then
-    candidate = nodes.get_highest_coincident(candidate)
+    candidate = nodes.get_outermost_jump_target_at_row(candidate)
   end
   return candidate, candidate_row
 end
