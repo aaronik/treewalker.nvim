@@ -253,6 +253,10 @@ function M.get_markdown_heading_level(row)
     end
   end
 
+  -- We don't consider the underline itself as a heading for navigation purposes
+  -- This allows navigation to work correctly between actual headings
+  -- But the underline identification is still used in other functions
+
   return nil
 end
 
@@ -386,4 +390,3 @@ function M.get_prev_outer_heading(row)
 end
 
 return M
-

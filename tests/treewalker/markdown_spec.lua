@@ -59,7 +59,7 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(1, 1)
   end)
 
-  pending("stops at document boundaries when moving down", function()
+  it("stops at document boundaries when moving down", function()
     vim.fn.cursor(110, 1)
     tw.move_down()
     tw.move_down()
@@ -113,4 +113,3 @@ describe("Swapping in a markdown file:", function()
     assert.same(lines_after, lines_before)
   end)
 end)
-
