@@ -14,13 +14,11 @@ function M.find_heading(start_row, opts)
   local row = start_row + dir
   while row >= 1 and row <= max_row do
     local info = line_utils.classify_line(row)
-    if info.type == "underline" then row = row + dir goto continue end
     if matcher(info, row) then
       local node = nodes.get_at_row(row)
       return node, row
     end
     row = row + dir
-    ::continue::
   end
   return nil, nil
 end
