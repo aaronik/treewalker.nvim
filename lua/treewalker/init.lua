@@ -28,11 +28,11 @@ end
 -- Makes sure the treesitter parser is available, otherwise makes a notification
 ---@param fn function
 local function ensuring_parser(fn)
-  return function()
+  return function(...)
     local ft = vim.bo.ft
     local ok = pcall(vim.treesitter.get_parser)
     if ok then
-      fn()
+      fn(...)
     else
       vim.notify_once(
         string.format(
@@ -45,10 +45,10 @@ local function ensuring_parser(fn)
   end
 end
 
-Treewalker.move_up = ensuring_parser(movement.move_up)
-Treewalker.move_out = ensuring_parser(movement.move_out)
+Treewalker.move_up   = ensuring_parser(movement.move_up)
+Treewalker.move_out  = ensuring_parser(movement.move_out)
 Treewalker.move_down = ensuring_parser(movement.move_down)
-Treewalker.move_in = ensuring_parser(movement.move_in)
+Treewalker.move_in   = ensuring_parser(movement.move_in)
 
 Treewalker.swap_up = ensuring_parser(swap.swap_up)
 Treewalker.swap_down = ensuring_parser(swap.swap_down)
