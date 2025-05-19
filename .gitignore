@@ -16,3 +16,6 @@
 debug.log
 
 .DS_Store
+
+# Fer claude
+settings.local.json

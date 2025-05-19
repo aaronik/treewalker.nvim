@@ -1,6 +1,8 @@
 local lines = require "treewalker.lines"
 local nodes = require "treewalker.nodes"
 local strategies = require "treewalker.strategies"
+local util = require "treewalker.util"
+local markdown_targets = require "treewalker.markdown.targets"
 
 local M = {}
 
@@ -20,6 +22,7 @@ end
 
 ---Get the highest coincident; helper
 ---@param node TSNode | nil
+---@return TSNode | nil
 local function coincident(node)
   if node then
     return nodes.get_highest_coincident(node)
@@ -31,6 +34,9 @@ end
 ---@param node TSNode
 ---@return TSNode | nil, integer | nil
 function M.out(node)
+  if util.is_markdown_file() then
+    return markdown_targets.out()
+  end
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
   candidate = coincident(candidate)
   if not candidate then return end
@@ -40,26 +46,35 @@ end
 
 ---@return TSNode | nil, integer | nil
 function M.inn()
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_down_and_in(current_row, current_col, nil, nil)
+  if util.is_markdown_file() then
+    return markdown_targets.inn()
+  end
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_down_and_in(current_row_, current_col, nil, nil)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end
 
 ---@return TSNode | nil, integer | nil
 function M.up()
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
-  candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row, candidate, candidate_row)
+  if util.is_markdown_file() then
+    return markdown_targets.up()
+  end
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row_, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_prev_if_on_empty_line(current_row_, candidate, candidate_row)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end
 
 ---@return TSNode | nil, integer | nil
 function M.down()
-  local current_row, current_col = current()
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
-  candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row, candidate, candidate_row)
+  if util.is_markdown_file() then
+    return markdown_targets.down()
+  end
+  local current_row_, current_col = current()
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row_, current_col, nil, nil)
+  candidate, candidate_row = strategies.get_next_if_on_empty_line(current_row_, candidate, candidate_row)
   candidate = coincident(candidate)
   return candidate, candidate_row
 end

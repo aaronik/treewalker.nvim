@@ -3,6 +3,9 @@ local operations = require "treewalker.operations"
 local targets = require "treewalker.targets"
 local augment = require "treewalker.augment"
 local strategies = require "treewalker.strategies"
+local util = require "treewalker.util"
+local markdown_swap = require "treewalker.markdown.swap.section"
+local markdown_heading = require "treewalker.markdown.heading"
 
 local M = {}
 
@@ -10,6 +13,13 @@ local M = {}
 local function is_on_target_node()
   local node = vim.treesitter.get_node()
   if not node then return false end
+
+  -- Special case for markdown - use heading utility
+  if util.is_markdown_file() then
+    return markdown_heading.is_heading(vim.fn.line("."))
+  end
+
+  -- For other languages, use the standard Treesitter-based approach
   if not nodes.is_jump_target(node) then return false end
   if vim.fn.line('.') - 1 ~= node:range() then return false end
   return true
@@ -20,9 +30,6 @@ local function is_supported_ft()
   local unsupported_filetypes = {
     ["text"] = true,
     ["txt"] = true,
-
-    ["markdown"] = true,
-    ["md"] = true,
   }
 
   local bufnr = vim.api.nvim_get_current_buf()
@@ -33,9 +40,11 @@ end
 
 function M.swap_down()
   vim.cmd("normal! ^")
-  if not is_on_target_node() then return end
   if not is_supported_ft() then return end
-
+  if not is_on_target_node() then return end
+  if util.is_markdown_file() then
+    return markdown_swap.swap_down_markdown()
+  end
   local current = nodes.get_current()
 
   local target = targets.down()
@@ -55,9 +64,6 @@ function M.swap_down()
   local target_erow = nodes.get_erow(target)
   local target_scol = nodes.get_scol(target)
   local target_all_rows = nodes.whole_range(target_all)
-
-  print("current_augments, target_augments:", vim.inspect(current_augments), vim.inspect(target_augments))
-
   operations.swap_rows(current_all_rows, target_all_rows)
 
   -- Place cursor
@@ -69,9 +75,11 @@ end
 
 function M.swap_up()
   vim.cmd("normal! ^")
-  if not is_on_target_node() then return end
   if not is_supported_ft() then return end
-
+  if not is_on_target_node() then return end
+  if util.is_markdown_file() then
+    return markdown_swap.swap_up_markdown()
+  end
   local current = nodes.get_current()
   local target = targets.up()
   if not target then return end
@@ -108,8 +116,7 @@ end
 
 function M.swap_right()
   if not is_supported_ft() then return end
-
-  -- Iteratively more desirable
+  if util.is_markdown_file() then return end
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
@@ -140,8 +147,7 @@ end
 
 function M.swap_left()
   if not is_supported_ft() then return end
-
-  -- Iteratively more desirable
+  if util.is_markdown_file() then return end
   local current = nodes.get_current()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)

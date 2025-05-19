@@ -52,12 +52,12 @@ function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
     local candidate_col = lines.get_start_col(candidate_line)
     local strow = candidate:range()
     if
-        nodes.is_jump_target(candidate)   -- only node types we consider jump targets
-        and candidate_line ~= ""          -- no empty lines
-        and candidate_col == scol         -- stay at current indent level
-        and candidate_row == strow + 1    -- top of block; no end's or else's etc.
+      nodes.is_jump_target(candidate) -- only node types we consider jump targets
+      and candidate_line ~= ""        -- no empty lines
+      and candidate_col == scol       -- stay at current indent level
+      and candidate_row == strow + 1  -- top of block; no end's or else's etc.
     then
-      break                               -- use most recent assignment below
+      break                           -- use most recent assignment below
     else
       candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(candidate_row, dir)
     end
