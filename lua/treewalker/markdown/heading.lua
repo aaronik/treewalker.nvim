@@ -41,7 +41,7 @@ function M.heading_info(row)
   return line_heading_info(row) or { type = "none" }
 end
 
---- Returns heading level for a row or nil
+--- Returns heading level for a row or nil if not on heading
 ---@param row integer
 function M.heading_level(row)
   local info = M.heading_info(row)

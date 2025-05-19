@@ -127,7 +127,13 @@ function M.swap_right()
 
   -- set a mark to track where the target started, so we may later go there after the swap
   local ns_id = vim.api.nvim_create_namespace("treewalker#swap_right")
-  local ext_id = vim.api.nvim_buf_set_extmark(0, ns_id, nodes.get_srow(target) - 1, nodes.get_scol(target) - 1, {})
+  local ext_id = vim.api.nvim_buf_set_extmark(
+    0,
+    ns_id,
+    nodes.get_srow(target) - 1,
+    nodes.get_scol(target) - 1,
+    {}
+  )
 
   operations.swap_nodes(current, target)
 

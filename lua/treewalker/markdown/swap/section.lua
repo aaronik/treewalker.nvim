@@ -6,10 +6,10 @@ local heading = require "treewalker.markdown.heading"
 local M = {}
 
 -- See get_validated_swap_context for safety rules.
--- @param current_row integer: The row of the currently selected header
--- @param target_row integer: The row of the target header to swap with
--- @param direction "up" | "down": The direction of the swap
--- @return boolean, integer|nil: success, new_cursor_position (if swap succeeded)
+---@param current_row integer: The row of the currently selected header
+---@param target_row integer: The row of the target header to swap with
+---@param direction "up" | "down": The direction of the swap
+---@return boolean, integer|nil: success, new_cursor_position (if swap succeeded)
 function M.swap_markdown_sections(current_row, target_row, direction)
   local ctx = validate.get_validated_swap_context(current_row, target_row)
   if not ctx then return false, nil end
@@ -53,44 +53,34 @@ end
 function M.swap_down_markdown()
   local current_row = vim.fn.line(".")
   local info = heading.heading_info(current_row)
-  if info.type == "heading" then
-    local target_node, target_row = markdown_selectors.get_next_same_level_heading(current_row)
-    if not target_node or not target_row then
-      return
-    end
 
-    local success, new_pos = M.swap_markdown_sections(current_row, target_row, "down")
-    if success then
-      if new_pos then
-        vim.fn.cursor(new_pos, 1)
-      else
-        vim.fn.cursor(target_row, 1)
-      end
-      return
-    end
+  if info.type ~= "heading" then return end
+
+  local target_node, target_row = markdown_selectors.get_next_same_level_heading(current_row)
+  if not target_node or not target_row then
+    return
   end
+
+  local success, new_pos = M.swap_markdown_sections(current_row, target_row, "down")
+  if not success then return end
+  if new_pos then vim.fn.cursor(new_pos, 1) end
 end
 
 -- Swap up in markdown file: handling finding neighbor heading and calling swap_markdown_sections
 function M.swap_up_markdown()
   local current_row = vim.fn.line(".")
   local info = heading.heading_info(current_row)
-  if info.type == "heading" then
-    local target_node, target_row = markdown_selectors.get_prev_same_level_heading(current_row)
-    if not target_node or not target_row then
-      return
-    end
 
-    local success, new_pos = M.swap_markdown_sections(current_row, target_row, "up")
-    if success then
-      if new_pos then
-        vim.fn.cursor(new_pos, 1)
-      else
-        vim.fn.cursor(target_row, 1)
-      end
-      return
-    end
+  if info.type ~= "heading" then return end
+
+  local target_node, target_row = markdown_selectors.get_prev_same_level_heading(current_row)
+  if not target_node or not target_row then
+    return
   end
+
+  local success, new_pos = M.swap_markdown_sections(current_row, target_row, "up")
+  if not success then return end
+  if new_pos then vim.fn.cursor(new_pos, 1) end
 end
 
 return M

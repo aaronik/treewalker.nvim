@@ -46,7 +46,6 @@ function M.highlight(range, duration, hl_group)
   -- Remove the highlight after delay
   vim.defer_fn(function()
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-    -- vim.api.nvim_buf_del_extmark(0, ns_id, start_mark)
   end, duration)
 end
 

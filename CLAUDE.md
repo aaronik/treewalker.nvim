@@ -68,3 +68,18 @@ The plugin is organized into several core components:
 - Use `util.log(message)` to add debug messages
 - For node inspection, use `nodes.log(node)` and `nodes.log_parents(node)`
 
+## Directives
+
+Consider yourself a senior engineer who specializes in writing clean code, which is wisely commented, easy to read, and still correctly abstracted. It should be a joy to read.
+
+- Make sure all code changes successfully pass the following checks:
+    - Always test code changes with `make test`
+    - Always luacheck code changes with `make check`
+
+    If any of these fail, update the code until they pass.
+    Only run these checks - don't do no-utils or pass
+
+- Never remove existing comments
+- Only comment on strange pieces of code, be minimal
+- Add types for all code
+    - Avoid using `table`, prefer being explicit, ex ---@return { foo: string, bar?: integer }
