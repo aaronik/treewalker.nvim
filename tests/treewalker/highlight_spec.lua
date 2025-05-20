@@ -19,16 +19,16 @@ end
 
 -- Test for highlight clear-before-highlight behavior
 describe("Clears previous highlights before applying new", function()
-  local clear_spy, add_spy
+  local clear_spy, hlrange_spy
 
   before_each(function()
     clear_spy = spy.on(vim.api, "nvim_buf_clear_namespace")
-    add_spy = spy.on(vim.api, "nvim_buf_add_highlight")
+    hlrange_spy = spy.on(vim.hl, "range")
   end)
 
   after_each(function()
     clear_spy:revert()
-    add_spy:revert()
+    hlrange_spy:revert()
   end)
 
   it("calls clear_namespace before every highlight", function()
@@ -37,10 +37,26 @@ describe("Clears previous highlights before applying new", function()
     operations.highlight(range1, 50, "CursorLine")
     operations.highlight(range2, 50, "CursorLine")
 
-    -- For each highlight call, we should first clear, then add highlight
+    -- For each highlight call, we should first clear, then range highlight
     assert.spy(clear_spy).was.called_with(0, match.is_number(), 0, -1)
     assert.spy(clear_spy).was.called(2)
-    assert.spy(add_spy).was.called(6) -- 3 rows for each range in example
+    assert.spy(hlrange_spy).was.called(2)
+    -- check arguments
+    local call1 = hlrange_spy.calls[1].vals
+    local call2 = hlrange_spy.calls[2].vals
+    assert.equal(0, call1[1])
+    assert.is_number(call1[2])
+    assert.equal("CursorLine", call1[3])
+    assert.same({1,2}, call1[4])
+    assert.same({3,4}, call1[5])
+    assert.same({ inclusive = true }, call1[6])
+
+    assert.equal(0, call2[1])
+    assert.is_number(call2[2])
+    assert.equal("CursorLine", call2[3])
+    assert.same({10,2}, call2[4])
+    assert.same({12,4}, call2[5])
+    assert.same({ inclusive = true }, call2[6])
   end)
 end)
 

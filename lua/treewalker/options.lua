@@ -1,6 +1,6 @@
 local M = {}
 
----@alias Opts { highlight?: boolean, highlight_duration?: integer, jumplist?: boolean | 'left', highlight_group?: string }
+---@alias Opts { highlight: boolean, highlight_duration: integer, jumplist: boolean | 'left', highlight_group: string }
 
 ---@param opts Opts
 ---@return boolean, table<string>
