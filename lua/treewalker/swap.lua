@@ -121,7 +121,7 @@ function M.swap_right()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
-  local target = nodes.next_sib(current)
+  local target = nodes.next_sib(current) or nodes.farthest_sibling(current, nodes.prev_sib)
 
   if not current or not target then return end
 
@@ -158,7 +158,7 @@ function M.swap_left()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
-  local target = nodes.prev_sib(current)
+  local target = nodes.prev_sib(current) or nodes.farthest_sibling(current, nodes.next_sib)
 
   if not current or not target then return end
 
