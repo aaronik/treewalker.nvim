@@ -39,5 +39,13 @@ describe("In a ruby file: ", function()
     assert.same(first_block, lines.get_lines(15, 19))
     h.assert_cursor_at(16, 3)
   end)
+
+  it("swaparound feature works", function()
+    vim.fn.cursor(40, 27)
+    tw.swap_left()
+    assert.same("  def process_transaction(callback = nil, amount)", lines.get_line(40))
+    tw.swap_right()
+    assert.same("  def process_transaction(amount, callback = nil)", lines.get_line(40))
+  end)
 end)
 
