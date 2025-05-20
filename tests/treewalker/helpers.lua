@@ -74,5 +74,4 @@ M.ensure_has_parser = function(lang)
   end)
 end
 
-
 return M

@@ -1,3 +1,5 @@
+local spy = require('luassert.spy')
+local match = require('luassert.match')
 local load_fixture = require "tests.load_fixture"
 local stub = require 'luassert.stub'
 local assert = require "luassert"
@@ -5,38 +7,74 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local operations = require 'treewalker.operations'
 
-local highlight_stub = stub(operations, "highlight")
-
 -- use with rows as they're numbered in vim lines (1-indexed)
-local function assert_highlighted(srow, scol, erow, ecol, desc)
-  assert(highlight_stub.calls[1], "highlight was not called at all")
+local function assert_highlighted(srow, scol, erow, ecol, stoob, desc)
+  assert(stoob.calls[1], "highlight was not called at all")
   assert.same(
     { srow - 1, scol - 1, erow - 1, ecol },
-    highlight_stub.calls[1].refs[1],
+    stoob.calls[1].refs[1],
     "highlight wrong for: " .. desc
   )
 end
 
+-- Test for highlight clear-before-highlight behavior
+describe("Clears previous highlights before applying new", function()
+  local clear_spy, add_spy
+
+  before_each(function()
+    clear_spy = spy.on(vim.api, "nvim_buf_clear_namespace")
+    add_spy = spy.on(vim.api, "nvim_buf_add_highlight")
+  end)
+
+  after_each(function()
+    clear_spy:revert()
+    add_spy:revert()
+  end)
+
+  it("calls clear_namespace before every highlight", function()
+    local range1 = { 1, 2, 3, 4 }
+    local range2 = { 10, 2, 12, 4 }
+    operations.highlight(range1, 50, "CursorLine")
+    operations.highlight(range2, 50, "CursorLine")
+
+    -- For each highlight call, we should first clear, then add highlight
+    assert.spy(clear_spy).was.called_with(0, match.is_number(), 0, -1)
+    assert.spy(clear_spy).was.called(2)
+    assert.spy(add_spy).was.called(6) -- 3 rows for each range in example
+  end)
+end)
+
 describe("Highlights in a lua spec file: ", function()
+  local highlight_stub
+
   load_fixture("/lua-spec.lua")
 
   before_each(function()
     highlight_stub = stub(operations, "highlight")
   end)
 
+  after_each(function()
+    highlight_stub:revert()
+  end)
+
   it("highlights full block on move_in() (identified in gh #30)", function()
     vim.fn.cursor(64, 3)
     tw.move_in()
-    assert_highlighted(67, 5, 85, 8, "it block")
+    assert_highlighted(67, 5, 85, 8, highlight_stub, "it block")
   end)
-
 end)
 
 describe("Highlights in a regular lua file: ", function()
+  local highlight_stub
+
   load_fixture("/lua.lua")
 
   before_each(function()
     highlight_stub = stub(operations, "highlight")
+  end)
+
+  after_each(function()
+    highlight_stub:revert()
   end)
 
   it("respects default highlight option", function()
@@ -105,50 +143,51 @@ describe("Highlights in a regular lua file: ", function()
   it("highlights whole functions", function()
     vim.fn.cursor(10, 1)
     tw.move_down()
-    assert_highlighted(21, 1, 28, 3, "is_jump_target function")
+    assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
   end)
 
   it("highlights whole lines starting with identifiers", function()
     vim.fn.cursor(134, 5)
     tw.move_up()
-    assert_highlighted(133, 5, 133, 33, "table.insert call")
+    assert_highlighted(133, 5, 133, 33, highlight_stub, "table.insert call")
   end)
 
   it("highlights whole lines starting with assignments", function()
     vim.fn.cursor(133, 5)
     tw.move_down()
-    assert_highlighted(134, 5, 134, 18, "child = iter()")
+    assert_highlighted(134, 5, 134, 18, highlight_stub, "child = iter()")
   end)
 
   it("highlights out reliably", function()
     vim.fn.cursor(133, 5)
     tw.move_out()
-    assert_highlighted(132, 3, 135, 5, "while child")
+    assert_highlighted(132, 3, 135, 5, highlight_stub, "while child")
   end)
 
   it("highlights out reliably", function()
     vim.fn.cursor(132, 3)
     tw.move_out()
-    assert_highlighted(128, 1, 137, 3, "local f get_children")
+    assert_highlighted(128, 1, 137, 3, highlight_stub, "local f get_children")
   end)
 
   it("doesn't highlight the whole file", function()
     vim.fn.cursor(3, 1)
     tw.move_up()
-    assert_highlighted(1, 1, 1, 39, "first line")
+    assert_highlighted(1, 1, 1, 39, highlight_stub, "first line")
   end)
 
   -- Note this is highly language dependent, so this test is not so powerful
   it("highlights only the first item in a block", function()
     vim.fn.cursor(27, 3)
     tw.move_up()
-    assert_highlighted(22, 3, 26, 5, "for _")
+    assert_highlighted(22, 3, 26, 5, highlight_stub, "for _")
   end)
 
   it("given in a line with no parent, move_out highlights the whole node", function()
     vim.fn.cursor(21, 16) -- |is_jump_target
     tw.move_out()
     h.assert_cursor_at(21, 1)
-    assert_highlighted(21, 1, 28, 3, "is_jump_target function")
+    assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
   end)
 end)
+

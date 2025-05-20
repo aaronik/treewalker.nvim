@@ -37,7 +37,11 @@ end
 ---@param hl_group string
 function M.highlight(range, duration, hl_group)
   local start_row, _, end_row, _ = range[1], range[2], range[3], range[4]
-  local ns_id = vim.api.nvim_create_namespace("")
+  local ns_name = "treewalker.nvim-movement-highlight"
+  local ns_id = vim.api.nvim_create_namespace(ns_name)
+
+  -- clear any previous highlights so there aren't multiple active at the same time
+  vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 
   for row = start_row, end_row do
     vim.api.nvim_buf_add_highlight(0, ns_id, hl_group, row, 0, -1)
@@ -53,7 +57,7 @@ end
 ---@param row integer
 function M.jump(node, row)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
-  vim.cmd("normal! ^")  -- Jump to start of line
+  vim.cmd("normal! ^") -- Jump to start of line
   if require("treewalker").opts.highlight then
     local range = nodes.range(node)
     local duration = require("treewalker").opts.highlight_duration
