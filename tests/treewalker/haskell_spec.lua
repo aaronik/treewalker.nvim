@@ -7,10 +7,8 @@ describe("In a haskell file: ", function()
     load_fixture("/haskell.hs")
   end)
 
-  h.ensure_has_parser("haskell")
-
-  -- Oh dang when did this break?
-  pending("moves around in a haskell file", function ()
+  h.ensure_has_parser("haskell") -- Oh dang when did this break?
+  pending("moves around in a haskell file", function()
     vim.fn.cursor(1, 1)
     tw.move_down()
     h.assert_cursor_at(2, 1)
@@ -27,6 +25,12 @@ describe("In a haskell file: ", function()
     tw.move_out()
     h.assert_cursor_at(19, 1)
   end)
+
+  it("swaparound behavior works", function()
+    vim.fn.cursor(40, 15) -- (|node1, node2)
+    tw.swap_left()
+    assert.same("  printEvens [9, 3, 5, 7, 1]\", lines.get_line(40)")
+    tw.swap_right()
+    assert.same("  printEvens [1, 3, 5, 7, 9]\", lines.get_line(40)")
+  end)
 end)
-
-
