@@ -1,0 +1,104 @@
+appConfig: &appDefaults
+  name: "SampleApp"            # Application name
+  version: 1.2.3               # Version as float
+  debug: true                  # Boolean
+  maxUsers: 1000               # Integer
+  features:                   # List of features
+    - authentication
+    - payment
+    - notifications
+  database:
+    host: localhost
+    port: 5432
+    username: admin
+    password: !!binary |
+      cGFzc3dvcmQxMjM=        # base64 encoded: password123
+    options:
+      poolSize: 20
+      reconnect: yes          # YAML boolean "yes"
+  welcomeMessage: |           # Literal multi-line string
+    Welcome to SampleApp!
+    We hope you enjoy your stay.
+    If you need help, email support@example.com.
+  about: >
+    SampleApp is a *demo* application,
+    designed to showcase various YAML features.
+  emptyValue:                 # Empty scalar (null)
+  isActive: true
+  threshold: .75              # Float with leading dot
+  colors: !!set               # Set data type
+    red: null
+    green: null
+    blue: null
+
+users:
+  - id: 1001
+    name: "Alice"
+    roles: [admin, user]
+    metadata: &userMeta
+      lastLogin: 2024-05-15  # Date as string
+      preferences:
+        theme: dark
+        notifications: true
+  - id: 1002
+    name: Bob                # Unquoted string
+    roles:
+      - user
+    metadata: *userMeta       # Alias referencing previous metadata
+
+complexKeys:
+  ? "key with ? and :"
+  : "This is the value"
+  ? ["tuple", "key"]
+  : "Value for tuple key"
+  ? |
+    multi-line
+    complex
+    key
+  : "Value for multi-line key"
+
+misc:
+  quotedSingle: 'Single quoted string with ''escaped'' quotes'
+  quotedDouble: "Double quoted string with \n new line and unicode \u2603"
+  integerAsString: "007"
+  specialFloat1: .inf
+  specialFloat2: -.NaN
+  emptyList: []
+  emptyMap: {}
+  nestedEmpty:
+    list: []
+    map: {}
+
+mixedList:
+  - 123
+  - "string item"
+  - true
+  - null
+  -
+    key1: val1
+    key2: val2
+
+anchorsAndAliases:
+  defaults: &defaults
+    adapter: postgres
+    host: localhost
+  development:
+    <<: *defaults          # Merge key
+    database: dev_db
+  production:
+    <<: *defaults          # Merge key
+    database: prod_db
+
+# Explicit tag example
+explicitTag: !!str 12345      # Force as string even if looks like int
+
+# Multi-document
+---
+doc2:
+  title: "Second document"
+  list:
+    - one
+    - two
+    - three
+
+
