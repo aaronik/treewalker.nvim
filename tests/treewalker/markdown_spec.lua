@@ -289,3 +289,22 @@ describe("Swapping in a markdown file:", function()
     h.assert_cursor_at(14, 1)
   end)
 end)
+
+describe("Swapping in a markdown file with h2s at the top:", function()
+  before_each(function()
+    load_fixture("/markdown-h2s.md")
+  end)
+
+  h.ensure_has_parser("markdown")
+
+  it("swaps h2s even when they're at the top of the file (#40)", function()
+    local first = lines.get_lines(1, 4)
+    local second = lines.get_lines(6, 9)
+    vim.fn.cursor(1, 1)
+
+    tw.swap_down()
+
+    assert.same(second, lines.get_lines(1, 4))
+    assert.same(first, lines.get_lines(6, 9))
+  end)
+end)

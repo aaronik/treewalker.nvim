@@ -79,10 +79,11 @@ end
 ---@param parent table Parent section information
 ---@return table|nil sibling_info Information about siblings or nil if invalid
 local function validate_siblings(current_row, target_row, level, parent)
+  local start_row = (parent.row == nil) and 1 or (parent.start + 1)
   local sibling_headers = sibling_utils.list_sibling_headers_of_level_in_bounds(
     level,
     parent.row,
-    parent.start + 1,
+    start_row,
     parent.finish
   )
 
