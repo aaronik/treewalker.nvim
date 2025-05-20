@@ -123,14 +123,13 @@ It's unclear in markdown treesitter which nodes are siblings, parents, or childr
     -- (see :h highlight-group for options)
     highlight_group = 'CursorLine',
 
-    -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
-    --  true: All movements more than 1 line are added to the jumplist. This is the default,
-    --        and is meant to cover most use cases. It's modeled on how { and } natively add
-    --        to the jumplist.
-    --  false: Treewalker does not add to the jumplist at all
-    --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
-    --          likely one to be confusing, so it has its own mode to supply some jumplist
-    --          addition but
+        -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
+        --  true: All movements more than 1 line are added to the jumplist. This is the default,
+        --        and is meant to cover most use cases. It's modeled on how { and } natively add
+        --        to the jumplist.
+        --  false: Treewalker does not add to the jumplist at all
+        --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
+        --          likely one to be confusing, so it has its own mode.
     jumplist = true,
   }
 }
@@ -161,8 +160,7 @@ use {
         --        to the jumplist.
         --  false: Treewalker does not add to the jumplist at all
         --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
-        --          likely one to be confusing, so it has its own mode to supply some jumplist
-        --          addition but
+        --          likely one to be confusing, so it has its own mode.
         jumplist = true,
       })
   end
