@@ -43,8 +43,15 @@ function M.highlight(range, duration, hl_group)
   -- clear any previous highlights so there aren't multiple active at the same time
   vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 
-  -- Use vim.hl.range (Neovim 0.10+ replacement for nvim_buf_add_highlight)
-  vim.hl.range(0, ns_id, hl_group, { start_row, start_col }, { end_row, end_col }, { inclusive = true })
+  if vim.hl then
+    -- vim.hl.range (Neovim 0.10+ replacement for nvim_buf_add_highlight)
+    vim.hl.range(0, ns_id, hl_group, { start_row, start_col }, { end_row, end_col }, { inclusive = true })
+  else
+    -- support for lower versions of neovim
+    for row = start_row, end_row do
+      vim.api.nvim_buf_add_highlight(0, ns_id, hl_group, row, 0, -1)
+    end
+  end
 
   -- Remove the highlight after delay
   vim.defer_fn(function()
