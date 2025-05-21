@@ -1,5 +1,5 @@
 local assert = require('luassert')
-local stub = require 'luassert.stub'
+local stub   = require 'luassert.stub'
 local lines  = require('treewalker.lines')
 
 local M      = {}
@@ -61,7 +61,7 @@ M.ensure_has_parser = function(lang)
   it(string.format("::The test suite has the [%s/%s] parser::", lang, ft), function()
     -- Three ways to check, this is the way implementation uses
     if not vim.treesitter.language.get_lang(lang) then
-        error("Missing parser for: " .. lang)
+      error("Missing parser for: " .. lang)
     end
 
     if not ok_given then
@@ -76,6 +76,7 @@ end
 
 -- pass in a highlight stub, via `highlight_stub = stub.new(operations, "highlight")`
 -- use with rows as they're numbered in vim lines (1-indexed)
+-- Always checks most recent call
 ---@param srow integer
 ---@param scol integer
 ---@param erow integer
@@ -83,10 +84,11 @@ end
 ---@param stoob any
 ---@param desc string | nil
 function M.assert_highlighted(srow, scol, erow, ecol, stoob, desc)
-  assert(stoob.calls[1], "highlight was not called at all")
+  assert(#stoob.calls >= 1, "highlight was not called at all")
+
   assert.same(
     { srow - 1, scol - 1, erow - 1, ecol },
-    stoob.calls[1].refs[1],
+    stoob.calls[#stoob.calls].refs[1],
     "highlight wrong for: " .. (desc or "")
   )
 end

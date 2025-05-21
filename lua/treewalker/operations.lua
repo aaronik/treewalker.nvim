@@ -1,5 +1,7 @@
 local nodes = require 'treewalker.nodes'
 local lines = require 'treewalker.lines'
+local util = require 'treewalker.util'
+local heading = require 'treewalker.markdown.heading'
 
 local M = {}
 
@@ -65,9 +67,18 @@ function M.jump(node, row)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
   vim.cmd("normal! ^") -- Jump to start of line
   if require("treewalker").opts.highlight then
-    local range = nodes.range(node)
     local duration = require("treewalker").opts.highlight_duration
     local hl_group = require("treewalker").opts.highlight_group
+
+    local range = nodes.range(node)
+
+    if util.is_markdown_file() then
+      local _, section_start, section_end = heading.get_section_bounds(row)
+      if section_start and section_end then
+        range = { section_start - 1, 0, section_end - 1, 1 }
+      end
+    end
+
     M.highlight(range, duration, hl_group)
   end
 end
