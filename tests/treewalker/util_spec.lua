@@ -21,7 +21,7 @@ describe("util", function()
 
   describe("log", function()
     it("works", function()
-      local io_open_stub = stub(io, "open")
+      local io_open_stub = stub.new(io, "open")
 
       ---@type string[]
       local writes = {}

@@ -152,6 +152,11 @@ describe("Movement in a markdown file", function()
     tw.move_out()
     h.assert_cursor_at(104, 1, "## Task List")
   end)
+
+  it("highlights whole h2", function()
+    vim.fn.cursor(4, 1)
+    tw.move_down() tw.move_up()
+  end)
 end)
 
 describe("Swapping in a markdown file:", function()

@@ -4,7 +4,7 @@ local tw = require 'treewalker'
 
 describe("When given bad options", function()
   it("notifies the user of all wrong options", function()
-    local notify_stub = stub(vim, "notify")
+    local notify_stub = stub.new(vim, "notify")
 
     tw.setup({
       ---@diagnostic disable-next-line: assign-type-mismatch

@@ -53,7 +53,7 @@ M.ensure_has_parser = function(lang)
   local ok_given = pcall(vim.treesitter.get_parser, 0, lang)
   local ok_gotten = pcall(vim.treesitter.get_parser)
 
-  local notify_once_stub = stub(vim, "notify_once")
+  local notify_once_stub = stub.new(vim, "notify_once")
   assert.stub(notify_once_stub).was.called(0)
 
   local ft = vim.bo.ft
@@ -72,6 +72,23 @@ M.ensure_has_parser = function(lang)
       error(string.format("Test suite is missing parser for filetype [%s]", ft))
     end
   end)
+end
+
+-- pass in a highlight stub, via `highlight_stub = stub.new(operations, "highlight")`
+-- use with rows as they're numbered in vim lines (1-indexed)
+---@param srow integer
+---@param scol integer
+---@param erow integer
+---@param ecol integer
+---@param stoob any
+---@param desc string | nil
+function M.assert_highlighted(srow, scol, erow, ecol, stoob, desc)
+  assert(stoob.calls[1], "highlight was not called at all")
+  assert.same(
+    { srow - 1, scol - 1, erow - 1, ecol },
+    stoob.calls[1].refs[1],
+    "highlight wrong for: " .. (desc or "")
+  )
 end
 
 return M

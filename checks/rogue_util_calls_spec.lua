@@ -24,7 +24,7 @@ local commands = {
 ---@param method string
 local function spy(obj, method)
   local orig = obj[method]
-  local stoob = stub(obj, method)
+  local stoob = stub.new(obj, method)
   stoob.callback = orig
   ---@type type obj
   return stoob

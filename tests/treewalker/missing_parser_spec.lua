@@ -22,7 +22,7 @@ describe("For a file in which there is a missing parser", function()
 
   for nam, command in pairs(commands) do
     it(string.format("notifies once when %s is called", nam), function()
-      local notify_once_stub = stub(vim, "notify_once")
+      local notify_once_stub = stub.new(vim, "notify_once")
       command()
       assert.stub(notify_once_stub).was.called(1)
     end)

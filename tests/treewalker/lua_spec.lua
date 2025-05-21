@@ -284,7 +284,7 @@ describe("Swapping in a regular lua file:", function()
   it("passes along encoding to apply_text_edits", function()
     vim.fn.cursor(38, 32) -- (|node1, node2)
 
-    local apply_text_edits_stub = stub(vim.lsp.util, "apply_text_edits")
+    local apply_text_edits_stub = stub.new(vim.lsp.util, "apply_text_edits")
 
     -- Prep the file encoding
     local expected_encoding = 'utf-16'

@@ -7,16 +7,6 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local operations = require 'treewalker.operations'
 
--- use with rows as they're numbered in vim lines (1-indexed)
-local function assert_highlighted(srow, scol, erow, ecol, stoob, desc)
-  assert(stoob.calls[1], "highlight was not called at all")
-  assert.same(
-    { srow - 1, scol - 1, erow - 1, ecol },
-    stoob.calls[1].refs[1],
-    "highlight wrong for: " .. desc
-  )
-end
-
 -- Test for highlight clear-before-highlight behavior
 describe("Clears previous highlights before applying new", function()
   local clear_spy, hlrange_spy
@@ -66,7 +56,7 @@ describe("Highlights in a lua spec file: ", function()
   load_fixture("/lua-spec.lua")
 
   before_each(function()
-    highlight_stub = stub(operations, "highlight")
+    highlight_stub = stub.new(operations, "highlight")
   end)
 
   after_each(function()
@@ -76,7 +66,7 @@ describe("Highlights in a lua spec file: ", function()
   it("highlights full block on move_in() (identified in gh #30)", function()
     vim.fn.cursor(64, 3)
     tw.move_in()
-    assert_highlighted(67, 5, 85, 8, highlight_stub, "it block")
+    h.assert_highlighted(67, 5, 85, 8, highlight_stub, "it block")
   end)
 end)
 
@@ -86,7 +76,7 @@ describe("Highlights in a regular lua file: ", function()
   load_fixture("/lua.lua")
 
   before_each(function()
-    highlight_stub = stub(operations, "highlight")
+    highlight_stub = stub.new(operations, "highlight")
   end)
 
   after_each(function()
@@ -104,7 +94,7 @@ describe("Highlights in a regular lua file: ", function()
   end)
 
   it("respects highlight config option", function()
-    highlight_stub = stub(operations, "highlight")
+    highlight_stub = stub.new(operations, "highlight")
     tw.setup({ highlight = false })
     vim.fn.cursor(23, 5)
     tw.move_out()
@@ -159,51 +149,51 @@ describe("Highlights in a regular lua file: ", function()
   it("highlights whole functions", function()
     vim.fn.cursor(10, 1)
     tw.move_down()
-    assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
+    h.assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
   end)
 
   it("highlights whole lines starting with identifiers", function()
     vim.fn.cursor(134, 5)
     tw.move_up()
-    assert_highlighted(133, 5, 133, 33, highlight_stub, "table.insert call")
+    h.assert_highlighted(133, 5, 133, 33, highlight_stub, "table.insert call")
   end)
 
   it("highlights whole lines starting with assignments", function()
     vim.fn.cursor(133, 5)
     tw.move_down()
-    assert_highlighted(134, 5, 134, 18, highlight_stub, "child = iter()")
+    h.assert_highlighted(134, 5, 134, 18, highlight_stub, "child = iter()")
   end)
 
   it("highlights out reliably", function()
     vim.fn.cursor(133, 5)
     tw.move_out()
-    assert_highlighted(132, 3, 135, 5, highlight_stub, "while child")
+    h.assert_highlighted(132, 3, 135, 5, highlight_stub, "while child")
   end)
 
   it("highlights out reliably", function()
     vim.fn.cursor(132, 3)
     tw.move_out()
-    assert_highlighted(128, 1, 137, 3, highlight_stub, "local f get_children")
+    h.assert_highlighted(128, 1, 137, 3, highlight_stub, "local f get_children")
   end)
 
   it("doesn't highlight the whole file", function()
     vim.fn.cursor(3, 1)
     tw.move_up()
-    assert_highlighted(1, 1, 1, 39, highlight_stub, "first line")
+    h.assert_highlighted(1, 1, 1, 39, highlight_stub, "first line")
   end)
 
   -- Note this is highly language dependent, so this test is not so powerful
   it("highlights only the first item in a block", function()
     vim.fn.cursor(27, 3)
     tw.move_up()
-    assert_highlighted(22, 3, 26, 5, highlight_stub, "for _")
+    h.assert_highlighted(22, 3, 26, 5, highlight_stub, "for _")
   end)
 
   it("given in a line with no parent, move_out highlights the whole node", function()
     vim.fn.cursor(21, 16) -- |is_jump_target
     tw.move_out()
     h.assert_cursor_at(21, 1)
-    assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
+    h.assert_highlighted(21, 1, 28, 3, highlight_stub, "is_jump_target function")
   end)
 end)
 
