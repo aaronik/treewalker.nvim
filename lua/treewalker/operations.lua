@@ -2,6 +2,7 @@ local nodes = require 'treewalker.nodes'
 local lines = require 'treewalker.lines'
 local util = require 'treewalker.util'
 local heading = require 'treewalker.markdown.heading'
+local hl_ns_id_buffer = {}
 
 local M = {}
 
@@ -38,13 +39,22 @@ end
 ---@param duration integer
 ---@param hl_group string
 function M.highlight(range, duration, hl_group)
+  -- clear any previous highlights and find the next available namespace
+  local next_i = #hl_ns_id_buffer + 1
+  for i, ns_id in ipairs(hl_ns_id_buffer) do
+    if ns_id == -1 then
+      if next_i > i then
+        next_i = i
+      end
+    else
+      vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+    end
+  end
+
   local start_row, start_col, end_row, end_col = range[1], range[2], range[3], range[4]
-  local ns_name = "treewalker.nvim-movement-highlight"
+  local ns_name = "treewalker.nvim-movement-highlight-" .. next_i
   local ns_id = vim.api.nvim_create_namespace(ns_name)
-
-  -- clear any previous highlights so there aren't multiple active at the same time
-  vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
-
+  hl_ns_id_buffer[next_i] = ns_id
   if vim.hl then
     -- vim.hl.range (Neovim 0.10+ replacement for nvim_buf_add_highlight)
     vim.hl.range(0, ns_id, hl_group, { start_row, start_col }, { end_row, end_col }, { inclusive = true })
@@ -58,6 +68,7 @@ function M.highlight(range, duration, hl_group)
   -- Remove the highlight after delay
   vim.defer_fn(function()
     vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
+    hl_ns_id_buffer[next_i] = -1
   end, duration)
 end
 
