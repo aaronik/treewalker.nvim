@@ -46,14 +46,14 @@ local function ensuring_parser(fn)
   end
 end
 
-Treewalker.move_up   = ensuring_parser(movement.move_up)
-Treewalker.move_out  = ensuring_parser(movement.move_out)
-Treewalker.move_down = ensuring_parser(movement.move_down)
-Treewalker.move_in   = ensuring_parser(movement.move_in)
+Treewalker.move_up    = ensuring_parser(movement.move_up)
+Treewalker.move_out   = ensuring_parser(movement.move_out)
+Treewalker.move_down  = ensuring_parser(movement.move_down)
+Treewalker.move_in    = ensuring_parser(movement.move_in)
 
-Treewalker.swap_up = ensuring_parser(swap.swap_up)
-Treewalker.swap_down = ensuring_parser(swap.swap_down)
+Treewalker.swap_up    = ensuring_parser(swap.swap_up)
+Treewalker.swap_down  = ensuring_parser(swap.swap_down)
 Treewalker.swap_right = ensuring_parser(swap.swap_right)
-Treewalker.swap_left = ensuring_parser(swap.swap_left)
+Treewalker.swap_left  = ensuring_parser(swap.swap_left)
 
 return Treewalker
