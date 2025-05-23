@@ -9,16 +9,22 @@ local operations = require 'treewalker.operations'
 
 -- Test for highlight clear-before-highlight behavior
 describe("Clears previous highlights before applying new", function()
-  local clear_spy, hlrange_spy
+  local clear_spy, highlight_spy
 
   before_each(function()
     clear_spy = spy.on(vim.api, "nvim_buf_clear_namespace")
-    hlrange_spy = spy.on(vim.hl, "range")
+
+    -- Backwards support for 0.10.2
+    if vim.hl then
+      highlight_spy = spy.on(vim.hl, "range")
+    else
+      highlight_spy = spy.on(vim.api, "nvim_buf_add_highlight")
+    end
   end)
 
   after_each(function()
     clear_spy:revert()
-    hlrange_spy:revert()
+    highlight_spy:revert()
   end)
 
   it("calls clear_namespace before every highlight", function()
@@ -30,10 +36,10 @@ describe("Clears previous highlights before applying new", function()
     -- For each highlight call, we should first clear, then range highlight
     assert.spy(clear_spy).was.called_with(0, match.is_number(), 0, -1)
     assert.spy(clear_spy).was.called(3)
-    assert.spy(hlrange_spy).was.called(2)
+    assert.spy(highlight_spy).was.called(2)
     -- check arguments
-    local call1 = hlrange_spy.calls[1].vals
-    local call2 = hlrange_spy.calls[2].vals
+    local call1 = highlight_spy.calls[1].vals
+    local call2 = highlight_spy.calls[2].vals
     assert.equal(0, call1[1])
     assert.is_number(call1[2])
     assert.equal("CursorLine", call1[3])
