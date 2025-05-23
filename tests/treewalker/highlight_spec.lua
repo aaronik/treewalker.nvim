@@ -29,7 +29,7 @@ describe("Clears previous highlights before applying new", function()
 
     -- For each highlight call, we should first clear, then range highlight
     assert.spy(clear_spy).was.called_with(0, match.is_number(), 0, -1)
-    assert.spy(clear_spy).was.called(2)
+    assert.spy(clear_spy).was.called(3)
     assert.spy(hlrange_spy).was.called(2)
     -- check arguments
     local call1 = hlrange_spy.calls[1].vals
