@@ -73,16 +73,28 @@ end
 ---@param current_row integer
 ---@return TSNode | nil, integer | nil
 function M.find_out(current_row)
-  local cur = current_row
+  local current_level = heading.heading_level(current_row)
 
-  while cur > 1 do
-    cur = cur - 1
-    local info = heading.heading_info(cur)
+  if current_level then
+    -- We're on a heading, find the parent heading (lower level number)
+    local parent_row, _ = heading.find_parent_header(current_row, current_level)
+    if parent_row then
+      return nodes.get_at_row(parent_row), parent_row
+    end
+  else
+    -- We're on text content, find the nearest heading above
+    local cur = current_row
+    while cur > 1 do
+      cur = cur - 1
+      local info = heading.heading_info(cur)
 
-    if info.type == "heading" then
-      return nodes.get_at_row(cur), cur
+      if info.type == "heading" then
+        return nodes.get_at_row(cur), cur
+      end
     end
   end
+
+  return nil, nil
 end
 
 return M

@@ -135,6 +135,29 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(63, 1, "## Links")
   end)
 
+  it("handles headings that are out of order", function()
+    vim.fn.cursor(68, 1) -- ## Out of order headings
+
+    -- navs between h2s, doesn't somehow get sucked into weird ordered content
+    tw.move_down()
+    h.assert_cursor_at(79, 1)
+    tw.move_up()
+    h.assert_cursor_at(68, 1)
+
+    -- Goes in from h2 to h3, skipping h4
+    tw.move_in()
+    h.assert_cursor_at(73, 1)
+
+    tw.move_in()
+    h.assert_cursor_at(75, 1)
+
+    tw.move_out()
+    h.assert_cursor_at(73, 1)
+
+    tw.move_out()
+    h.assert_cursor_at(68, 1)
+  end)
+
   it("navigates between headers across different content blocks", function()
     vim.fn.cursor(63, 1)
     tw.move_down()
@@ -146,7 +169,7 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(79, 1, "## References")
   end)
 
-  it("navigates from content to the correct heading level", function()
+  it("moves out from content to the correct heading level", function()
     vim.fn.cursor(31, 1)
     tw.move_out()
     h.assert_cursor_at(19, 1, "## Text Formatting")

@@ -65,16 +65,16 @@ Or inline code:
 
 [Google](https://www.google.com) and [GitHub Pages](https://pages.github.com).
 
-## Footnotes
+## Out of order headings
 --------------
 
-This text has a footnote[^1].
+#### Out of order
 
-[^1]: The footnote.
+### Out of order
 
-You can also use multiple footnotes[^2]:
+#### What order
 
-[^2]: Another one!
+### Out of it
 
 ## References
 ----------------
