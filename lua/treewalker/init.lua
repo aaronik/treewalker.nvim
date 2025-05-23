@@ -37,7 +37,7 @@ local function ensuring_parser(fn)
     else
       vim.notify_once(
         string.format(
-          "Treewalker.nvim: Missing parser for [%s] files! Treewalker won't work until one is installed.",
+          "Treewalker.nvim: Missing parser for files with extension [%s]! Treewalker won't work until one is installed.",
           ft
         ),
         vim.log.levels.ERROR
