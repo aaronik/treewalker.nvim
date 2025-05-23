@@ -84,6 +84,18 @@ Like in movement, swapping in markdown operates against headings.
 
 ---
 
+## Requirements
+
+Treewalker.nvim requires **Neovim 0.8.3 or later**. The plugin is automatically tested against:
+
+- Neovim 0.8.3 (minimum supported version)
+- Neovim 0.9.5
+- Neovim 0.10.2
+- Neovim stable
+- Neovim nightly
+
+---
+
 ## Installation
 
 #### [Lazy](https://github.com/folke/lazy.nvim)
