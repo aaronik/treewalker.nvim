@@ -321,6 +321,15 @@ describe("Swapping in a regular lua file:", function()
     apply_text_edits_stub:revert()
   end)
 
+	it("swaparound behavior works", function()
+    vim.fn.cursor(38, 32) -- (|node1, node2)
+    tw.swap_left()
+		assert.same("local function have_same_range(node2, node1)", lines.get_line(38))
+    tw.swap_right()
+		assert.same("local function have_same_range(node1, node2)", lines.get_line(38))
+	end)
+
+
   -- Actually I don't think this is supposed to work. It's ambiguous what
   -- node we're on. We'd need to do the lowest coincident that is the highest string
   -- or something.
