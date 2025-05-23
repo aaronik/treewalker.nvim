@@ -22,7 +22,7 @@ jobs:
   test:
     strategy:
       matrix:
-        neovim_version: ['v0.8.3', 'v0.9.5', 'v0.10.2', 'stable', 'nightly']
+        neovim_version: ['v0.9.5', 'v0.10.2', 'stable', 'nightly']
       fail-fast: false
 
     runs-on: ubuntu-latest
