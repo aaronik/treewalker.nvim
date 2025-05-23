@@ -38,6 +38,10 @@ Tests use Plenary.nvim's busted-style framework (describe, it, before_each) and 
 
 Each test spec focuses on a specific language or feature, loading the appropriate fixture and verifying cursor movement and text manipulation behavior.
 
+## Linting
+
+The linter doesn't like whitespace at the end of rows, so avoid leaving it
+
 ## Architecture
 
 The plugin is organized into several core components:
