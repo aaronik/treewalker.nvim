@@ -33,3 +33,15 @@ to develop Treewalker.
 # ~/.zshrc (etc)
 export TREEWALKER_NVIM_ENV=development
 ```
+
+## Adding New Supported Languages
+
+In many cases, treewalker works great out of the box with new languages.
+But when it doesn't, here's how you can add a new supported language.
+
+* Create a fixture file - ~100 lines of your language, put it in `tests/fixtures/`
+* `cp tests/treewalker/{python_spec.lua,<your language>_spec.lua}`
+* Use python_spec as inspiration for your spec
+* Add your language to `tests/minimal_init.lua`
+    * Once at `ensure_installed = {`
+    * Once if you need a `vim.treesitter.language.register()`

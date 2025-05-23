@@ -31,7 +31,8 @@ require('nvim-treesitter.configs').setup {
     modules = {}
 }
 
--- These are required lest nvim not be able to tell these parsers are installed
+-- These are required lest nvim not be able to tell these parsers are
+-- installed. I'm not sure why some of these are required and some aren't.
 vim.treesitter.language.register('ruby', { 'rb' })
 vim.treesitter.language.register('markdown', { 'md' })
 vim.treesitter.language.register('javascript', { 'js' })
