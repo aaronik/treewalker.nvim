@@ -89,17 +89,17 @@ And some online resources:
 * <https://www.w3schools.com>
 * <https://developer.mozilla.org/en-US/docs/Web/HTML>
 
-## Images
-------------
+## Code block
 
-![A cute cat](https://example.com/cat.jpg)
+```sh
+## This is a bash comment, will it register as an h2?
+```
 
-And a table with images:
 
-| Image | Description |
-|:------|:-------------|
-| ![Image 1](https://example.com/image1.jpg) | This is image 1. |
-| ![Image 2](https://example.com/image2.jpg) | And this is image 2! |
+
+
+
+
 
 ## Task List
 --------------

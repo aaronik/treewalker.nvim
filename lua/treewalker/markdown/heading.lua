@@ -3,6 +3,7 @@
 
 local util = require "treewalker.util"
 local lines = require "treewalker.lines"
+local nodes = require "treewalker.nodes"
 
 local M = {}
 
@@ -10,11 +11,32 @@ local M = {}
 -- Heading info extraction: Prefer Treesitter AST, fallback to line regex
 ------------------------------------------------------------
 
+-- Check if what looks like a header is actually a sneaky comment
+-- in a code fence
+---@param row integer
+---@return boolean
+local function is_code_comment(row)
+  local line_node = nodes.get_at_row(row)
+  if not line_node then return false end
+
+  if line_node:type() == "comment" then
+    return true
+  end
+
+  return false
+end
+
 --- Classify heading by examining the raw line (ATX, setext/underline style, etc)
 ---@param row integer
 ---@return {type: string, level: integer}|{type: string}
 local function line_heading_info(row)
   local line = lines.get_line(row) or ""
+
+  -- Don't treat lines inside code fences as headings
+  if is_code_comment(row) then
+    return { type = "none" }
+  end
+
   local atx = line:match("^(#+)%s")
   if atx then
     return { type = "heading", level = #atx }
