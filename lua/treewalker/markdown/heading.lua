@@ -19,11 +19,7 @@ local function is_code_comment(row)
   local line_node = nodes.get_at_row(row)
   if not line_node then return false end
 
-  if line_node:type() == "comment" then
-    return true
-  end
-
-  return false
+  return not nodes.is_jump_target(line_node)
 end
 
 --- Classify heading by examining the raw line (ATX, setext/underline style, etc)
