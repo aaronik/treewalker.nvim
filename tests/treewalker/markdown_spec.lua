@@ -1,9 +1,7 @@
 local load_fixture = require "tests.load_fixture"
-local stub = require 'luassert.stub'
 local assert = require "luassert"
 local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
-local operations = require 'treewalker.operations'
 local h = require 'tests.treewalker.helpers'
 
 describe("Movement in a markdown file", function()
@@ -179,31 +177,29 @@ describe("Movement in a markdown file", function()
   end)
 
   it("highlights whole h2", function()
-    local highlight_stub = stub.new(operations, "highlight")
-
     vim.fn.cursor(19, 1)
     tw.move_up()
-    h.assert_highlighted(4, 1, 18, 1, highlight_stub)
+    h.assert_highlighted(4, 1, 18, 0)
     tw.move_down()
-    h.assert_highlighted(19, 1, 37, 1, highlight_stub)
+    h.assert_highlighted(19, 1, 37, 0)
     tw.move_down()
-    h.assert_highlighted(38, 1, 46, 1, highlight_stub)
+    h.assert_highlighted(38, 1, 46, 0)
     tw.move_down()
-    h.assert_highlighted(47, 1, 54, 1, highlight_stub)
+    h.assert_highlighted(47, 1, 54, 0)
     tw.move_down()
-    h.assert_highlighted(55, 1, 62, 1, highlight_stub)
+    h.assert_highlighted(55, 1, 62, 0)
     tw.move_down()
-    h.assert_highlighted(63, 1, 67, 1, highlight_stub)
+    h.assert_highlighted(63, 1, 67, 0)
     tw.move_down()
-    h.assert_highlighted(68, 1, 78, 1, highlight_stub)
+    h.assert_highlighted(68, 1, 78, 0)
     tw.move_down()
-    h.assert_highlighted(79, 1, 91, 1, highlight_stub)
+    h.assert_highlighted(79, 1, 91, 0)
     tw.move_down()
-    h.assert_highlighted(92, 1, 103, 1, highlight_stub)
+    h.assert_highlighted(92, 1, 103, 0)
     tw.move_down()
-    h.assert_highlighted(104, 1, 109, 1, highlight_stub)
+    h.assert_highlighted(104, 1, 109, 0)
     tw.move_down()
-    h.assert_highlighted(110, 1, 132, 1, highlight_stub)
+    h.assert_highlighted(110, 1, 132, 0)
   end)
 end)
 

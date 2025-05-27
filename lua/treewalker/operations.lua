@@ -39,24 +39,18 @@ end
 ---@param hl_group string
 function M.highlight(range, duration, hl_group)
   local start_row, start_col, end_row, end_col = range[1], range[2], range[3], range[4]
-  local ns_prefix = "treewalker.nvim-movement-highlight-"
-  local ns_name =  ns_prefix .. util.guid()
-  local local_ns_id = vim.api.nvim_create_namespace(ns_name)
+  local ns_name = "treewalker.nvim-movement-highlight"
+  local ns_id = vim.api.nvim_create_namespace(ns_name)
 
   -- clear any previous highlights so there aren't multiple active at the same time
-  -- Find them by prefix, whole local name will only be used for timeout below
-  for name, id in pairs(vim.api.nvim_get_namespaces()) do
-    if vim.startswith(name, ns_prefix) then
-      vim.api.nvim_buf_clear_namespace(0, id, 0, -1)
-    end
-  end
+  vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 
   if vim.hl then
     -- vim.hl.range (Neovim 0.10+ replacement for nvim_buf_add_highlight)
     -- Has timeout option, but when it expires, _auto clears whole namespace_ for pete's sake
     vim.hl.range(
       0,
-      local_ns_id,
+      ns_id,
       hl_group,
       { start_row, start_col },
       { end_row, end_col },
@@ -65,13 +59,13 @@ function M.highlight(range, duration, hl_group)
   else
     -- support for lower versions of neovim
     for row = start_row, end_row do
-      vim.api.nvim_buf_add_highlight(0, local_ns_id, hl_group, row, 0, -1)
+      vim.api.nvim_buf_add_highlight(0, ns_id, hl_group, row, 0, -1)
     end
   end
 
   -- Remove the local highlight after delay
   vim.defer_fn(function()
-    vim.api.nvim_buf_clear_namespace(0, local_ns_id, start_row, end_row + 1)
+    vim.api.nvim_buf_clear_namespace(0, ns_id, start_row, end_row + 1)
   end, duration)
 end
 

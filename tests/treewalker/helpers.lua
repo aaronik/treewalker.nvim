@@ -81,16 +81,40 @@ end
 ---@param scol integer
 ---@param erow integer
 ---@param ecol integer
----@param stoob any
----@param desc string | nil
-function M.assert_highlighted(srow, scol, erow, ecol, stoob, desc)
-  assert(#stoob.calls >= 1, "highlight was not called at all")
+function M.assert_highlighted(srow, scol, erow, ecol)
+  local ns_id = vim.api.nvim_create_namespace("treewalker.nvim-movement-highlight")
+  local highlights = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, { details = true })
 
-  assert.same(
-    { srow - 1, scol - 1, erow - 1, ecol },
-    stoob.calls[#stoob.calls].refs[1],
-    "highlight wrong for: " .. (desc or "")
-  )
+  for _, highlight in ipairs(highlights) do
+    local actual_srow = highlight[2] + 1
+    local actual_scol = highlight[3] + 1
+    local actual_erow = highlight[4].end_row + 1
+    local actual_ecol = highlight[4].end_col
+
+    -- print("actual_srow:", actual_srow)
+    -- print("actual_scol:", actual_scol)
+    -- print("actual_erow:", actual_erow)
+    -- print("actual_ecol:", actual_ecol)
+
+    if
+        srow == actual_srow
+        and scol == actual_scol
+        and erow == actual_erow
+        and ecol == actual_ecol
+    then
+      return true
+    end
+  end
+
+  assert(false, "Specified highlight not found")
+end
+
+-- Get count of active treewalker highlights
+---@return integer
+function M.get_highlight_count()
+  local ns_id = vim.api.nvim_create_namespace("treewalker.nvim-movement-highlight")
+  local highlights = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, {})
+  return #highlights
 end
 
 return M
