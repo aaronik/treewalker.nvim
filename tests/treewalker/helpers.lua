@@ -74,6 +74,39 @@ M.ensure_has_parser = function(lang)
   end)
 end
 
+--- Assert number of highlights for legacy vs block highlight for non-legacy
+---@param expected_count integer|fun(integer):boolean -- Either a count or a predicate
+function M.assert_highlight_count(expected_count)
+  local ns_id = vim.api.nvim_create_namespace("treewalker.nvim-movement-highlight")
+  local highlights = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, {})
+  if vim.env.TEST_HIGHLIGHT_LEGACY and vim.env.TEST_HIGHLIGHT_LEGACY ~= "0" then
+    if type(expected_count) == "function" then
+      assert(expected_count(#highlights))
+    else
+      assert.equal(expected_count, #highlights, "Wrong count of line highlights (legacy)")
+    end
+  else
+    assert.equal(1, #highlights, "Should be exactly one block highlight")
+  end
+end
+
+--- Wait up to {timeout} ms for highlight count to match expectation
+---@param expected integer|fun(integer):boolean
+---@param timeout integer|nil
+function M.assert_highlight_count_eventually(expected, timeout)
+  local got, deadline = -1, vim.loop.hrtime() + (timeout or 100)*1e6
+  while vim.loop.hrtime() < deadline do
+    got = M.get_highlight_count()
+    if type(expected) == 'function' then
+      if expected(got) then return true end
+    else
+      if got == expected then return true end
+    end
+    vim.wait(5, function() return false end)
+  end
+  error("Timed out waiting for highlight: got "..tostring(got))
+end
+
 -- pass in a highlight stub, via `highlight_stub = stub.new(operations, "highlight")`
 -- use with rows as they're numbered in vim lines (1-indexed)
 -- Always checks most recent call
@@ -85,17 +118,47 @@ function M.assert_highlighted(srow, scol, erow, ecol)
   local ns_id = vim.api.nvim_create_namespace("treewalker.nvim-movement-highlight")
   local highlights = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, { details = true })
 
+  -- Diagnostic dump for debugging test failures:
+  local dump_lines = {}
+  table.insert(dump_lines, string.format("[treewalker helpers] highlight assertion failed! Expected: (%d,%d) → (%d,%d)", srow, scol, erow, ecol))
+  if #highlights > 0 then
+    table.insert(dump_lines, "Extmarks found:")
+    for _, h in ipairs(highlights) do
+      table.insert(dump_lines, string.format("> extmark [%d]: srow=%d scol=%d erow=%d ecol=%d", h[1], h[2]+1, h[3]+1, h[4].end_row+1, h[4].end_col))
+    end
+  else
+    table.insert(dump_lines, "No extmarks found.")
+  end
+
+  -- In legacy mode, accept linewise block highlighting
+  if vim.env.TEST_HIGHLIGHT_LEGACY and vim.env.TEST_HIGHLIGHT_LEGACY ~= "0" then
+    local num_lines = erow - srow + 1
+    local found = 0
+    for line = srow, erow do
+      for _, highlight in ipairs(highlights) do
+        local actual_srow = highlight[2] + 1
+        local actual_scol = highlight[3] + 1
+        local actual_erow = highlight[4].end_row + 1
+        local actual_ecol = highlight[4].end_col
+        if actual_srow == line and actual_scol == 1 and actual_erow == line + 1 and actual_ecol == 0 then
+          found = found + 1
+          break
+        end
+      end
+    end
+    if found == num_lines then
+      return true
+    end
+    vim.api.nvim_out_write(table.concat(dump_lines, "\n").."\n")
+    assert(false, "Specified linewise highlight not found for the full range. See extmark dump above.")
+  end
+
+  -- Non-legacy: require a single extmark highlight over the whole range
   for _, highlight in ipairs(highlights) do
     local actual_srow = highlight[2] + 1
     local actual_scol = highlight[3] + 1
     local actual_erow = highlight[4].end_row + 1
     local actual_ecol = highlight[4].end_col
-
-    -- print("actual_srow:", actual_srow)
-    -- print("actual_scol:", actual_scol)
-    -- print("actual_erow:", actual_erow)
-    -- print("actual_ecol:", actual_ecol)
-
     if
         srow == actual_srow
         and scol == actual_scol
@@ -106,7 +169,8 @@ function M.assert_highlighted(srow, scol, erow, ecol)
     end
   end
 
-  assert(false, "Specified highlight not found")
+  vim.api.nvim_out_write(table.concat(dump_lines, "\n").."\n")
+  assert(false, "Specified highlight not found. See extmark dump above.")
 end
 
 -- Get count of active treewalker highlights

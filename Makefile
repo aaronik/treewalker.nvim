@@ -2,7 +2,7 @@ MINIMAL_INIT=tests/minimal_init.lua
 TESTS_DIR=tests
 NO_UTIL_SPEC=checks
 
-.PHONY: test test-watch check no-utils pass help
+.PHONY: test test-watch check no-utils pass test-docker test-docker-build help
 
 test: ## Run the whole test suite
 	@nvim \
@@ -25,6 +25,12 @@ no-utils: ## Make sure there are no errant util calls which write to data direct
 		-c "PlenaryBustedDirectory ${NO_UTIL_SPEC} { minimal_init = '${MINIMAL_INIT}' }"
 
 pass: test no-utils check ## Run everything, if it's a 0 code, everything's good
+
+test-docker-build: ## Build Docker image for Neovim 0.10 testing
+	@docker build -f Dockerfile.neovim-0.10 -t treewalker-nvim-0.10 .
+
+test-docker: test-docker-build ## Run all tests in Docker with Neovim 0.10
+	@docker run --rm -v "$(PWD):/workspace" treewalker-nvim-0.10
 
 help: ## Displays this information.
 	@printf '%s\n' "Usage: make <command>"

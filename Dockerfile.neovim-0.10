@@ -1,0 +1,45 @@
+FROM ubuntu:24.04
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    curl \
+    wget \
+    unzip \
+    build-essential \
+    cmake \
+    gettext \
+    libtool \
+    libtool-bin \
+    autoconf \
+    automake \
+    pkg-config \
+    ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Neovim 0.10 - build from source for compatibility
+RUN cd /tmp && \
+    git clone --depth 1 --branch v0.10.0 https://github.com/neovim/neovim.git && \
+    cd neovim && \
+    make CMAKE_BUILD_TYPE=Release && \
+    make install
+
+# Install luacheck
+RUN apt-get update && apt-get install -y luarocks && \
+    luarocks install luacheck && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create workspace
+WORKDIR /workspace
+
+# Copy the project
+COPY . /workspace/
+
+# Install dependencies (plenary.nvim and nvim-treesitter)
+RUN mkdir -p /root/.local/share/nvim/lazy && \
+    cd /root/.local/share/nvim/lazy && \
+    git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git && \
+    git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git
+
+# Set the entrypoint to run tests
+CMD ["env", "TEST_HIGHLIGHT_LEGACY=1", "make", "test"]

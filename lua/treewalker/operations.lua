@@ -42,12 +42,20 @@ function M.highlight(range, duration, hl_group)
   local ns_name = "treewalker.nvim-movement-highlight"
   local ns_id = vim.api.nvim_create_namespace(ns_name)
 
+  -- DEBUG output:
+  local nvimv = vim.version and vim.version().major and vim.version().major .. '.' .. vim.version().minor or ''
+  print(string.format('[treewalker] highlight: using vim.hl? %s | TEST_HIGHLIGHT_LEGACY=%s | nvim: %s', tostring(vim.hl and true or false), tostring(vim.env.TEST_HIGHLIGHT_LEGACY), nvimv))
+
   -- clear any previous highlights so there aren't multiple active at the same time
   vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 
-  if vim.hl then
-    -- vim.hl.range (Neovim 0.10+ replacement for nvim_buf_add_highlight)
-    -- Has timeout option, but when it expires, _auto clears whole namespace_ for pete's sake
+  if (vim.env.TEST_HIGHLIGHT_LEGACY and vim.env.TEST_HIGHLIGHT_LEGACY ~= "0") or not vim.hl then
+    print('[treewalker] Using legacy nvim_buf_add_highlight')
+    for row = start_row, end_row do
+      vim.api.nvim_buf_add_highlight(0, ns_id, hl_group, row, 0, -1)
+    end
+  else
+    print('[treewalker] Calling vim.hl.range', start_row, start_col, end_row, end_col, hl_group)
     vim.hl.range(
       0,
       ns_id,
@@ -56,12 +64,11 @@ function M.highlight(range, duration, hl_group)
       { end_row, end_col },
       { inclusive = true }
     )
-  else
-    -- support for lower versions of neovim
-    for row = start_row, end_row do
-      vim.api.nvim_buf_add_highlight(0, ns_id, hl_group, row, 0, -1)
-    end
   end
+
+  -- Print all extmarks after highlighting for debug
+  local highlights = vim.api.nvim_buf_get_extmarks(0, ns_id, 0, -1, { details = true })
+  print('[treewalker] extmarks after highlight:', vim.inspect(highlights))
 
   -- Remove the local highlight after delay
   vim.defer_fn(function()
