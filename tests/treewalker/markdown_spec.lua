@@ -202,6 +202,11 @@ describe("Movement in a markdown file", function()
     h.assert_highlighted(110, 1, 132, 0)
   end)
 
+  it("Move out in out of order headings", function()
+    vim.fn.cursor(71, 1)
+    tw.move_out()
+    h.assert_cursor_at(68, 1)
+  end)
 end)
 
 describe("Swapping in a markdown file:", function()

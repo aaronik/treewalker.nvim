@@ -12,7 +12,7 @@ local function find_section_at_row(row)
   local node = nodes.get_at_row(row)
   if not node then return nil end
 
-  local current = node
+  local current = node --[[@as TSNode?]]
   while current do
     if current:type() == "section" then
       return current
@@ -209,25 +209,39 @@ function M.get_prev_outer_heading(row)
   if not util.is_markdown_file() then return nil, nil end
   if not heading.is_heading(row) then return nil, nil end
 
-  local section = find_section_at_row(row)
-  if not section then return nil, nil end
-
-  local current_level = get_section_level(section)
+  local current_level = heading.heading_level(row)
   if not current_level or current_level <= 1 then return nil, nil end
 
-  -- Find parent section with level current_level - 1
-  local parent = section:parent()
-  while parent do
-    if parent:type() == "section" then
-      local parent_level = get_section_level(parent)
-      if parent_level == current_level - 1 then
-        local heading_row = get_section_heading_row(parent)
-        if heading_row then
-          return nodes.get_at_row(heading_row), heading_row
+  -- For out-of-order headings, we need to find the nearest previous heading
+  -- with a lower level (not necessarily direct AST parent)
+  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local target_level = current_level - 1
+  local best_match = nil
+
+  local function find_in_node(node)
+    if node:type() == "section" then
+      local section_level = get_section_level(node)
+      local section_row = get_section_heading_row(node)
+
+      if section_row and section_row < row and section_level and section_level <= target_level then
+        -- Update best match if this is closer or has a higher level (but still <= target_level)
+        if not best_match or section_row > best_match.row or
+           (section_row == best_match.row and section_level > best_match.level) then
+          best_match = { row = section_row, level = section_level }
         end
       end
     end
-    parent = parent:parent()
+
+    -- Recursively search children
+    for child in node:iter_children() do
+      find_in_node(child)
+    end
+  end
+
+  find_in_node(root)
+
+  if best_match then
+    return nodes.get_at_row(best_match.row), best_match.row
   end
 
   return nil, nil
