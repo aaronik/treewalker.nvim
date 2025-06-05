@@ -1,5 +1,4 @@
 local heading = require "treewalker.markdown.heading"
-local section_utils = require "treewalker.markdown.section_utils"
 
 local M = {}
 
@@ -14,7 +13,7 @@ function M.list_sibling_headers_of_level_in_bounds(level, parent_row, start_row,
   for r = start_row, end_row do
     local info = heading.heading_info(r)
     if info.type == "heading" and info.level == level then
-      local this_p, _ = section_utils.find_parent_header(r, info.level)
+      local this_p, _ = heading.find_parent_header(r, info.level)
       if this_p == parent_row then
         table.insert(result, r)
       end

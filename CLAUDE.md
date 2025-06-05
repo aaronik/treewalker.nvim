@@ -66,6 +66,11 @@ The plugin is organized into several core components:
    - General utility functions and logging
    - Node augmentation for related nodes (comments, decorators)
 
+6. **Markdown Support** (`markdown/` directory)
+   - Treesitter-based markdown heading navigation and manipulation
+   - Heading level detection, section bounds calculation, navigation selectors
+   - Pure treesitter implementation without line-based fallbacks
+
 ## Debugging
 
 - Debug logs are written to `~/.local/share/nvim/treewalker/debug.log`
@@ -79,6 +84,7 @@ Consider yourself a senior engineer who specializes in writing clean code, which
 - Make sure all code changes successfully pass the following checks:
     - Always test code changes with `make test`
     - Always luacheck code changes with `make check`
+    - Always use your LSP capabilities and make sure there are no LSP diagnostics
 
     If any of these fail, update the code until they pass.
     Only run these checks - don't do no-utils or pass

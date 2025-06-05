@@ -201,6 +201,7 @@ describe("Movement in a markdown file", function()
     tw.move_down()
     h.assert_highlighted(110, 1, 132, 0)
   end)
+
 end)
 
 describe("Swapping in a markdown file:", function()
