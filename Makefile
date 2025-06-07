@@ -31,3 +31,13 @@ help: ## Displays this information.
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@printf '\n'
 
+dump-treesitter-tree: ## Prints out the treesitter node tree, ex. make dump-treesitter-tree FILE=tests/fixtures/markdown.md
+	@if [ -z "$$FILE" ]; then \
+		echo "Usage: make dump-treesitter-tree FILE=path/to/file"; \
+	else \
+		nvim --headless -c "edit $$FILE" \
+			-c "lua vim.treesitter.inspect_tree({ ignore_injections = false })" \
+			-c 'lua for _,buf in ipairs(vim.api.nvim_list_bufs()) do if vim.bo[buf].filetype=="query" then local l=vim.api.nvim_buf_get_lines(buf,0,-1,false) for _,line in ipairs(l) do print(line) end end end' \
+			-c 'qa!'; \
+	fi
+

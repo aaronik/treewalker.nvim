@@ -1,4 +1,3 @@
-local section_utils = require "treewalker.markdown.section_utils"
 local sibling_utils = require "treewalker.markdown.sibling_utils"
 local heading = require "treewalker.markdown.heading"
 local util = require "treewalker.util"
@@ -12,10 +11,10 @@ local M = {}
 local function validate_section_basics(current_row, target_row)
   if not util.is_markdown_file() then return nil end
 
-  local current_level, current_start, current_end = section_utils.get_markdown_section_bounds(current_row)
+  local current_level, current_start, current_end = heading.get_section_bounds(current_row)
   if not current_level then return nil end
 
-  local target_level, target_start, target_end = section_utils.get_markdown_section_bounds(target_row)
+  local target_level, target_start, target_end = heading.get_section_bounds(target_row)
   if not target_level then return nil end
 
   if current_level ~= target_level then return nil end
@@ -36,13 +35,13 @@ end
 ---@param level integer Level of both headings
 ---@return table|nil parent_info Information about the parent section or nil if invalid
 local function validate_parent(current_row, target_row, level)
-  local current_parent_row = section_utils.find_parent_header(current_row, level)
-  local target_parent_row = section_utils.find_parent_header(target_row, level)
+  local current_parent_row = heading.find_parent_header(current_row, level)
+  local target_parent_row = heading.find_parent_header(target_row, level)
 
   local _, current_parent_start, current_parent_end =
-      section_utils.get_parent_section_bounds(current_row, level)
+      heading.get_parent_section_bounds(current_row, level)
   local _, target_parent_start, target_parent_end =
-      section_utils.get_parent_section_bounds(target_row, level)
+      heading.get_parent_section_bounds(target_row, level)
 
   if current_parent_row ~= target_parent_row then return nil end
   if current_parent_start ~= target_parent_start or current_parent_end ~= target_parent_end then return nil end
