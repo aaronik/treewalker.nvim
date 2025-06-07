@@ -11,6 +11,7 @@ Treewalker.opts = {
   highlight_duration = 250,
   highlight_group = "CursorLine",
   jumplist = true,
+  swaparound = true
 }
 
 -- This does not need to be called for Treewalker to work. The defaults are preinitialized and aim to be sane.
