@@ -10,7 +10,7 @@ describe("In an html file", function()
   h.ensure_has_parser("html")
   h.ensure_has_parser("javascript")
 
-  it("doesn't stop on footers", function()
+  it("doesn't stop on closing tags", function()
     vim.fn.cursor(10, 5)
     tw.move_down()
     h.assert_cursor_at(22, 5)
