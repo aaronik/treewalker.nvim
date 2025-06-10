@@ -3,6 +3,7 @@
 
 local util = require "treewalker.util"
 local nodes = require "treewalker.nodes"
+local ast_utils = require "treewalker.markdown.ast_utils"
 
 local M = {}
 
@@ -173,14 +174,12 @@ function M.find_parent_header(row, level)
   local parent = section:parent()
   while parent do
     if parent:type() == "section" then
-      -- Get the heading level of this parent section
-      for child in parent:iter_children() do
-        if child:type() == "atx_heading" then
-          local parent_level = get_heading_level_from_node(child)
-          if parent_level and parent_level < level then
-            return nodes.get_srow(child), parent_level
-          end
-          break
+      -- Get the heading level of this parent section using ast_utils
+      local heading_child = ast_utils.find_child_of_type(parent, "atx_heading")
+      if heading_child then
+        local parent_level = get_heading_level_from_node(heading_child)
+        if parent_level and parent_level < level then
+          return nodes.get_srow(heading_child), parent_level
         end
       end
     end

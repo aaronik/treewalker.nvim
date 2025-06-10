@@ -40,36 +40,19 @@ function M.get_next_same_level_heading(row)
   local current_level = heading.heading_level(row)
   if not current_level then return nil, nil end
 
-  -- Use treesitter to walk through all sections in document order
   local root = vim.treesitter.get_parser():parse()[1]:root()
   local found_current = false
 
-  local function find_in_node(node)
-    if node:type() == "section" then
-      local section_level = get_section_level(node)
-      local section_row = get_section_heading_row(node)
-
-      if section_row and section_level == current_level then
-        if found_current then
-          local section_row_new, heading_node = get_section_heading_row_and_node(node)
-          return heading_node, section_row_new
-        elseif section_row == row then
-          found_current = true
-        end
+  return ast_utils.find_section_matching(root, function(_, section_row, section_level)
+    if section_row and section_level == current_level then
+      if found_current then
+        return true
+      elseif section_row == row then
+        found_current = true
       end
     end
-
-    -- Recursively search children
-    for child in node:iter_children() do
-      local result_node, result_row = find_in_node(child)
-      if result_node then return result_node, result_row end
-    end
-
-    return nil, nil
-  end
-
-  local result_node, result_row = find_in_node(root)
-  return result_node, result_row
+    return false
+  end)
 end
 
 ---@param row integer
@@ -83,37 +66,24 @@ function M.get_prev_same_level_heading(row)
   local current_level = heading.heading_level(row)
   if not current_level then return nil, nil end
 
-  -- Use treesitter to walk through all sections in document order
   local root = vim.treesitter.get_parser():parse()[1]:root()
   local last_match = nil
 
-  local function find_in_node(node)
-    if node:type() == "section" then
-      local section_level = get_section_level(node)
-      local section_row = get_section_heading_row(node)
-
-      if section_row and section_level == current_level then
-        if section_row == row then
-          -- Found current, return the last match we found
-          return last_match and nodes.get_at_row(last_match), last_match
-        else
-          -- Update last match
-          last_match = section_row
+  return ast_utils.find_section_matching(root, function(_, section_row, section_level)
+    if section_row and section_level == current_level then
+      if section_row == row then
+        -- Found current, return the last match we found
+        if last_match then
+          return true, last_match -- Special return to use last_match as row
         end
+        return false
+      else
+        -- Update last match
+        last_match = section_row
       end
     end
-
-    -- Recursively search children
-    for child in node:iter_children() do
-      local result_node, result_row = find_in_node(child)
-      if result_node then return result_node, result_row end
-    end
-
-    return nil, nil
-  end
-
-  local result_node, result_row = find_in_node(root)
-  return result_node, result_row
+    return false
+  end)
 end
 
 -- Find nearest prev heading at any level
@@ -125,25 +95,16 @@ function M.get_nearest_prev_heading(row)
   local root = vim.treesitter.get_parser():parse()[1]:root()
   local last_match = nil
 
-  local function find_in_node(node)
-    if node:type() == "section" then
-      local section_row = get_section_heading_row(node)
-      if section_row and section_row < row then
-        last_match = section_row
-      elseif section_row and section_row >= row then
-        return last_match and nodes.get_at_row(last_match), last_match
-      end
+  local result_node, result_row = ast_utils.find_section_matching(root, function(_, section_row, _)
+    if section_row and section_row < row then
+      last_match = section_row
+      return false -- Continue searching
+    elseif section_row and section_row >= row then
+      return last_match ~= nil, last_match -- Return previous match if found
     end
+    return false
+  end)
 
-    for child in node:iter_children() do
-      local result_node, result_row = find_in_node(child)
-      if result_node then return result_node, result_row end
-    end
-
-    return nil, nil
-  end
-
-  local result_node, result_row = find_in_node(root)
   if result_node then return result_node, result_row end
   return last_match and nodes.get_at_row(last_match), last_match
 end
@@ -156,23 +117,26 @@ function M.get_nearest_next_heading(row)
 
   local root = vim.treesitter.get_parser():parse()[1]:root()
 
-  local function find_in_node(node)
-    if node:type() == "section" then
-      local section_row = get_section_heading_row(node)
-      if section_row and section_row > row then
-        return nodes.get_at_row(section_row), section_row
-      end
-    end
+  return ast_utils.find_section_matching(root, function(_, section_row, _)
+    return section_row and section_row > row
+  end)
+end
 
-    for child in node:iter_children() do
-      local result_node, result_row = find_in_node(child)
-      if result_node then return result_node, result_row end
-    end
+--- Check if a child section is a valid heading candidate
+---@param child TSNode
+---@param current_level integer
+---@return TSNode | nil, integer | nil, boolean -- node, row, is_exact_next_level
+local function get_child_heading_info(child, current_level)
+  if child:type() ~= "section" then return nil, nil, false end
 
-    return nil, nil
-  end
+  local child_level = get_section_level(child)
+  if not child_level or child_level <= current_level then return nil, nil, false end
 
-  return find_in_node(root)
+  local heading_row = get_section_heading_row(child)
+  if not heading_row then return nil, nil, false end
+
+  local is_exact_next_level = child_level == current_level + 1
+  return nodes.get_at_row(heading_row), heading_row, is_exact_next_level
 end
 
 ---@param row integer
@@ -187,17 +151,24 @@ function M.get_next_inner_heading(row)
   local current_level = get_section_level(section)
   if not current_level then return nil, nil end
 
-  -- Find first child section with level current_level + 1
+  -- Find first child section with appropriate level (handles skipped levels)
+  -- Prefer next level (current_level + 1), but accept any deeper level if none found
+  local fallback_match = nil
+
   for child in section:iter_children() do
-    if child:type() == "section" then
-      local child_level = get_section_level(child)
-      if child_level == current_level + 1 then
-        local heading_row = get_section_heading_row(child)
-        if heading_row then
-          return nodes.get_at_row(heading_row), heading_row
-        end
+    local child_node, child_row, is_exact_next_level = get_child_heading_info(child, current_level)
+    if child_node and child_row then
+      if is_exact_next_level then
+        return child_node, child_row
+      end
+      if not fallback_match then
+        fallback_match = { node = child_node, row = child_row }
       end
     end
+  end
+
+  if fallback_match then
+    return fallback_match.node, fallback_match.row
   end
 
   return nil, nil
