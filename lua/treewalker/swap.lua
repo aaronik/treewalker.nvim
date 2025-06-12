@@ -188,15 +188,14 @@ function M.reorder(node, fn)
   ---@param iter TSNode
   local iter = fn(node)
   while iter do
-    operations.swap_nodes(fn(iter), iter)
+    operations.swap_nodes(node, iter)
+    node = iter
     iter = fn(iter)
   end
 
-  -- We don't know which way we're swapping
-  local lastnode = nodes.prev_sib(iter) or nodes.next_sib(iter)
   vim.fn.cursor(
-    nodes.get_srow(lastnode),
-    nodes.get_scol(lastnode)
+    nodes.get_srow(node),
+    nodes.get_scol(node)
   )
 end
 
