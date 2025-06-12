@@ -121,7 +121,11 @@ function M.swap_right()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
-  local target = nodes.next_sib(current) or nodes.farthest_sibling(current, nodes.prev_sib)
+  local target = nodes.next_sib(current)
+
+  if not target then
+    M.reorder(current, nodes.prev_sib)
+  end
 
   if not current or not target then return end
 
@@ -158,7 +162,11 @@ function M.swap_left()
   current = strategies.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
-  local target = nodes.prev_sib(current) or nodes.farthest_sibling(current, nodes.next_sib)
+  local target = nodes.prev_sib(current)
+
+  if not target then
+    M.reorder(current, nodes.next_sib)
+  end
 
   if not current or not target then return end
 
@@ -168,6 +176,23 @@ function M.swap_left()
   vim.fn.cursor(
     nodes.get_srow(target),
     nodes.get_scol(target)
+  )
+end
+
+---@param node TSNode
+---@param fn function
+function M.reorder(node, fn)
+  if not node then return nil end
+  ---@param iter TSNode
+  local iter = node
+  while fn(iter) do
+    operations.swap_nodes(fn(iter), iter)
+    iter = fn(iter)
+  end
+  -- place cursor on iter
+  vim.fn.cursor(
+    nodes.get_srow(iter),
+    nodes.get_scol(iter)
   )
 end
 
