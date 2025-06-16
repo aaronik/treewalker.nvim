@@ -30,10 +30,23 @@ describe("In a haskell file: ", function()
   end)
 
   it("swaparound behavior works", function()
-    vim.fn.cursor(40, 15)
-    tw.swap_left()
-    assert.same("  printEvens [9, 3, 5, 7, 1]", lines.get_line(40))
-    tw.swap_right()
+    vim.fn.cursor(40, 15) -- [|1, 3, 5, 7, 9]
     assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [3, 5, 7, 9, 1]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [5, 7, 9, 1, 3]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [7, 9, 1, 3, 5]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [9, 1, 3, 5, 7]", lines.get_line(40))
+    tw.swap_left() -- back to original order
+    assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+
+    vim.fn.cursor(40, 27) -- [|1, 3, 5, 7, |9]
+    assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+    tw.swap_right()
+    assert.same("  printEvens [9, 1, 3, 5, 7]", lines.get_line(40))
+    tw.swap_right()
+    assert.same("  printEvens [7, 9, 1, 3, 5]", lines.get_line(40))
   end)
-end)
