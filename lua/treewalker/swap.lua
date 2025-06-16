@@ -123,6 +123,10 @@ function M.swap_right()
 
   local target = nodes.next_sib(current)
 
+  if not target then
+    M.reorder(current, nodes.prev_sib)
+  end
+
   if not current or not target then return end
 
   -- set a mark to track where the target started, so we may later go there after the swap
@@ -160,6 +164,10 @@ function M.swap_left()
 
   local target = nodes.prev_sib(current)
 
+  if not target then
+    M.reorder(current, nodes.next_sib)
+  end
+
   if not current or not target then return end
 
   operations.swap_nodes(target, current)
@@ -168,6 +176,26 @@ function M.swap_left()
   vim.fn.cursor(
     nodes.get_srow(target),
     nodes.get_scol(target)
+  )
+end
+
+---@param node TSNode
+---@param fn function
+function M.reorder(node, fn)
+  if not node then return end
+  if not fn then return end
+
+  ---@param iter TSNode
+  local iter = fn(node)
+  while iter do
+    operations.swap_nodes(node, iter)
+    node = iter
+    iter = fn(iter)
+  end
+
+  vim.fn.cursor(
+    nodes.get_srow(node),
+    nodes.get_scol(node)
   )
 end
 
