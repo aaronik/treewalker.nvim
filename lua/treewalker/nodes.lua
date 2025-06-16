@@ -176,22 +176,6 @@ function M.next_sib(node)
   return node:next_named_sibling()
 end
 
----@param node TSNode
----@param fn function
----@return TSNode | nil
-function M.farthest_sibling(node, fn)
-  if not node then return nil end
-
-  ---@type TSNode | nil
-  local iter = fn(node)
-
-  while iter do
-    node = iter
-    iter = fn(iter)
-  end
-  return node
-end
-
 -- Convenience for give me back prev sibling of a potentially nil node
 ---@param node TSNode | nil
 function M.prev_sib(node)
