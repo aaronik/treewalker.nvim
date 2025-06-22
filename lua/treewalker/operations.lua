@@ -131,4 +131,34 @@ function M.swap_nodes(left, right)
   vim.lsp.util.apply_text_edits({ edit1, edit2 }, bufnr, encoding)
 end
 
+function M.find_delimiter(node, fn)
+	if not node or not fn then return end
+	local iter = fn(node)
+	while iter do
+		if iter:type() == "punctuation.delimeter" then
+			return nodes.get_lines(iter)
+		end
+	end
+end
+
+function M.delete_left_end(parent)
+	if not parent then return end
+	local children = nodes.get_children(parent) 
+
+	local start_node = children[2]
+	local end_node = children[4]
+
+  local range = {
+		start = nodes.lsp_range(start_node).start,
+		["end"] = nodes.lsp_range(end_node).start
+	}
+
+  local edit = { range = range, newText = "" }
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local encoding = vim.api.nvim_get_option_value('fileencoding', {})
+  if not encoding or encoding == "" then encoding = "utf-8" end -- #23
+  vim.lsp.util.apply_text_edits({ edit }, bufnr, encoding)
+end
+
 return M
