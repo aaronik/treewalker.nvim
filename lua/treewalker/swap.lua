@@ -124,8 +124,7 @@ function M.swap_right()
   local target = nodes.next_sib(current)
 
   if not target then
-    -- M.reorder(current, nodes.prev_sib)
-    M.reorder(current, current.prev_sibling)
+    M.reorder(current, "left") 
   end
 
   if not current or not target then return end
@@ -166,8 +165,7 @@ function M.swap_left()
   local target = nodes.prev_sib(current)
 
   if not target then
-    -- M.reorder(current, nodes.next_sib)
-    M.reorder(current, current.next_sibling)
+    M.reorder(current, "right")
   end
 
   if not current or not target then return end
@@ -183,9 +181,9 @@ end
 
 ---@param node TSNode
 ---@param fn function
-function M.reorder(node, fn)
-  if not node or not fn then return end
-	operations.delete_left_end(node:parent())
+function M.reorder(node, side)
+  if not node or not side then return end
+	operations.delete_at_end(node:parent(), side)
 end
 
 return M

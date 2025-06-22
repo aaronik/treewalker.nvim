@@ -161,4 +161,38 @@ function M.delete_left_end(parent)
   vim.lsp.util.apply_text_edits({ edit }, bufnr, encoding)
 end
 
+function M.delete(range)
+  local edit = { range = range, newText = "" }
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local encoding = vim.api.nvim_get_option_value('fileencoding', {})
+  if not encoding or encoding == "" then encoding = "utf-8" end -- #23
+  vim.lsp.util.apply_text_edits({ edit }, bufnr, encoding)
+
+end
+
+function M.delete_at_end(parent, side)
+	if not parent then return end
+	local children = nodes.get_children(parent) 
+
+	local start_node, end_node
+
+	if side == "left" then
+		start_node = children[2]
+		end_node = children[4]
+	elseif side == "right" then
+		start_node = children[#children - 2]
+		end_node = children[#children]
+	else
+		return
+	end
+
+  local range = {
+		start = nodes.lsp_range(start_node).start,
+		["end"] = nodes.lsp_range(end_node).start
+	}
+
+	M.delete(range)
+end
+
 return M
