@@ -124,7 +124,7 @@ function M.swap_right()
   local target = nodes.next_sib(current)
 
   if not target then
-    M.reorder(current, "left") 
+    M.reorder(current, "right") 
   end
 
   if not current or not target then return end
@@ -165,7 +165,7 @@ function M.swap_left()
   local target = nodes.prev_sib(current)
 
   if not target then
-    M.reorder(current, "right")
+    M.reorder(current, "left")
   end
 
   if not current or not target then return end
@@ -183,9 +183,9 @@ end
 ---@param fn function
 function M.reorder(node, side)
   if not node or not side then return end
-	operations.delete_at_end(node:parent(), side)
-	node = nodes.get_current()
 	operations.insert(node, side)
+	node = nodes.get_current()
+	operations.delete_at_end(node:parent(), side)
 end
 
 return M

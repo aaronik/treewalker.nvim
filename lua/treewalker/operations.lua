@@ -132,9 +132,6 @@ function M.swap_nodes(left, right)
 end
 
 function M.find_delimiter(parent)
-	for k,v in pairs(parent) do
-		print(v:type())
-	end
 end
 
 function M.delete(range)
@@ -174,7 +171,31 @@ end
 function M.insert(node, side)
   if not node then return end
   local parent = node:parent()
-  local delimimiter = M.find_delimiter(nodes.get_children(parent))
-  print(delimimiter)
+
+  -- local delimimiter = M.find_delimiter(nodes.get_children(parent))
+	local delimiter = ","
+
+	local parent = node:parent()
+  local children = nodes.get_children(parent) 
+
+	local range, edit
+	if side == "right" then
+		range = {
+			start = nodes.lsp_range(children[2]).start,
+			["end"] = nodes.lsp_range(children[2]).start
+		}
+		edit = { range = range, newText = table.concat(nodes.get_lines(node), "\n") .. delimiter .. " " }
+	elseif side == "left" then
+		range = {
+			start = nodes.lsp_range(children[#children - 1])["end"],
+			["end"] = nodes.lsp_range(children[#children - 1])["end"]
+		}
+		edit = { range = range, newText = delimiter .. " " .. table.concat(nodes.get_lines(node), "\n") }
+	end
+
+  local bufnr = vim.api.nvim_get_current_buf()
+  local encoding = vim.api.nvim_get_option_value('fileencoding', {})
+  if not encoding or encoding == "" then encoding = "utf-8" end -- #23
+  vim.lsp.util.apply_text_edits({ edit }, bufnr, encoding)
 end
 return M
