@@ -184,6 +184,8 @@ end
 function M.reorder(node, side)
   if not node or not side then return end
 	operations.delete_at_end(node:parent(), side)
+	node = nodes.get_current()
+	operations.insert(node, side)
 end
 
 return M

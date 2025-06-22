@@ -131,13 +131,9 @@ function M.swap_nodes(left, right)
   vim.lsp.util.apply_text_edits({ edit1, edit2 }, bufnr, encoding)
 end
 
-function M.find_delimiter(node, fn)
-	if not node or not fn then return end
-	local iter = fn(node)
-	while iter do
-		if iter:type() == "punctuation.delimeter" then
-			return nodes.get_lines(iter)
-		end
+function M.find_delimiter(parent)
+	for k,v in pairs(parent) do
+		print(v:type())
 	end
 end
 
@@ -195,4 +191,10 @@ function M.delete_at_end(parent, side)
 	M.delete(range)
 end
 
+function M.insert(node, side)
+	if not node then return end
+	local parent = node:parent()
+	local delimimiter = M.find_delimiter(nodes.get_children(parent))
+	print(delimimiter)
+end
 return M
