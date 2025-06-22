@@ -123,6 +123,10 @@ function M.swap_right()
 
   local target = nodes.next_sib(current)
 
+  if not target then
+    M.reorder(current, "right") 
+  end
+
   if not current or not target then return end
 
   -- set a mark to track where the target started, so we may later go there after the swap
@@ -160,6 +164,10 @@ function M.swap_left()
 
   local target = nodes.prev_sib(current)
 
+  if not target then
+    M.reorder(current, "left")
+  end
+
   if not current or not target then return end
 
   operations.swap_nodes(target, current)
@@ -169,6 +177,15 @@ function M.swap_left()
     nodes.get_srow(target),
     nodes.get_scol(target)
   )
+end
+
+---@param node TSNode
+---@param fn function
+function M.reorder(node, side)
+  if not node or not side then return end
+	operations.insert(node, side)
+	node = nodes.get_current()
+	operations.delete_at_end(node:parent(), side)
 end
 
 return M
