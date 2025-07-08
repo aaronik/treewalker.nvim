@@ -33,6 +33,31 @@ function M.swap_buffer_ranges(start1, end1, start2, end2)
   return true
 end
 
+---Create visual selection for the given range
+---@param range Range4
+function M.select(range)
+  local start_row, start_col, end_row, end_col = range[1], range[2], range[3], range[4]
+
+  -- Exit visual mode if we're already in it to start fresh
+  local current_mode = vim.fn.mode()
+  if current_mode == 'v' or current_mode == 'V' or current_mode == '\22' then
+    vim.cmd('normal! \\<Esc>')
+  end
+
+  -- Position cursor at start of selection (1-indexed for vim API)
+  vim.api.nvim_win_set_cursor(0, { start_row + 1, start_col })
+
+  -- Enter visual mode
+  vim.cmd('normal! v')
+
+  -- Move to end position using API
+  local end_line = end_row + 1
+  local end_column = end_col > 0 and end_col - 1 or 0
+
+  -- Move cursor to end position while in visual mode
+  vim.api.nvim_win_set_cursor(0, { end_line, end_column })
+end
+
 ---Flash a highlight over the given range
 ---@param range Range4
 ---@param duration integer
@@ -74,19 +99,22 @@ end
 function M.jump(node, row)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
   vim.cmd("normal! ^") -- Jump to start of line
-  if require("treewalker").opts.highlight then
-    local duration = require("treewalker").opts.highlight_duration
-    local hl_group = require("treewalker").opts.highlight_group
 
-    local range = nodes.range(node)
+  local opts = require("treewalker").opts
+  local range = nodes.range(node)
 
-    if util.is_markdown_file() then
-      local _, section_start, section_end = heading.get_section_bounds(row)
-      if section_start and section_end then
-        range = { section_start - 1, 0, section_end - 1, 1 }
-      end
+  if util.is_markdown_file() then
+    local _, section_start, section_end = heading.get_section_bounds(row)
+    if section_start and section_end then
+      range = { section_start - 1, 0, section_end - 1, 1 }
     end
+  end
 
+  if opts.select then
+    M.select(range)
+  elseif opts.highlight then
+    local duration = opts.highlight_duration
+    local hl_group = opts.highlight_group
     M.highlight(range, duration, hl_group)
   end
 end
