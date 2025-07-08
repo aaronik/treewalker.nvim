@@ -33,6 +33,53 @@ function M.swap_buffer_ranges(start1, end1, start2, end2)
   return true
 end
 
+---Create visual selection for the given range without moving cursor
+---Good lord, why isn't there some API to do this? Someone should do something
+---about that!
+---@param range Range4
+function M.select(range)
+  local _, _, end_row, end_col = range[1], range[2], range[3], range[4]
+
+  -- Exit visual mode if we're already in it to start fresh
+  local current_mode = vim.fn.mode()
+  if current_mode == 'v' or current_mode == 'V' or current_mode == '\22' then
+    vim.cmd('normal! \\<Esc>')
+  end
+
+  -- Use current cursor position as start of selection
+  local cursor_pos = vim.api.nvim_win_get_cursor(0)
+  local start_line = cursor_pos[1]
+  local start_col = cursor_pos[2]
+
+  -- Convert 0-indexed range to 1-indexed for vim
+  local end_line = end_row + 1
+
+  -- Treesitter ranges are exclusive at the end, but vim visual selections are inclusive
+  local adjusted_end_col = end_col > 0 and end_col - 1 or end_col
+
+  -- Enter visual mode
+  vim.cmd('normal! v')
+
+  -- Move to end position
+  vim.api.nvim_win_set_cursor(0, { end_line, adjusted_end_col })
+
+  -- Exit and re-enter visual mode to ensure marks are set
+  vim.cmd('normal! \\<Esc>')
+
+  -- Set the marks manually to ensure they're correct
+  vim.api.nvim_buf_set_mark(0, '<', start_line, start_col, {})
+  vim.api.nvim_buf_set_mark(0, '>', end_line, adjusted_end_col, {})
+
+  -- Re-enter visual mode using gv which restores the selection based on marks
+  vim.cmd('normal! gv')
+
+  -- Ensure cursor is at the start of the selection
+  local new_cursor_pos = vim.api.nvim_win_get_cursor(0)
+  if new_cursor_pos[1] ~= start_line or new_cursor_pos[2] ~= start_col then
+    vim.cmd('normal! o')  -- Switch to other end of selection
+  end
+end
+
 ---Flash a highlight over the given range
 ---@param range Range4
 ---@param duration integer
@@ -74,19 +121,22 @@ end
 function M.jump(node, row)
   vim.api.nvim_win_set_cursor(0, { row, 0 })
   vim.cmd("normal! ^") -- Jump to start of line
-  if require("treewalker").opts.highlight then
-    local duration = require("treewalker").opts.highlight_duration
-    local hl_group = require("treewalker").opts.highlight_group
 
-    local range = nodes.range(node)
+  local opts = require("treewalker").opts
+  local range = nodes.range(node)
 
-    if util.is_markdown_file() then
-      local _, section_start, section_end = heading.get_section_bounds(row)
-      if section_start and section_end then
-        range = { section_start - 1, 0, section_end - 1, 1 }
-      end
+  if util.is_markdown_file() then
+    local _, section_start, section_end = heading.get_section_bounds(row)
+    if section_start and section_end then
+      range = { section_start - 1, 0, section_end - 1, 1 }
     end
+  end
 
+  if opts.select then
+    M.select(range)
+  elseif opts.highlight then
+    local duration = opts.highlight_duration
+    local hl_group = opts.highlight_group
     M.highlight(range, duration, hl_group)
   end
 end

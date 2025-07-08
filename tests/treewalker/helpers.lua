@@ -38,6 +38,24 @@ function M.assert_cursor_at(expected_row, expected_col, expected_line)
   assert.same({ expected_row, expected_col }, { actual_row, actual_col }, error_line)
 end
 
+--- Assert the selected text is in the expected range
+---@param srow integer
+---@param scol integer
+---@param erow integer
+---@param ecol integer
+function M.assert_selected(srow, scol, erow, ecol)
+  -- Get the start position of the current selection using the mark '<'
+  local selection_start = vim.api.nvim_buf_get_mark(0, '<')
+  -- Get the other end position of the current selection using the mark '>'
+  local other_end = vim.api.nvim_buf_get_mark(0, '>')
+
+  -- Assert the expected start position of the selection
+  local msg = "select position is wrong"
+  local expected = { srow, scol, erow, ecol }
+  local actual = { selection_start[1], selection_start[2] + 1, other_end[1], other_end[2] + 1 }
+  assert.same(expected, actual, msg)
+end
+
 -- Feed keys to neovim; keys are pressed no matter what vim mode or state
 ---@param keys string
 ---@return nil
@@ -45,7 +63,6 @@ M.feed_keys = function(keys)
   local termcodes = vim.api.nvim_replace_termcodes(keys, true, true, true)
   vim.api.nvim_feedkeys(termcodes, 'mtx', false)
 end
-
 -- This is more for the test suite itself and ensuring that it's operating correctly.
 -- Makes sure there's no missing parser for the loaded file in the current buffer
 ---@param lang string
