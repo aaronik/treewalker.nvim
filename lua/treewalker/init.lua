@@ -29,11 +29,13 @@ end
 -- Makes sure the treesitter parser is available, otherwise makes a notification
 ---@param fn function
 local function ensuring_parser(fn)
+  ---@return boolean
   return function(...)
     local ft = vim.bo.ft
     local ok = pcall(vim.treesitter.get_parser)
     if ok then
       fn(...)
+      return true
     else
       vim.notify_once(
         string.format(
@@ -43,6 +45,7 @@ local function ensuring_parser(fn)
         ),
         vim.log.levels.ERROR
       )
+      return false
     end
   end
 end
