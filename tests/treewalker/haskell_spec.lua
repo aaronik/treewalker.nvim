@@ -1,6 +1,7 @@
 local load_fixture = require "tests.load_fixture"
 local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
+local lines = require 'treewalker.lines'
 
 describe("In a haskell file: ", function()
   before_each(function()
@@ -27,6 +28,26 @@ describe("In a haskell file: ", function()
     tw.move_out()
     h.assert_cursor_at(19, 1)
   end)
+
+  it("swaparound behavior works", function()
+    vim.fn.cursor(40, 15) -- [|1, 3, 5, 7, 9]
+    assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [3, 5, 7, 9, 1]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [5, 7, 9, 1, 3]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [7, 9, 1, 3, 5]", lines.get_line(40))
+    tw.swap_left()
+    assert.same("  printEvens [9, 1, 3, 5, 7]", lines.get_line(40))
+    tw.swap_left() -- back to original order
+    assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+
+    vim.fn.cursor(40, 27) -- [|1, 3, 5, 7, |9]
+    assert.same("  printEvens [1, 3, 5, 7, 9]", lines.get_line(40))
+    tw.swap_right()
+    assert.same("  printEvens [9, 1, 3, 5, 7]", lines.get_line(40))
+    tw.swap_right()
+    assert.same("  printEvens [7, 9, 1, 3, 5]", lines.get_line(40))
+  end)
 end)
-
-
