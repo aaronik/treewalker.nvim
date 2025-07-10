@@ -44,18 +44,35 @@ function M.select(range)
     vim.cmd('normal! \\<Esc>')
   end
 
-  -- Position cursor at start of selection (1-indexed for vim API)
-  vim.api.nvim_win_set_cursor(0, { start_row + 1, start_col })
+  -- Convert 0-indexed range to 1-indexed for vim
+  local start_line = start_row + 1
+  local end_line = end_row + 1
+
+  -- Position cursor at start of selection
+  vim.api.nvim_win_set_cursor(0, { start_line, start_col })
 
   -- Enter visual mode
   vim.cmd('normal! v')
 
-  -- Move to end position using API
-  local end_line = end_row + 1
-  local end_column = end_col > 0 and end_col - 1 or 0
+  -- Move to end position
+  vim.api.nvim_win_set_cursor(0, { end_line, end_col })
 
-  -- Move cursor to end position while in visual mode
-  vim.api.nvim_win_set_cursor(0, { end_line, end_column })
+  -- Exit and re-enter visual mode to ensure marks are set
+  vim.cmd('normal! \\<Esc>')
+
+  -- Set the marks manually to ensure they're correct
+  -- Treesitter ranges are exclusive at the end, but vim visual selections are inclusive
+  local adjusted_end_col = end_col > 0 and end_col - 1 or end_col
+  vim.api.nvim_buf_set_mark(0, '<', start_line, start_col, {})
+  vim.api.nvim_buf_set_mark(0, '>', end_line, adjusted_end_col, {})
+
+  -- Re-enter visual mode using gv which restores the selection based on marks
+  vim.cmd('normal! gv')
+
+  -- Ensure cursor is at the start of the selection
+  if vim.api.nvim_win_get_cursor(0)[1] ~= start_line or vim.api.nvim_win_get_cursor(0)[2] ~= start_col then
+    vim.cmd('normal! o')  -- Switch to other end of selection
+  end
 end
 
 ---Flash a highlight over the given range
