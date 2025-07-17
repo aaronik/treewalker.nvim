@@ -38,6 +38,10 @@ function M.out(node)
     return markdown_targets.out()
   end
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
+  -- If no ancestor with different column found, try to find the first valid ancestor
+  if not candidate then
+    candidate = strategies.get_first_ancestor_jump_target(node)
+  end
   candidate = coincident(candidate)
   if not candidate then return end
   local row = nodes.get_srow(candidate)

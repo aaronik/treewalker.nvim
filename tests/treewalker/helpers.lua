@@ -91,9 +91,7 @@ M.ensure_has_parser = function(lang)
   end)
 end
 
--- pass in a highlight stub, via `highlight_stub = stub.new(operations, "highlight")`
 -- use with rows as they're numbered in vim lines (1-indexed)
--- Always checks most recent call
 ---@param srow integer
 ---@param scol integer
 ---@param erow integer
@@ -108,10 +106,10 @@ function M.assert_highlighted(srow, scol, erow, ecol)
     local actual_erow = highlight[4].end_row + 1
     local actual_ecol = highlight[4].end_col
 
-    -- print("actual_srow:", actual_srow)
-    -- print("actual_scol:", actual_scol)
-    -- print("actual_erow:", actual_erow)
-    -- print("actual_ecol:", actual_ecol)
+    print("actual_srow:", actual_srow)
+    print("actual_scol:", actual_scol)
+    print("actual_erow:", actual_erow)
+    print("actual_ecol:", actual_ecol)
 
     if
         srow == actual_srow

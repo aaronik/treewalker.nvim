@@ -192,6 +192,19 @@ function M.get_first_ancestor_with_diff_scol(node)
   end
 end
 
+---Get the first ancestor that is a valid jump target (used for move_out)
+---@param node TSNode
+---@return TSNode | nil
+function M.get_first_ancestor_jump_target(node)
+  local iter_ancestor = node:parent()
+  while iter_ancestor do
+    if nodes.is_jump_target(iter_ancestor) then
+      return iter_ancestor
+    end
+    iter_ancestor = iter_ancestor:parent()
+  end
+end
+
 -- Use this to get the whole string from inside of a string
 -- returns nils if the passed in node is not a string node
 ---@param node TSNode
