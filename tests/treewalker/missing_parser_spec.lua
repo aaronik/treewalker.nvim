@@ -42,3 +42,21 @@ describe("For a file in which there is a parser present", function()
     end)
   end
 end)
+
+describe("For a file in which there is a missing parser, when notifications are turned off", function()
+  before_each(function()
+    load_fixture("/random.not_real", true)
+    vim.opt.fileencoding = 'utf-8'
+    tw.setup({ notifications = false })
+  end)
+
+  for nam, command in pairs(commands) do
+    it(string.format("does not notify when %s is called", nam), function()
+      local notify_once_stub = stub.new(vim, "notify_once")
+      local return_val = command()
+      assert.stub(notify_once_stub).was.called(0)
+      assert.same(false, return_val)
+    end)
+  end
+end)
+

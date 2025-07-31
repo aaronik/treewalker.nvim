@@ -1,6 +1,13 @@
 local M = {}
 
----@alias Opts { highlight: boolean, highlight_duration: integer, jumplist: boolean | 'left', highlight_group: string, select: boolean }
+---@alias Opts
+---| {
+---    highlight: boolean,
+---    highlight_duration: integer,
+---    jumplist: boolean | 'left',
+---    highlight_group: string,
+---    select: boolean,
+---    notifications: boolean }
 
 ---@param opts Opts
 ---@return boolean, table<string>
@@ -28,6 +35,10 @@ function M.validate_opts(opts)
 
   if type(opts.select) ~= "boolean" and opts.select ~= nil then
     table.insert(errors, "`select` should be boolean or nil")
+  end
+
+  if type(opts.notifications) ~= "boolean" and opts.notifications ~= nil then
+    table.insert(errors, "`notifications` should be boolean or nil")
   end
 
   if #errors == 0 then

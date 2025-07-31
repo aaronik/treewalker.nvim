@@ -15,6 +15,8 @@ describe("When given bad options", function()
       highlight_group = 85,
       ---@diagnostic disable-next-line: assign-type-mismatch
       jumplist = {},
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      notifications = "what",
     })
 
     assert.stub(notify_stub).was.called(1)
@@ -23,6 +25,7 @@ describe("When given bad options", function()
     assert(notify_msg:find("highlight_duration"))
     assert(notify_msg:find("highlight_group"))
     assert(notify_msg:find("jumplist"))
+    assert(notify_msg:find("notifications"))
   end)
 
   it("does not notify of correct options", function()
@@ -33,7 +36,8 @@ describe("When given bad options", function()
       ---@diagnostic disable-next-line: assign-type-mismatch
       highlight = "bad",
       highlight_group = "ColorColumn",
-      jumplist = true
+      jumplist = true,
+      notifications = true,
     })
 
     assert.stub(notify_stub).was.called(1)
@@ -60,6 +64,7 @@ describe("When given all good options", function()
       highlight_duration = 1,
       highlight_group = "ColorColumn",
       jumplist = 'left',
+      notifications = true,
     })
 
     assert.stub(notify_stub).was.called(0)
@@ -93,6 +98,25 @@ describe("When given all good options", function()
     local notify_once_stub = stub(vim, "notify_once")
 
     tw.setup()
+
+    assert.stub(notify_stub).was.called(0)
+    assert.stub(notify_once_stub).was.called(0)
+  end)
+end)
+
+describe("Notifications", function()
+  it("does not notify of bad ops when notifications is turned off", function()
+    local notify_stub = stub(vim, "notify")
+    local notify_once_stub = stub(vim, "notify_once")
+
+    tw.setup({
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      highlight = "butts", -- This will trigger a notification
+      highlight_duration = 1,
+      highlight_group = "ColorColumn",
+      jumplist = 'left',
+      notifications = false,
+    })
 
     assert.stub(notify_stub).was.called(0)
     assert.stub(notify_once_stub).was.called(0)

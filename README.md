@@ -3,6 +3,8 @@
     <h4 align="center">
         <a href="#Installation">Installation</a>
         ·
+        <a href="#Options">Options</a>
+        ·
         <a href="#Mapping">Mapping</a>
     </h4>
     <a href="https://neovim.io/">
@@ -48,25 +50,17 @@ and then feel lost, you have `Ctrl-o` available to bring you back to where you l
 
 ## Swapping
 
-### Code files
-
 `Swap{Up,Down}` operate on a linewise basis, and **bring along nodes' comments, decorators, and annotations**.
 These are meant for swapping declarations and definitions - things that take up whole lines.
 
-`Swap{Left,Right}` are meant for swapping function arguments, enum members, list elements, etc. Things that are many per line.
-In some cases these will operate on the same nodes as Up/Down, but won't take the accoutrements.
+`Swap{Left,Right}` operate on a nodewise basis, and are meant for swapping function arguments, enum members,
+list elements, etc -- things that are many per line. If used on a top level node on a line, it'll swap
+the same nodes as Up/Down, but won't take the comments, decorators or annotations with them.
 
 * **`:Treewalker SwapUp`** - Swaps the highest node on the line upwards in the document
-* **`:Treewalker SwapDown`** - Swaps the biggest node on the line downward in the document
+* **`:Treewalker SwapDown`** - Swaps the highest node on the line downward in the document
 * **`:Treewalker SwapLeft`** - Swap the node under the cursor with its previous neighbor
 * **`:Treewalker SwapRight`** - Swap the node under the cursor with its next neighbor
-
-### Markdown
-
-Like in movement, swapping in markdown operates against headings.
-
-* **`:Treewalker SwapUp`** - Swaps the current heading and its subtree with the previous heading at the same level, moving the whole section upward
-* **`:Treewalker SwapDown`** - Swaps the current heading and its subtree with the next heading at the same level, moving the whole section downward
 
 ---
 
@@ -91,34 +85,8 @@ Like in movement, swapping in markdown operates against headings.
 {
   'aaronik/treewalker.nvim',
 
-  -- The following options are the defaults.
-  -- Treewalker aims for sane defaults, so these are each individually optional,
-  -- and setup() does not need to be called, so the whole opts block is optional as well.
-  opts = {
-    -- Whether to briefly highlight the node after jumping to it
-    highlight = true,
-
-    -- How long should above highlight last (in ms)
-    highlight_duration = 250,
-
-    -- The color of the above highlight. Must be a valid vim highlight group.
-    -- (see :h highlight-group for options)
-    highlight_group = 'CursorLine',
-
-    -- Whether to create a visual selection after a movement to a node.
-    -- If true, highlight is disabled and a visual selection is made in
-    -- its place.
-    select = false,
-
-    -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
-    --  true: All movements more than 1 line are added to the jumplist. This is the default,
-    --        and is meant to cover most use cases. It's modeled on how { and } natively add
-    --        to the jumplist.
-    --  false: Treewalker does not add to the jumplist at all
-    --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
-    --          likely one to be confusing, so it has its own mode.
-    jumplist = true,
-  }
+  -- optional (see below for detailed options)
+  opts = { ... }
 }
 ```
 
@@ -127,34 +95,9 @@ Like in movement, swapping in markdown operates against headings.
 use {
   'aaronik/treewalker.nvim',
 
-  -- The setup function is optional, defaults are meant to be sane
-  -- and setup does not need to be called
+  -- optional (see below for detailed options)
   setup = function()
-      require('treewalker').setup({
-        -- Whether to briefly highlight the node after jumping to it
-        highlight = true,
-
-        -- How long should above highlight last (in ms)
-        highlight_duration = 250,
-
-        -- The color of the above highlight. Must be a valid vim highlight group.
-        -- (see :h highlight-group for options)
-        highlight_group = 'CursorLine',
-
-        -- Whether to create a visual selection after a movement to a node.
-        -- If true, highlight is disabled and a visual selection is made in
-        -- its place.
-        select = false,
-
-        -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
-        --  true: All movements more than 1 line are added to the jumplist. This is the default,
-        --        and is meant to cover most use cases. It's modeled on how { and } natively add
-        --        to the jumplist.
-        --  false: Treewalker does not add to the jumplist at all
-        --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
-        --          likely one to be confusing, so it has its own mode.
-        jumplist = true,
-      })
+      require('treewalker').setup({ ... })
   end
 }
 ```
@@ -163,11 +106,48 @@ use {
 ```vimscript
 Plug 'aaronik/treewalker.nvim'
 
-" This line is optional
-:lua require('treewalker').setup({ highlight = true, highlight_duration = 250, highlight_group = 'CursorLine', select = false, jumplist = true })
+" Optionally (see below for detailed options)
+:lua require('treewalker').setup({ ... })
 ```
 
 ---
+
+## Options
+
+Treewalker aims for sane defaults, but you can modify some behavior via the
+options below.
+
+```lua
+-- The defaults:
+{
+  -- Whether to briefly highlight the node after jumping to it
+  highlight = true,
+
+  -- How long should above highlight last (in ms)
+  highlight_duration = 250,
+
+  -- The color of the above highlight. Must be a valid vim highlight group.
+  -- (see :h highlight-group for options)
+  highlight_group = 'CursorLine',
+
+  -- Whether to create a visual selection after a movement to a node.
+  -- If true, highlight is disabled and a visual selection is made in
+  -- its place.
+  select = false,
+
+  -- Whether to use vim.notify to warn when there are missing parsers or incorrect options
+  notifications = true,
+
+  -- Whether the plugin adds movements to the jumplist -- true | false | 'left'
+  --  true: All movements more than 1 line are added to the jumplist. This is the default,
+  --        and is meant to cover most use cases. It's modeled on how { and } natively add
+  --        to the jumplist.
+  --  false: Treewalker does not add to the jumplist at all
+  --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
+  --          likely one to be confusing, so it has its own mode.
+  jumplist = true,
+}
+```
 
 ## Mapping
 
@@ -232,12 +212,3 @@ that don't necessarily seem helpful to go to. In my usage, it seems like
 whereas `Treewalker` takes a more linewise approach which allows you to make
 larger movements more easily. For movement inside of a single line, `Treewalker`
 doesn't help much, whereas `tree-climber` does.
-
-## Mentions
-
-* [treesitter-unit](https://github.com/David-Kunz/treesitter-unit)
-provides a textobject, along with highlighting for the current treesitter unit
-(as navigated to by `Treewalker`). When combined with `Treewalker`, it's possible
-to perform edits in ways analogous to Vim's builtin `{}` motions and `p`
-textobject.
-

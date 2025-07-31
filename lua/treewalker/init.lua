@@ -12,6 +12,7 @@ Treewalker.opts = {
   highlight_group = "CursorLine",
   jumplist = true,
   select = false,
+  notifications = true,
 }
 
 -- This does not need to be called for Treewalker to work. The defaults are preinitialized and aim to be sane.
@@ -20,7 +21,7 @@ function Treewalker.setup(opts)
   if opts == nil then return end -- nil is valid, in which case we stick to the defaults
 
   local is_opts_valid, validation_errors = options.validate_opts(opts)
-  if not is_opts_valid then
+  if not is_opts_valid and opts.notifications ~= false then
     return options.handle_opts_validation_errors(validation_errors)
   end
 
@@ -38,6 +39,10 @@ local function ensuring_parser(fn)
       fn(...)
       return true
     else
+      if Treewalker.opts.notifications == false then
+        return false
+      end
+
       vim.notify_once(
         string.format(
           "Treewalker.nvim: Missing parser for files with extension [%s]! " ..
