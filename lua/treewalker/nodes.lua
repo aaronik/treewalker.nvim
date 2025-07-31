@@ -10,7 +10,6 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "else",               -- else/elseif statements (lua)
   "elif",               -- else/elseif statements (py)
   "end_tag",            -- html closing tags
-  "block",              -- C# puts their blocks under their fn names like a psycho
   "declaration_list",   -- C# class blocks
   "compound_statement", -- C blocks when defined under their fn names like a psycho
 }

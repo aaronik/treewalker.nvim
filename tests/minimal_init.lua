@@ -24,6 +24,7 @@ require('nvim-treesitter.configs').setup {
         "markdown",
         "ruby",
         "scheme",
+        "yaml",
     },
     sync_install = true,
     auto_install = true,
@@ -37,5 +38,6 @@ vim.treesitter.language.register('ruby', { 'rb' })
 vim.treesitter.language.register('markdown', { 'md' })
 vim.treesitter.language.register('javascript', { 'js' })
 vim.treesitter.language.register('scheme', { 'scm' })
+vim.treesitter.language.register('yaml', { 'yml' })
 
 dofile("plugin/init.lua") -- get the Treewalker command present
