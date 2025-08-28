@@ -16,6 +16,14 @@ local function current()
   local current_row = vim.fn.line(".")
   local current_line = lines.get_line(current_row)
   assert(current_line, "Treewalker: cursor is on invalid line number")
+
+  -- When on a non-jump-target node (like a comment), use actual cursor column
+  -- instead of the line's start column to allow movement to differently indented code
+  local current_node = nodes.get_current()
+  if current_node and not nodes.is_jump_target(current_node) then
+    return current_row, vim.fn.col(".")
+  end
+
   local current_col = lines.get_start_col(current_line)
   return current_row, current_col
 end

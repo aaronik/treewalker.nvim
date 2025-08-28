@@ -4,7 +4,7 @@ local tw = require 'treewalker'
 local lines = require 'treewalker.lines'
 local h = require 'tests.treewalker.helpers'
 
-describe("Swapping in a typescript file:", function()
+describe("In a typescript file:", function()
   before_each(function()
     load_fixture("/typescript.ts")
   end)
@@ -25,5 +25,11 @@ describe("Swapping in a typescript file:", function()
     h.assert_cursor_at(106, 3)
     assert.same('  const j = 2', lines.get_line(106))
     assert.same('  const i = 1', lines.get_line(107))
+  end)
+
+  it("Moves down from an indented comment block", function()
+    vim.fn.cursor(115, 1)
+    tw.move_down()
+    h.assert_cursor_at(117, 1)
   end)
 end)

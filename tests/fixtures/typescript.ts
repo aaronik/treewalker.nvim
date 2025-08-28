@@ -110,3 +110,8 @@ function doThings(b: number ) {
     console.log(a)
   }
 }
+
+/**
+  * whats blah blah
+  */
+const whatever = 'woohoo'
