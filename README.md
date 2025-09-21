@@ -11,6 +11,7 @@
         <img alt="Neovim" style="height: 20px;" src="https://img.shields.io/badge/NeoVim-%2357A143.svg?&amp;style=for-the-badge&amp;logo=neovim&amp;logoColor=white">
     </a>
     <img alt="100% Lua" src="https://img.shields.io/badge/100%25_lua-purple" height="20px">
+    <span>&nbsp;</span>
     <img src="https://github.com/aaronik/treewalker.nvim/actions/workflows/test.yml/badge.svg" alt="build status">
     <img src="https://img.shields.io/github/issues/aaronik/treewalker.nvim/bug?label=bugs" alt="GitHub issues by-label">
     <img src="https://img.shields.io/github/issues-pr/aaronik/treewalker.nvim" alt="GitHub Pull Requests">
@@ -25,7 +26,10 @@
 <div align="center">
     <h2>Move around your code in a syntax tree aware manner.</h2>
     <p>
-        Treewalker uses neovim's native <a href="https://github.com/tree-sitter/tree-sitter">Treesitter</a> under the hood for syntax tree awareness.
+        Treewalker uses neovim's native <a href="https://github.com/tree-sitter/tree-sitter">Treesitter</a>
+        under the hood to enable movement around and swapping of code objects like
+        functions, blocks, and statements.
+        <br/>
         Design goals include stability, ergonomics, and simplicity.
     </p>
 </div>
@@ -176,8 +180,8 @@ vim.keymap.set('n', '<C-S-l>', '<cmd>Treewalker SwapRight<cr>', { silent = true 
 
 * [syntax-tree-surfer](https://github.com/ziontee113/syntax-tree-surfer)
 is publicly archived and I could not get it to work :/
-`Treewalker` has a robust test suite, makes use of the type system, has CI
-(automated testing), and has organized code. So the plugin should be pretty
+`Treewalker` has a robust test suite, is well typed, and has CI
+(automated testing), in the hope that the plugin is pretty
 stable. I believe `Treewalker` usage is a little bit simpler and more intuitive.
 `Treewalker` is missing the visual selection swap feature that syntax-tree-surfer
 has, though. (See [#32](https://github.com/aaronik/treewalker.nvim/issues/32))
@@ -200,15 +204,15 @@ offers a programmatic interface for swapping nodes. It doesn't suffer from node
 type awareness, and works mostly the same as `Treewalker` under the hood. Some
 of `Treewalker`'s left/right swapping code is inspired by `ts_utils`.
 `Treewalker` operates a little differently under the hood, picking the highest
-startwise coinciding node over the lowest. But mostly it does the work of
-finding the next relevant node and packaging it all up into a nice interface.
+startwise coinciding node over the lowest. But mostly `Treewalker` does the work of
+finding the next relevant node and packaging it all up into a nice user experience.
 
 * [tree-climber.nvim](https://github.com/drybalka/tree-climber.nvim)
 i discovered long after having made `Treewalker`. It seems to be the most
-similar of all of these. It works mostly the same, but with a little bit less
-refinement, including getting stuck on certain nodes, and navigating to nodes
-that don't necessarily seem helpful to go to. In my usage, it seems like
-`tree-climber` gives you more fine grained access to each individual node,
-whereas `Treewalker` takes a more linewise approach which allows you to make
-larger movements more easily. For movement inside of a single line, `Treewalker`
-doesn't help much, whereas `tree-climber` does.
+similar of all of these. It works mostly the same, but sometimes gets stuck on
+certain nodes, and navigates to nodes that don't necessarily seem helpful to
+go to. In my usage, it seems like `tree-climber` gives you more fine grained
+access to each individual node, and works better than `Treewalker` for
+navigating the literal syntax tree. Whereas `Treewalker` selects nodes on a
+more linewise approach, which enables larger, more intuitive movements.
+
