@@ -10,8 +10,13 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "else",               -- else/elseif statements (lua)
   "elif",               -- else/elseif statements (py)
   "end_tag",            -- html closing tags
-  "declaration_list",   -- C# class blocks
+  "declaration_list",   -- C# class blocks - these are structural containers
   "compound_statement", -- C blocks when defined under their fn names like a psycho
+  -- Parent-child patterns: "child_type:parent_type"
+  "block:method_declaration",
+  "block:constructor_declaration",
+  "block:destructor_declaration",
+  "block:class_declaration",
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
@@ -33,8 +38,20 @@ local M = {}
 ---@return boolean
 local function is_matched_in(node, matchers)
   for _, matcher in ipairs(matchers) do
-    if node:type():match(matcher) then
-      return true
+    -- Check for parent-child pattern: "child_type:parent_type"
+    if matcher:find(":") then
+      local child_type, parent_type = matcher:match("^([^:]+):([^:]+)$")
+      if child_type and parent_type then
+        local parent = node:parent()
+        if node:type():match(child_type) and parent and parent:type():match(parent_type) then
+          return true
+        end
+      end
+    else
+      -- Simple type matching
+      if node:type():match(matcher) then
+        return true
+      end
     end
   end
   return false
