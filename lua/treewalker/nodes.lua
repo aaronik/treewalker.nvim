@@ -10,13 +10,9 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "else",               -- else/elseif statements (lua)
   "elif",               -- else/elseif statements (py)
   "end_tag",            -- html closing tags
-  "declaration_list",   -- C# class blocks - these are structural containers
+  "declaration_list",   -- C# class blocks
   "compound_statement", -- C blocks when defined under their fn names like a psycho
-  -- Parent-child patterns: "child_type:parent_type"
-  "block:method_declaration",
-  "block:constructor_declaration",
-  "block:destructor_declaration",
-  "block:class_declaration",
+  "c_sharp:block",      -- C# block nodes (language-specific)
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
@@ -33,22 +29,38 @@ local AUGMENT_TARGET_TYPE_MATCHERS = {
 
 local M = {}
 
+---Get the parser name for the current buffer
+---@return string|nil
+local function get_parser_name()
+  local ok, parser = pcall(vim.treesitter.get_parser, 0)
+  if not ok or not parser then
+    return nil
+  end
+
+  local ok_lang, lang = pcall(parser.lang, parser)
+  if not ok_lang then
+    return nil
+  end
+
+  return lang
+end
+
 ---@param node TSNode
 ---@param matchers string[]
 ---@return boolean
 local function is_matched_in(node, matchers)
+  local parser_name = get_parser_name()
+
   for _, matcher in ipairs(matchers) do
-    -- Check for parent-child pattern: "child_type:parent_type"
+    -- Check if matcher is language-specific (contains ':')
     if matcher:find(":") then
-      local child_type, parent_type = matcher:match("^([^:]+):([^:]+)$")
-      if child_type and parent_type then
-        local parent = node:parent()
-        if node:type():match(child_type) and parent and parent:type():match(parent_type) then
-          return true
-        end
+      local lang, node_type = matcher:match("([^:]+):(.+)")
+      -- Only apply this matcher if we're in the specified language
+      if parser_name and lang == parser_name and node:type():match(node_type) then
+        return true
       end
     else
-      -- Simple type matching
+      -- Regular matcher, apply to all languages
       if node:type():match(matcher) then
         return true
       end
