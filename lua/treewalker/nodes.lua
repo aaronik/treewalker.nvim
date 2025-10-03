@@ -282,7 +282,7 @@ function M.get_lines(node)
   return vim.split(text, "\n")
 end
 
--- get 1-indexed row of given node
+-- get 1-indexed start row of given node
 -- (so will work directly with vim.fn.cursor,
 -- and will reflect row as seen in the vim status line)
 ---@param node TSNode
@@ -302,7 +302,7 @@ function M.get_erow(node)
   return row + 1
 end
 
--- get 1-indexed column of given node
+-- get 1-indexed start column of given node
 -- (so will work directly with vim.fn.cursor,
 -- and will reflect col as seen in the vim status line)
 ---@param node TSNode
@@ -340,7 +340,7 @@ end
 ---@return TSNode
 function M.get_current()
   local current = vim.treesitter.get_node({ ignore_injections = false })
-  assert(current, "Treewalker: Treesitter node not found under cursor. This shouldn't happen!")
+  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
   return current
 end
 

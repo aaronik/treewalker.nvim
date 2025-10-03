@@ -1,4 +1,3 @@
-local lines = require "treewalker.lines"
 local nodes = require "treewalker.nodes"
 local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
@@ -7,25 +6,12 @@ local markdown_targets = require "treewalker.markdown.targets"
 local M = {}
 
 -- Gets a bunch of information about where the user currently is.
--- I don't really like this here, I wish everything ran on nodes.
--- But the node information is often wrong, like the current node
--- could come back as a bigger containing scope, and the behavior
--- would be unintuitive.
 ---@return integer, integer
 local function current()
   local current_row = vim.fn.line(".")
-  local current_line = lines.get_line(current_row)
-  assert(current_line, "Treewalker: cursor is on invalid line number")
-
-  -- When on a non-jump-target node (like a comment), use actual cursor column
-  -- instead of the line's start column to allow movement to differently indented code
   local current_node = nodes.get_current()
-  if current_node and not nodes.is_jump_target(current_node) then
-    return current_row, vim.fn.col(".")
-  end
-
-  local current_col = lines.get_start_col(current_line)
-  return current_row, current_col
+  local highest_coincident = nodes.get_highest_row_coincident(current_node)
+  return current_row, nodes.get_scol(highest_coincident)
 end
 
 ---Get the highest coincident; helper

@@ -31,5 +31,13 @@ describe("In a typescript file:", function()
     vim.fn.cursor(115, 1)
     tw.move_down()
     h.assert_cursor_at(117, 1)
+
+    vim.fn.cursor(115, 3)
+    tw.move_down()
+    h.assert_cursor_at(117, 1)
+
+    vim.fn.cursor(115, 7)
+    tw.move_down()
+    h.assert_cursor_at(117, 1)
   end)
 end)

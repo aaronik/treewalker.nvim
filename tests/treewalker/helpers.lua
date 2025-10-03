@@ -106,11 +106,6 @@ function M.assert_highlighted(srow, scol, erow, ecol)
     local actual_erow = highlight[4].end_row + 1
     local actual_ecol = highlight[4].end_col
 
-    print("actual_srow:", actual_srow)
-    print("actual_scol:", actual_scol)
-    print("actual_erow:", actual_erow)
-    print("actual_ecol:", actual_ecol)
-
     if
         srow == actual_srow
         and scol == actual_scol
@@ -118,6 +113,11 @@ function M.assert_highlighted(srow, scol, erow, ecol)
         and ecol == actual_ecol
     then
       return true
+    else
+      print("actual_srow:", actual_srow)
+      print("actual_scol:", actual_scol)
+      print("actual_erow:", actual_erow)
+      print("actual_ecol:", actual_ecol)
     end
   end
 

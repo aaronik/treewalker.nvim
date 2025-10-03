@@ -31,7 +31,9 @@ describe("For a file in which there is a missing parser", function()
 end)
 
 describe("For a file in which there is a parser present", function()
-  load_fixture("/lua.lua")
+  before_each(function()
+    load_fixture("/lua.lua")
+  end)
 
   for nam, command in pairs(commands) do
     it(string.format("does not notify when %s is called", nam), function()
@@ -59,4 +61,3 @@ describe("For a file in which there is a missing parser, when notifications are 
     end)
   end
 end)
-
