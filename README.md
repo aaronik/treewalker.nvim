@@ -31,6 +31,8 @@
         functions, blocks, and statements.
         <br/>
         Design goals include stability, ergonomics, and simplicity.
+        <br/>
+        Made in 100% Lua, with no dependencies.
     </p>
 </div>
 
