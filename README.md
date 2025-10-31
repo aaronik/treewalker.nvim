@@ -40,7 +40,7 @@
 
 ## Movement
 
-The movement commands move you through your code in an intuitive way, skipping nodes that don't help you move quickly:
+The movement commands move you through code in an intuitive way, skipping nodes that aren't conducive to nimble movement through code:
 
 * **`:Treewalker Up`** - Moves up to the previous neighbor node
 * **`:Treewalker Down`** - Moves down to the next neighbor node
@@ -56,10 +56,12 @@ and then feel lost, you have `Ctrl-o` available to bring you back to where you l
 
 ## Swapping
 
-`Swap{Up,Down}` operate on a linewise basis, and **bring along nodes' comments, decorators, and annotations**.
+The swapping commands swap whatever node your cursor is on with one of its neighbors.
+
+`Swap{Up,Down}` operate on a linewise basis, **bringing along nodes' comments, decorators, and annotations**.
 These are meant for swapping declarations and definitions - things that take up whole lines.
 
-`Swap{Left,Right}` operate on a nodewise basis, and are meant for swapping function arguments, enum members,
+`Swap{Left,Right}` operate on a literal nodewise basis, and are meant for swapping function arguments, enum members,
 list elements, etc -- things that are many per line. If used on a top level node on a line, it'll swap
 the same nodes as Up/Down, but won't take the comments, decorators or annotations with them.
 
@@ -91,7 +93,7 @@ the same nodes as Up/Down, but won't take the comments, decorators or annotation
 {
   'aaronik/treewalker.nvim',
 
-  -- optional (see below for detailed options)
+  -- optional (see options below)
   opts = { ... }
 }
 ```
@@ -101,7 +103,7 @@ the same nodes as Up/Down, but won't take the comments, decorators or annotation
 use {
   'aaronik/treewalker.nvim',
 
-  -- optional (see below for detailed options)
+  -- optional (see options below)
   setup = function()
       require('treewalker').setup({ ... })
   end
@@ -112,7 +114,7 @@ use {
 ```vimscript
 Plug 'aaronik/treewalker.nvim'
 
-" Optionally (see below for detailed options)
+" Optionally (see options below)
 :lua require('treewalker').setup({ ... })
 ```
 
@@ -120,8 +122,7 @@ Plug 'aaronik/treewalker.nvim'
 
 ## Options
 
-Treewalker aims for sane defaults, but you can modify some behavior via the
-options below.
+Treewalker aims for sane behavior, but you can modify some via the options below.
 
 ```lua
 -- The defaults:
@@ -149,16 +150,17 @@ options below.
   --        and is meant to cover most use cases. It's modeled on how { and } natively add
   --        to the jumplist.
   --  false: Treewalker does not add to the jumplist at all
-  --  "left": Treewalker only adds :Treewalker Left to the jumplist. This is usually the most
-  --          likely one to be confusing, so it has its own mode.
+  --  "left": Treewalker only adds :Treewalker Left to the jumplist. This seems the most
+  --          likely jump to cause location confusion, so use this to minimize writes
+  --          to the jumplist, while maintaining some ability to go back.
   jumplist = true,
 }
 ```
 
 ## Mapping
 
-I've found Ctrl - h / j / k / l to be a really natural flow for this plugin, and adding
-Shift to that for swapping just felt so clean. So here are the mappings I use:
+I found Ctrl - h / j / k / l to be a natural flow for this plugin, and adding
+Shift to that for swapping felt like a clean follow on. So here are the mappings I use:
 
 In `init.lua`:
 
@@ -183,38 +185,44 @@ vim.keymap.set('n', '<C-S-l>', '<cmd>Treewalker SwapRight<cr>', { silent = true 
 * [syntax-tree-surfer](https://github.com/ziontee113/syntax-tree-surfer)
 is publicly archived and I could not get it to work :/
 `Treewalker` has a robust test suite, is well typed, and has CI
-(automated testing), in the hope that the plugin is pretty
-stable. I believe `Treewalker` usage is a little bit simpler and more intuitive.
+(automated testing), to help the plugin be stable.
+I believe `Treewalker` usage is a little bit simpler and more intuitive.
 `Treewalker` is missing the visual selection swap feature that syntax-tree-surfer
-has, though. (See [#32](https://github.com/aaronik/treewalker.nvim/issues/32))
+has (See [#32](https://github.com/aaronik/treewalker.nvim/issues/32)).
 
 * [nvim-treehopper](https://github.com/mfussenegger/nvim-treehopper)
-is similar in that it uses the AST to navigate, but it takes more of a
+is similar to Treewalker in that it uses the AST to navigate, but it takes more of a
 [leap](https://github.com/ggandor/leap.nvim) like approach, only annotating
-interesting nodes.
+interesting nodes. Treewalker provides movements that can be called from anywhere
+to interact with neighboring nodes.
 
 * [nvim-treesitter-textobjects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
 can swap
 [a subset of node types](https://github.com/nvim-treesitter/nvim-treesitter-textobjects?tab=readme-ov-file#built-in-textobjects),
 but misses some types (ex. rust enums). `Treewalker` is not aware of node type
-names, only the structure of the AST, so left/right swaps will work mostly
-where you want it to. It can also move to nodes, but treats node types individually,
-whereas `Treewalker` is agnostic about types and just goes to the next relevant node.
+names, only the structure of the AST, so left/right swaps should work where you
+want them to. `nvim-treesitter-textobjects` can also move to nodes, but treats
+node types individually, whereas `Treewalker` is agnostic about node types, treating
+them all the same, and interacting with the neighboring relevant node.
 
 * [nvim-treesitter.ts_utils](https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/ts_utils.lua)
-offers a programmatic interface for swapping nodes. It doesn't suffer from node
-type awareness, and works mostly the same as `Treewalker` under the hood. Some
-of `Treewalker`'s left/right swapping code is inspired by `ts_utils`.
-`Treewalker` operates a little differently under the hood, picking the highest
-startwise coinciding node over the lowest. But mostly `Treewalker` does the work of
-finding the next relevant node and packaging it all up into a nice user experience.
+offers a programmatic interface for swapping nodes. It works mostly the same as
+`Treewalker` under the hood. Some of `Treewalker`'s left/right swapping code is
+inspired by `ts_utils`. `Treewalker` operates a little differently though,
+picking the highest node with a coinciding start position, vs.
+`ts_utils`'s picking the lowest node with a coinciding start position.
+Practically, what `Treewalker` offers beyond `ts_utils` is doing the
+work of finding the next relevant node and packaging the functionality
+into a hopefully nice user experience.
 
 * [tree-climber.nvim](https://github.com/drybalka/tree-climber.nvim)
-i discovered long after having made `Treewalker`. It seems to be the most
-similar of all of these. It works mostly the same, but sometimes gets stuck on
-certain nodes, and navigates to nodes that don't necessarily seem helpful to
-go to. In my usage, it seems like `tree-climber` gives you more fine grained
-access to each individual node, and works better than `Treewalker` for
-navigating the literal syntax tree. Whereas `Treewalker` selects nodes on a
-more linewise approach, which enables larger, more intuitive movements.
+I discovered long after having made `Treewalker`. It seems to be the most
+similar of all of these alternatives. It works mostly the same as `Treewalker`,
+but sometimes gets stuck on certain nodes, and navigates to nodes that
+don't necessarily seem helpful to go to. In my usage, it seems like
+`tree-climber` gives you more fine grained access to each individual
+node, and works better than `Treewalker` for navigating the literal
+syntax tree. `Treewalker` selects nodes on a more linewise approach,
+which enables larger movements to nodes that seem more relevant to
+moving around code.
 
