@@ -115,3 +115,13 @@ function doThings(b: number ) {
   * whats blah blah
   */
 const whatever = 'woohoo'
+
+class Ok {
+
+  /**
+    * whats blah blah
+    */
+  constructor(who: What) {
+    console.log(who)
+  }
+}
