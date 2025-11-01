@@ -26,14 +26,18 @@ end
 
 ---@return nil
 function M.move_out()
-  vim.cmd("normal! ^") -- TODO can somehow use nodes.get_at_row for this instead of this junk?
+  -- Add to jumplist at original cursor position before normalizing
+  add_jumplist_for_move('move_out')
+
+  -- Normalize cursor position to line start before querying node
+  operations.move_to_line_start()
+
   local node = nodes.get_current()
   local target, row = targets.out(node)
   if not (target and row) then
     operations.jump(node, nodes.get_srow(node))
     return
   end
-  add_jumplist_for_move('move_out')
   operations.jump(target, row)
   add_jumplist_for_move('move_out') -- for easy Ctrl-o/Ctrl-i navigation
 end
@@ -49,6 +53,9 @@ end
 
 ---@return nil
 function M.move_up()
+  -- Normalize cursor to line start for consistent node querying
+  operations.move_to_line_start()
+
   local node = nodes.get_current()
   local target, row = targets.up()
   if not target or not row then return end
@@ -64,6 +71,9 @@ end
 
 ---@return nil
 function M.move_down()
+  -- Normalize cursor to line start for consistent node querying
+  operations.move_to_line_start()
+
   local node = nodes.get_current()
   local target, row = targets.down()
   if not target or not row then return end

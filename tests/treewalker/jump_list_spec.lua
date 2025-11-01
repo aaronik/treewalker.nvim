@@ -190,7 +190,7 @@ describe("When opts.jumplist = 'left'", function()
     local jumplist_count = #vim.fn.getjumplist()[1]
     assert(jumplist_count == 1)
     helpers.feed_keys('<C-o>')
-    helpers.assert_cursor_at(80, 3)
+    helpers.assert_cursor_at(80, 5)
   end)
 
   it("move_in does NOT add to jumplist", function()

@@ -129,8 +129,8 @@ describe("In a typescript file:", function()
     h.assert_cursor_at(124, 3)
   end)
 
+
   it("Moves left from Ok class comment to class declaration", function()
-    -- From the comment opener "/**"
     vim.fn.cursor(121, 1) -- At "/**"
     tw.move_out()
     h.assert_cursor_at(119, 1)

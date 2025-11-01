@@ -344,6 +344,23 @@ function M.get_current()
   return current
 end
 
+-- Get node at the first non-whitespace position of the current line
+-- This avoids cursor movement which can cause treesitter issues in some environments
+---@return TSNode
+function M.get_current_at_line_start()
+  local row = vim.fn.line('.')
+  local line = lines.get_line(row)
+  if line then
+    local start_col = lines.get_start_col(line)
+    -- pos is {row, col} 0-indexed
+    local current = vim.treesitter.get_node({ pos = {row - 1, start_col - 1}, ignore_injections = false })
+    assert(current, "Treewalker: Treesitter node not found. Missing parser?")
+    return current
+  else
+    return M.get_current()
+  end
+end
+
 -- util.log some formatted version of the node's properties
 ---@param node TSNode
 ---@return nil
