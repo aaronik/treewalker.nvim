@@ -90,8 +90,9 @@ end
 function M.get_section_bounds(row)
   if not util.is_markdown_file() then return nil, nil, nil end
 
-  -- Find the section node that contains a heading at this row using ast_utils helper
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  -- Find the section node that contains a heading at this row
+  local root = nodes.get_root()
+  if not root then return nil, nil, nil end
 
   local function find_section_with_heading_at_row(node)
     if node:type() == "section" then

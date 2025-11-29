@@ -40,7 +40,8 @@ function M.get_next_same_level_heading(row)
   local current_level = heading.heading_level(row)
   if not current_level then return nil, nil end
 
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local root = nodes.get_root()
+  if not root then return nil, nil end
   local found_current = false
 
   return ast_utils.find_section_matching(root, function(_, section_row, section_level)
@@ -66,7 +67,8 @@ function M.get_prev_same_level_heading(row)
   local current_level = heading.heading_level(row)
   if not current_level then return nil, nil end
 
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local root = nodes.get_root()
+  if not root then return nil, nil end
   local last_match = nil
 
   return ast_utils.find_section_matching(root, function(_, section_row, section_level)
@@ -92,7 +94,8 @@ end
 function M.get_nearest_prev_heading(row)
   if not util.is_markdown_file() then return nil, nil end
 
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local root = nodes.get_root()
+  if not root then return nil, nil end
   local last_match = nil
 
   local result_node, result_row = ast_utils.find_section_matching(root, function(_, section_row, _)
@@ -115,7 +118,8 @@ end
 function M.get_nearest_next_heading(row)
   if not util.is_markdown_file() then return nil, nil end
 
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local root = nodes.get_root()
+  if not root then return nil, nil end
 
   return ast_utils.find_section_matching(root, function(_, section_row, _)
     return section_row and section_row > row
@@ -185,7 +189,8 @@ function M.get_prev_outer_heading(row)
 
   -- For out-of-order headings, we need to find the nearest previous heading
   -- with a lower level (not necessarily direct AST parent)
-  local root = vim.treesitter.get_parser():parse()[1]:root()
+  local root = nodes.get_root()
+  if not root then return nil, nil end
   local target_level = current_level - 1
   local best_match = nil
 

@@ -45,6 +45,30 @@ local function get_parser_name()
   return lang
 end
 
+---Return the root TSNode for the given buffer (defaults to current buffer).
+---Safe wrapper around parser/parse() that handles missing parsers and empty parse results.
+---@param bufnr integer|nil
+---@return TSNode|nil
+function M.get_root(bufnr)
+  bufnr = bufnr or 0
+  local ok_parser, parser = pcall(vim.treesitter.get_parser, bufnr)
+  if not ok_parser or not parser then
+    return nil
+  end
+
+  local ok_parse, trees = pcall(function() return parser:parse() end)
+  if not ok_parse or not trees or #trees == 0 then
+    return nil
+  end
+
+  local ok_root, root = pcall(function() return trees[1]:root() end)
+  if not ok_root then
+    return nil
+  end
+
+  return root
+end
+
 ---@param node TSNode
 ---@param matchers string[]
 ---@return boolean
