@@ -25,6 +25,7 @@ require('nvim-treesitter.configs').setup {
         "ruby",
         "scheme",
         "yaml",
+        "java",
     },
     sync_install = true,
     auto_install = true,
