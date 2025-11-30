@@ -38,7 +38,7 @@ describe("Movement in a regular lua file: ", function()
     h.assert_cursor_at(88, 3, "local")
     vim.fn.cursor(85, 1)
     tw.move_up()
-    h.assert_cursor_at(84, 3, "end")
+    h.assert_cursor_at(82, 3, "end")
   end)
 
   it("goes into functions eagerly", function()

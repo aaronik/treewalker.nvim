@@ -2,7 +2,7 @@ MINIMAL_INIT=tests/minimal_init.lua
 TESTS_DIR=tests
 NO_UTIL_SPEC=checks
 
-.PHONY: test test-watch check no-utils pass help
+.PHONY: test test-watch test-ubuntu check no-utils pass help
 
 test: ## Run the whole test suite
 	@nvim \
@@ -13,6 +13,18 @@ test: ## Run the whole test suite
 
 test-watch: ## uses [nodemon](https://nodemon.io/) - watches for changes to lua files and reruns tests
 	@nodemon -e lua -x "$(MAKE) test || exit 1"
+
+test-ubuntu: ## Run tests in Ubuntu Docker container (matches CI environment)
+	@docker run --rm -v $$(PWD):/workspace -w /workspace ubuntu:latest bash -c "\
+		apt-get update -qq && \
+		apt-get install -y -qq software-properties-common git curl make apt-utils gcc && \
+		add-apt-repository -y ppa:neovim-ppa/unstable && \
+		apt-get update -qq && \
+		apt-get install -y -qq neovim lua-check && \
+		mkdir -p /root/.local/share/nvim/lazy/ && \
+		git clone --depth 1 -q https://github.com/nvim-lua/plenary.nvim.git /root/.local/share/nvim/lazy/plenary.nvim && \
+		git clone --depth 1 -q https://github.com/nvim-treesitter/nvim-treesitter.git /root/.local/share/nvim/lazy/nvim-treesitter && \
+		make test"
 
 check: ## uses [luacheck](https://github.com/mpeterv/luacheck) - checks for any type errors or style issues
 	@luacheck . --globals vim it describe before_each after_each --exclude-files tests/fixtures --max-comment-line-length 140

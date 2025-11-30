@@ -45,12 +45,10 @@ function M.swap_down()
   if util.is_markdown_file() then
     return markdown_swap.swap_down_markdown()
   end
-  local current = nodes.get_current()
+  local current, row = nodes.get_highest_node_at_current_row()
 
-  local target = targets.down()
+  local target = targets.down(current, row)
   if not target then return end
-
-  current = nodes.get_highest_coincident(current)
 
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
@@ -80,11 +78,9 @@ function M.swap_up()
   if util.is_markdown_file() then
     return markdown_swap.swap_up_markdown()
   end
-  local current = nodes.get_current()
-  local target = targets.up()
+  local current, row = nodes.get_highest_node_at_current_row()
+  local target = targets.up(current, row)
   if not target then return end
-
-  current = nodes.get_highest_coincident(current)
 
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
