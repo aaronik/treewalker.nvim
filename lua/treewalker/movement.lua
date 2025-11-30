@@ -29,13 +29,10 @@ function M.move_out()
   -- Add to jumplist at original cursor position before normalizing
   add_jumplist_for_move('move_out')
 
-  -- Normalize cursor position to line start before querying node
-  operations.move_to_line_start()
-
-  local node = nodes.get_current()
-  local target, row = targets.out(node)
+  local current_node = nodes.get_highest_node_at_current_row()
+  local target, row = targets.out(current_node)
   if not (target and row) then
-    operations.jump(node, nodes.get_srow(node))
+    operations.jump(current_node, nodes.get_srow(current_node))
     return
   end
   operations.jump(target, row)
@@ -44,7 +41,8 @@ end
 
 ---@return nil
 function M.move_in()
-  local target, row = targets.inn()
+  local current_node, current_col = nodes.get_highest_node_at_current_row()
+  local target, row = targets.inn(current_node, current_col)
   if not target or not row then return end
   add_jumplist_for_move('move_in')
   operations.jump(target, row)
@@ -53,14 +51,11 @@ end
 
 ---@return nil
 function M.move_up()
-  -- Normalize cursor to line start for consistent node querying
-  operations.move_to_line_start()
-
-  local node = nodes.get_current()
-  local target, row = targets.up()
+  local current_node, current_row = nodes.get_highest_node_at_current_row()
+  local target, row = targets.up(current_node, current_row)
   if not target or not row then return end
 
-  local is_neighbor = nodes.have_neighbor_srow(node, target)
+  local is_neighbor = nodes.have_neighbor_srow(current_node, target)
 
   if not is_neighbor then
     add_jumplist_for_move('move_up')
@@ -71,14 +66,11 @@ end
 
 ---@return nil
 function M.move_down()
-  -- Normalize cursor to line start for consistent node querying
-  operations.move_to_line_start()
-
-  local node = nodes.get_current()
-  local target, row = targets.down()
+  local current_node, current_row = nodes.get_highest_node_at_current_row()
+  local target, row = targets.down(current_node, current_row)
   if not target or not row then return end
 
-  local is_neighbor = nodes.have_neighbor_srow(node, target)
+  local is_neighbor = nodes.have_neighbor_srow(current_node, target)
 
   if not is_neighbor then
     add_jumplist_for_move('move_down')

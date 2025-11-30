@@ -130,16 +130,16 @@ describe("In a typescript file:", function()
   end)
 
 
-  it("Moves left from Ok class comment to class declaration", function()
-    vim.fn.cursor(121, 1) -- At "/**"
+  it("Moves out from Ok class comment to class declaration", function()
+    vim.fn.cursor(121, 3) -- At "/**"
     tw.move_out()
     h.assert_cursor_at(119, 1)
 
-    vim.fn.cursor(121, 2) -- At "*" in "/**"
+    vim.fn.cursor(121, 4) -- At "*" in "/**"
     tw.move_out()
     h.assert_cursor_at(119, 1)
 
-    vim.fn.cursor(121, 3) -- At second "*" in "/**"
+    vim.fn.cursor(121, 5) -- At second "*" in "/**"
     tw.move_out()
     h.assert_cursor_at(119, 1)
 

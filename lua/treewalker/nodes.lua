@@ -5,6 +5,7 @@ local util = require "treewalker.util"
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "comment",
   "source",             -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
+  "text",               -- Same as above but with java
   "attribute_item",     -- decorators (rust)
   "decorat",            -- decorators (py)
   "else",               -- else/elseif statements (lua)
@@ -23,6 +24,7 @@ local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
 local AUGMENT_TARGET_TYPE_MATCHERS = {
   "comment",
   "source",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
+  "text",           -- Same as above but with java
   "attribute_item", -- decorators (rust)
   "decorat",        -- decorators (py)
 }
@@ -43,30 +45,6 @@ local function get_parser_name()
   end
 
   return lang
-end
-
----Return the root TSNode for the given buffer (defaults to current buffer).
----Safe wrapper around parser/parse() that handles missing parsers and empty parse results.
----@param bufnr integer|nil
----@return TSNode|nil
-function M.get_root(bufnr)
-  bufnr = bufnr or 0
-  local ok_parser, parser = pcall(vim.treesitter.get_parser, bufnr)
-  if not ok_parser or not parser then
-    return nil
-  end
-
-  local ok_parse, trees = pcall(function() return parser:parse() end)
-  if not ok_parse or not trees or #trees == 0 then
-    return nil
-  end
-
-  local ok_root, root = pcall(function() return trees[1]:root() end)
-  if not ok_root then
-    return nil
-  end
-
-  return root
 end
 
 ---@param node TSNode
@@ -120,11 +98,23 @@ function M.is_highlight_target(node)
       and not is_root_node(node)
 end
 
+---@param node TSNode
+---@return boolean
 function M.is_augment_target(node)
   return
       true
       and is_matched_in(node, AUGMENT_TARGET_TYPE_MATCHERS)
       and not is_root_node(node)
+end
+
+---@param node TSNode
+---@return boolean
+function M.is_comment_node(node)
+  return
+      true
+      and node:type():match("comment")
+      or node:type():match("source")
+      or node:type():match("text")
 end
 
 ---Do the nodes have the same starting row
@@ -170,6 +160,30 @@ function M.get_children(node)
   return children
 end
 
+---Return the root TSNode for the given buffer (defaults to current buffer).
+---Safe wrapper around parser/parse() that handles missing parsers and empty parse results.
+---@param bufnr integer|nil
+---@return TSNode|nil
+function M.get_root(bufnr)
+  bufnr = bufnr or 0
+  local ok_parser, parser = pcall(vim.treesitter.get_parser, bufnr)
+  if not ok_parser or not parser then
+    return nil
+  end
+
+  local ok_parse, trees = pcall(function() return parser:parse() end)
+  if not ok_parse or not trees or #trees == 0 then
+    return nil
+  end
+
+  local ok_root, root = pcall(function() return trees[1]:root() end)
+  if not ok_root then
+    return nil
+  end
+
+  return root
+end
+
 --- Get all descendants of a given TSNode
 ---@param node TSNode
 ---@return TSNode[]
@@ -206,18 +220,8 @@ function M.get_from_neighboring_line(current_row, dir)
   end
   local max_row = vim.api.nvim_buf_line_count(0)
   if candidate_row > max_row or candidate_row <= 0 then return end
-  local candidate = M.get_at_row(candidate_row)
+  local candidate = M.get_highest_node_at_row(candidate_row)
   local candidate_line = lines.get_line(candidate_row)
-
-  -- For py decorators, when we examine the target-ness of a node, we
-  -- want to be checking the highest coincident, rather than checking
-  -- an inner node, then going up to highest coincident. Check the ultimate
-  -- node kinda thing, rather than checking a child and then assuming
-  -- its highest node will be good.
-  if candidate then
-    candidate = M.get_highest_row_coincident(candidate)
-  end
-
   return candidate, candidate_row, candidate_line
 end
 
@@ -244,6 +248,10 @@ function M.get_highest_row_coincident(node)
   ---@type TSNode | nil
   local iter = node
   while iter and M.have_same_srow(node, iter) do
+    -- Conceptually restart if we're actually still in the same node -
+    -- necessary for when brackets are on lines below definitions
+    -- TODO This does not belong here, but its behavior is deeply rooted.
+    -- Neets to be rooted out.
     if M.is_highlight_target(iter) then node = iter end
     iter = iter:parent()
   end
@@ -262,40 +270,23 @@ function M.get_highest_coincident(node)
   return node
 end
 
--- Easy conversion to table
----@param node TSNode
----@return [ integer, integer, integer, integer ]
-function M.range(node)
-  local r1, r2, r3, r4 = node:range()
-  return { r1, r2, r3, r4 }
+-- Get the highest coincident node at the current row.
+-- Returns row as well for convenience.
+---@return TSNode, number
+function M.get_highest_node_at_current_row()
+  local row = vim.fn.line('.')
+  local current = M.get_at_row(row)
+  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
+  return M.get_highest_row_coincident(current), row
 end
 
--- gets the smallest line number range that contains all given nodes
----@param nodes TSNode[]
----@return [ integer, integer ]
-function M.whole_range(nodes)
-  local min_row = math.huge
-  local max_row = -math.huge
-
-  for _, node in ipairs(nodes) do
-    local srow, _, erow = node:range()
-    if srow < min_row then min_row = srow end
-    if erow > max_row then max_row = erow end
-  end
-
-  return { min_row, max_row }
-end
-
--- Apparently the LSP speaks ranges in a different way from treesitter,
--- and this is important for swapping nodes
----@param node TSNode
----@return { start: { line: integer, character: integer }, end: { line: integer, character: integer }  }
-function M.lsp_range(node)
-  local start_line, start_col, end_line, end_col = node:range()
-  return {
-    start = { line = start_line, character = start_col },
-    ["end"] = { line = end_line, character = end_col }
-  }
+-- Get the highest coincident node at the given row.
+---@param row number
+---@return TSNode
+function M.get_highest_node_at_row(row)
+  local current = M.get_at_row(row)
+  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
+  return M.get_highest_row_coincident(current)
 end
 
 ---Get the given node's text
@@ -368,21 +359,40 @@ function M.get_current()
   return current
 end
 
--- Get node at the first non-whitespace position of the current line
--- This avoids cursor movement which can cause treesitter issues in some environments
----@return TSNode
-function M.get_current_at_line_start()
-  local row = vim.fn.line('.')
-  local line = lines.get_line(row)
-  if line then
-    local start_col = lines.get_start_col(line)
-    -- pos is {row, col} 0-indexed
-    local current = vim.treesitter.get_node({ pos = {row - 1, start_col - 1}, ignore_injections = false })
-    assert(current, "Treewalker: Treesitter node not found. Missing parser?")
-    return current
-  else
-    return M.get_current()
+-- Easy conversion to table
+---@param node TSNode
+---@return [ integer, integer, integer, integer ]
+function M.range(node)
+  local r1, r2, r3, r4 = node:range()
+  return { r1, r2, r3, r4 }
+end
+
+-- gets the smallest line number range that contains all given nodes
+---@param nodes TSNode[]
+---@return [ integer, integer ]
+function M.whole_range(nodes)
+  local min_row = math.huge
+  local max_row = -math.huge
+
+  for _, node in ipairs(nodes) do
+    local srow, _, erow = node:range()
+    if srow < min_row then min_row = srow end
+    if erow > max_row then max_row = erow end
   end
+
+  return { min_row, max_row }
+end
+
+-- Apparently the LSP speaks ranges in a different way from treesitter,
+-- and this is important for swapping nodes
+---@param node TSNode
+---@return { start: { line: integer, character: integer }, end: { line: integer, character: integer }  }
+function M.lsp_range(node)
+  local start_line, start_col, end_line, end_col = node:range()
+  return {
+    start = { line = start_line, character = start_col },
+    ["end"] = { line = end_line, character = end_col }
+  }
 end
 
 -- util.log some formatted version of the node's properties

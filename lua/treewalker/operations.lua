@@ -5,22 +5,6 @@ local heading = require 'treewalker.markdown.heading'
 
 local M = {}
 
--- Move cursor to first non-whitespace character of current line, accounting for tabstop
--- This is a tabstop-independent alternative to vim.cmd("normal! ^")
-function M.move_to_line_start()
-  local row = vim.fn.line('.')
-  local col = vim.fn.col('.')
-  local line = lines.get_line(row)
-  if line then
-    local start_col = lines.get_start_col(line)
-    -- Only move if not already at line start
-    if col ~= start_col then
-      -- Use vim.fn.cursor() instead of nvim_win_set_cursor() to avoid treesitter node caching issues in CI
-      vim.fn.cursor(row, start_col)
-    end
-  end
-end
-
 -- Position cursor at first non-whitespace character of specified row
 ---@param row integer
 function M.jump_to_line_start(row)
