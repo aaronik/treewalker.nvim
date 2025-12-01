@@ -53,3 +53,13 @@ dump-treesitter-tree: ## Prints out the treesitter node tree, ex. make dump-tree
 			-c 'qa!'; \
 	fi
 
+check-parsers: ## Check treesitter parser information
+	@nvim --headless --noplugin -u ${MINIMAL_INIT} -l check_parsers.lua
+
+save-trees: ## Save treesitter trees for TypeScript and Java fixtures
+	@echo "Saving TypeScript tree..."
+	@make dump-treesitter-tree FILE=tests/fixtures/typescript.ts > ts_tree_local.txt 2>&1
+	@echo "Saving Java tree..."
+	@make dump-treesitter-tree FILE=tests/fixtures/java.java > java_tree_local.txt 2>&1
+	@echo "Trees saved to ts_tree_local.txt and java_tree_local.txt"
+

@@ -38,6 +38,20 @@ jobs:
     - name: Check for errant util calls
       run: make no-utils
 
+    - name: Check Parser Information
+      run: |
+        echo "=== Parser Information ==="
+        make check-parsers
+        echo ""
+        echo "=== Saving Treesitter Trees ==="
+        make save-trees
+        echo ""
+        echo "=== TypeScript Tree (first 50 lines) ==="
+        head -50 ts_tree_local.txt
+        echo ""
+        echo "=== Java Tree (first 50 lines) ==="
+        head -50 java_tree_local.txt
+
     - name: Run Tests
       run: make test
 
