@@ -18,7 +18,7 @@ function M.out(node)
   -- but does fail on CI. TODO figure out the differences)
   if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
     -- Try moving down first - this works for Java on CI
-    local down_node, down_row = M.down(node, nodes.get_srow(node))
+    local down_node = M.down(node, nodes.get_srow(node))
     if down_node then
       node = down_node
     else
