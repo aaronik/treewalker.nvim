@@ -1,6 +1,6 @@
 # CI Test Failures Investigation - Current Status
 
-**Last Updated**: 2025-11-30 (Session 1)
+**Last Updated**: 2025-11-30 (Session 2)
 
 ## Problem Statement
 
@@ -246,4 +246,73 @@ Compare these runs to understand what changed.
 
 ---
 
-**For next session**: Start by running the immediate actions above and updating this file with results.
+---
+
+## Session 2 Update (2025-11-30)
+
+### Critical Discovery: No Code Changes Between Passing and Failing CI
+
+Analyzed git diff from commit 54881e3 (passing CI run 19810138349) to HEAD (failing runs). **Result: ZERO functional code changes.**
+
+**Changes made were ONLY documentation/cleanup:**
+- Added TODO comments to workflow files
+- Removed CI parser checking steps
+- Added CI_INVESTIGATION_STATUS.md
+- Removed investigation files (check_parsers.lua, logs, tree dumps)
+
+**No changes to:**
+- `lua/treewalker/` (all navigation logic)
+- `tests/` (test implementations)
+- Any functional code
+
+### Conclusion: Theory 2 ("Code Was Actually Changed") - RULED OUT
+
+The cleanup commits did not break any functional code. This proves the issue is environmental, not code-related.
+
+### Root Cause Analysis
+
+The smoking gun is in `lua/treewalker/targets.lua:15-21`:
+
+```lua
+-- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
+-- but does fail on CI. TODO figure out the differences)
+if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
+  node = M.down(node, nodes.get_srow(node)) or node
+end
+```
+
+**This workaround exists specifically because CI behaves differently than local**, even with identical versions. The issue is:
+
+1. **Parser binaries are compiled on-demand** during CI runs
+2. **GitHub Actions may cache or recompile parsers differently** between runs
+3. **CI run 19810138349 got "good" binaries**, subsequent runs got "bad" ones
+4. **No version pinning can fix this** because the problem is compilation, not source
+
+### Actions Taken
+
+**Modified `.github/workflows/test.yml`:**
+
+1. **Added cache-busting step** - Deletes any cached parser directory before installation
+2. **Added explicit parser compilation** - Forces fresh compilation with `TSInstallSync java typescript`
+3. **Added binary verification logging** - Outputs MD5 checksums and file info for all parser `.so` files
+
+These changes ensure:
+- Parsers are compiled fresh on every CI run
+- We can track if binary checksums change between runs
+- No stale cached parsers can cause intermittent failures
+
+### Next Steps
+
+1. **Push these workflow changes and trigger CI**
+2. **Check CI logs for parser checksums** - If checksums vary between runs with same code, confirms Theory 4
+3. **If CI still fails**, we know the issue is fundamental platform differences in parser compilation (Theory 1)
+4. **If CI passes consistently**, the issue was cached/stale parser binaries (Theory 4 confirmed)
+
+### Updated Theory Status
+
+- ❌ **Theory 2 (Code Changed)**: RULED OUT - No functional code changed
+- ⭐ **Theory 4 (Parser Caching)**: MOST LIKELY - Explains passing→failing with identical code
+- 🔧 **Theory 1 (Platform-Specific)**: STILL POSSIBLE - May be inevitable compiler differences
+- ❓ **Theory 3 (Non-Determinism)**: UNLIKELY - But binary checksums will confirm/deny
+
+**For next session**: Review CI logs after pushing workflow changes, check parser checksums, determine if failures persist.
