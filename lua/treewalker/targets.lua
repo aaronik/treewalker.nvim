@@ -11,6 +11,15 @@ function M.out(node)
   if util.is_markdown_file() then
     return markdown_targets.out()
   end
+
+  -- In case we're in a comment, we want to behave as though we were in the
+  -- node below the comment
+  -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
+  -- but does fail on CI. TODO figure out the differences)
+  if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
+    node = M.down(node, nodes.get_srow(node)) or node
+  end
+
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
   if not candidate then return end
   local row = nodes.get_srow(candidate)
