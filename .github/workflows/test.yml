@@ -78,14 +78,61 @@ jobs:
           echo ""
         done
         echo ""
-        echo "=== Dump TypeScript Test Tree Structure ==="
+        echo "=== TypeScript Algorithm Trace ==="
         cd $GITHUB_WORKSPACE
+        cat > /tmp/trace_ts.lua << 'EOFTRACE'
+        vim.fn.cursor(121, 3)
+        local nodes = require("treewalker.nodes")
+        local strategies = require("treewalker.strategies")
+        local node = nodes.get_at_row(121)
+        print("=== Complete algorithm trace ===")
+        print("1. Input node from get_at_row(121):")
+        print("   Type:", node:type())
+        print("   Scol:", nodes.get_scol(node))
+        print("")
+        local highest = nodes.get_highest_row_coincident(node)
+        print("2. After get_highest_row_coincident:")
+        print("   Type:", highest:type())
+        print("   Scol:", nodes.get_scol(highest))
+        print("")
+        print("3. Tracing get_first_ancestor_with_diff_scol:")
+        local original_scol = nodes.get_scol(highest)
+        print("   original_scol =", original_scol)
+        local starting = highest
+        print("   Escape augment targets:")
+        while starting and nodes.is_augment_target(starting) do
+          print("     -", starting:type(), "is augment, escaping to parent")
+          starting = starting:parent()
+        end
+        print("   starting_node =", starting and starting:type() or "NIL")
+        print("")
+        if starting then
+          print("   Walking ancestors:")
+          local iter = starting:parent()
+          while iter do
+            print("     -", iter:type(), "scol=" .. nodes.get_scol(iter), "is_jump_target=" .. tostring(nodes.is_jump_target(iter)))
+            if nodes.is_jump_target(iter) and nodes.get_scol(iter) ~= original_scol then
+              print("       >> FOUND! Returning", iter:type())
+              break
+            end
+            iter = iter:parent()
+          end
+        end
+        print("")
+        print("4. Final result:")
+        local result = strategies.get_first_ancestor_with_diff_scol(highest)
+        if result then
+          print("   Type:", result:type())
+          print("   Scol:", nodes.get_scol(result))
+        else
+          print("   NIL")
+        end
+        EOFTRACE
         nvim --headless -u tests/minimal_init.lua \
           -c "edit tests/fixtures/typescript.ts" \
           -c "lua vim.treesitter.get_parser():parse()" \
-          -c "lua vim.fn.cursor(121, 3)" \
-          -c "lua local nodes = require('treewalker.nodes'); local node = nodes.get_highest_node_at_current_row(); print('Node at 121,3 (using get_highest_node_at_current_row):'); print('  Type:', node:type()); print('  Is comment?', nodes.is_comment_node(node)); print('  Is augment target?', nodes.is_augment_target(node)); print('  Srow:', nodes.get_srow(node)); local p = node:parent(); if p then print('  Parent:', p:type()) end" \
-          -c "quitall" 2>&1 || echo "Tree dump failed"
+          -c "luafile /tmp/trace_ts.lua" \
+          -c "quitall" 2>&1 || echo "TypeScript trace failed"
         echo ""
         echo "=== Dump Java Test Tree Structure ==="
         nvim --headless -u tests/minimal_init.lua \
