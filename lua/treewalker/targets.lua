@@ -16,8 +16,16 @@ function M.out(node)
   -- node below the comment
   -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
   -- but does fail on CI. TODO figure out the differences)
-  if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
-    node = M.down(node, nodes.get_srow(node)) or node
+  -- Try multiple times to escape comment nodes on CI
+  local max_attempts = 3
+  local attempts = 0
+  while (nodes.is_comment_node(node) or nodes.is_augment_target(node)) and attempts < max_attempts do
+    local next_node = M.down(node, nodes.get_srow(node))
+    if not next_node or next_node == node then
+      break -- Can't move down further, stop trying
+    end
+    node = next_node
+    attempts = attempts + 1
   end
 
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
