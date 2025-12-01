@@ -104,15 +104,26 @@ function M.get_down_and_in(srow, scol, prev_candidate, prev_row)
 end
 
 ---Get the nearest ancestral node _which has different coordinates than the passed in node_
+---If the starting node is inside a comment/augment, first escape to the comment's parent
 ---@param node TSNode
 ---@return TSNode | nil
 function M.get_first_ancestor_with_diff_scol(node)
-  local iter_ancestor = node:parent()
+  -- First, escape from any comment/augment structure we might be inside
+  -- This handles platform differences where comment children (source/text) vary
+  local starting_node = node
+  local original_scol = nodes.get_scol(node)
+  while starting_node and nodes.is_augment_target(starting_node) do
+    starting_node = starting_node:parent()
+  end
+  if not starting_node then return nil end
+
+  local iter_ancestor = starting_node:parent()
   while iter_ancestor do
+    local iter_scol = nodes.get_scol(iter_ancestor)
     if
         true
         and nodes.is_jump_target(iter_ancestor)
-        and not nodes.have_same_scol(node, iter_ancestor)
+        and iter_scol ~= original_scol
     then
       return iter_ancestor
     end
