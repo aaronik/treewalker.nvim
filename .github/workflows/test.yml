@@ -27,7 +27,7 @@ jobs:
     - name: Install nvim-treesitter
       run: |
         mkdir -p $HOME/.local/share/nvim/lazy/
-        git clone https://github.com/nvim-treesitter/nvim-treesitter.git
+        git clone --depth 1 --branch v0.10.0 https://github.com/nvim-treesitter/nvim-treesitter.git
         mv nvim-treesitter $HOME/.local/share/nvim/lazy/
 
     - name: Run luacheck type check / linter

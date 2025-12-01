@@ -1,0 +1,1068 @@
+test	Set up job	﻿2025-12-01T03:18:01.9163153Z Current runner version: '2.329.0'
+test	Set up job	2025-12-01T03:18:01.9187206Z ##[group]Runner Image Provisioner
+test	Set up job	2025-12-01T03:18:01.9187987Z Hosted Compute Agent
+test	Set up job	2025-12-01T03:18:01.9188572Z Version: 20251016.436
+test	Set up job	2025-12-01T03:18:01.9189086Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+test	Set up job	2025-12-01T03:18:01.9189710Z Build Date: 2025-10-15T20:44:12Z
+test	Set up job	2025-12-01T03:18:01.9190254Z ##[endgroup]
+test	Set up job	2025-12-01T03:18:01.9190918Z ##[group]Operating System
+test	Set up job	2025-12-01T03:18:01.9191397Z Ubuntu
+test	Set up job	2025-12-01T03:18:01.9191866Z 24.04.3
+test	Set up job	2025-12-01T03:18:01.9192264Z LTS
+test	Set up job	2025-12-01T03:18:01.9192686Z ##[endgroup]
+test	Set up job	2025-12-01T03:18:01.9193111Z ##[group]Runner Image
+test	Set up job	2025-12-01T03:18:01.9193635Z Image: ubuntu-24.04
+test	Set up job	2025-12-01T03:18:01.9194094Z Version: 20251112.124.1
+test	Set up job	2025-12-01T03:18:01.9194977Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+test	Set up job	2025-12-01T03:18:01.9196207Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+test	Set up job	2025-12-01T03:18:01.9197246Z ##[endgroup]
+test	Set up job	2025-12-01T03:18:01.9198226Z ##[group]GITHUB_TOKEN Permissions
+test	Set up job	2025-12-01T03:18:01.9200155Z Contents: read
+test	Set up job	2025-12-01T03:18:01.9200837Z Metadata: read
+test	Set up job	2025-12-01T03:18:01.9201286Z Packages: read
+test	Set up job	2025-12-01T03:18:01.9201691Z ##[endgroup]
+test	Set up job	2025-12-01T03:18:01.9203873Z Secret source: Actions
+test	Set up job	2025-12-01T03:18:01.9204477Z Prepare workflow directory
+test	Set up job	2025-12-01T03:18:01.9537779Z Prepare all required actions
+test	Set up job	2025-12-01T03:18:01.9595629Z Getting action download info
+test	Set up job	2025-12-01T03:18:02.3390740Z Download action repository 'actions/checkout@v3' (SHA:f43a0e5ff2bd294095638e18286ca9a3d1956744)
+test	Set up job	2025-12-01T03:18:02.5055632Z Complete job name: test
+test	Checkout Code	﻿2025-12-01T03:18:02.5675150Z ##[group]Run actions/checkout@v3
+test	Checkout Code	2025-12-01T03:18:02.5675985Z with:
+test	Checkout Code	2025-12-01T03:18:02.5676399Z   repository: aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:02.5677224Z   token: ***
+test	Checkout Code	2025-12-01T03:18:02.5677624Z   ssh-strict: true
+test	Checkout Code	2025-12-01T03:18:02.5678084Z   persist-credentials: true
+test	Checkout Code	2025-12-01T03:18:02.5678595Z   clean: true
+test	Checkout Code	2025-12-01T03:18:02.5679027Z   sparse-checkout-cone-mode: true
+test	Checkout Code	2025-12-01T03:18:02.5679525Z   fetch-depth: 1
+test	Checkout Code	2025-12-01T03:18:02.5679954Z   fetch-tags: false
+test	Checkout Code	2025-12-01T03:18:02.5680521Z   lfs: false
+test	Checkout Code	2025-12-01T03:18:02.5680916Z   submodules: false
+test	Checkout Code	2025-12-01T03:18:02.5681387Z   set-safe-directory: true
+test	Checkout Code	2025-12-01T03:18:02.5682074Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:02.6520052Z Syncing repository: aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:02.6522302Z ##[group]Getting Git version info
+test	Checkout Code	2025-12-01T03:18:02.6523198Z Working directory is '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Checkout Code	2025-12-01T03:18:02.6524212Z [command]/usr/bin/git version
+test	Checkout Code	2025-12-01T03:18:02.6572010Z git version 2.51.2
+test	Checkout Code	2025-12-01T03:18:02.6597414Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:02.6611990Z Temporarily overriding HOME='/home/runner/work/_temp/11977312-52e7-48f4-ac15-c0567f946f88' before making global git config changes
+test	Checkout Code	2025-12-01T03:18:02.6614348Z Adding repository directory to the temporary git global config as a safe directory
+test	Checkout Code	2025-12-01T03:18:02.6616560Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:02.6645449Z Deleting the contents of '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Checkout Code	2025-12-01T03:18:02.6648421Z ##[group]Initializing the repository
+test	Checkout Code	2025-12-01T03:18:02.6651499Z [command]/usr/bin/git init /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:02.6743995Z hint: Using 'master' as the name for the initial branch. This default branch name
+test	Checkout Code	2025-12-01T03:18:02.6745049Z hint: is subject to change. To configure the initial branch name to use in all
+test	Checkout Code	2025-12-01T03:18:02.6745880Z hint: of your new repositories, which will suppress this warning, call:
+test	Checkout Code	2025-12-01T03:18:02.6746642Z hint:
+test	Checkout Code	2025-12-01T03:18:02.6747282Z hint: 	git config --global init.defaultBranch <name>
+test	Checkout Code	2025-12-01T03:18:02.6748207Z hint:
+test	Checkout Code	2025-12-01T03:18:02.6749415Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+test	Checkout Code	2025-12-01T03:18:02.6750283Z hint: 'development'. The just-created branch can be renamed via this command:
+test	Checkout Code	2025-12-01T03:18:02.6751412Z hint:
+test	Checkout Code	2025-12-01T03:18:02.6751872Z hint: 	git branch -m <name>
+test	Checkout Code	2025-12-01T03:18:02.6752485Z hint:
+test	Checkout Code	2025-12-01T03:18:02.6753477Z hint: Disable this message with "git config set advice.defaultBranchName false"
+test	Checkout Code	2025-12-01T03:18:02.6754449Z Initialized empty Git repository in /home/runner/work/treewalker.nvim/treewalker.nvim/.git/
+test	Checkout Code	2025-12-01T03:18:02.6756800Z [command]/usr/bin/git remote add origin https://github.com/aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:02.6785259Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:02.6786086Z ##[group]Disabling automatic garbage collection
+test	Checkout Code	2025-12-01T03:18:02.6787446Z [command]/usr/bin/git config --local gc.auto 0
+test	Checkout Code	2025-12-01T03:18:02.6809662Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:02.6810764Z ##[group]Setting up auth
+test	Checkout Code	2025-12-01T03:18:02.6814384Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	Checkout Code	2025-12-01T03:18:02.6835708Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	Checkout Code	2025-12-01T03:18:02.7130665Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	Checkout Code	2025-12-01T03:18:02.7155844Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	Checkout Code	2025-12-01T03:18:02.7342852Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+test	Checkout Code	2025-12-01T03:18:02.7371583Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:02.7372443Z ##[group]Fetching the repository
+test	Checkout Code	2025-12-01T03:18:02.7379200Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +19ad8532d4ea04699a86ead988a882ae342faf1c:refs/remotes/origin/f-ai
+test	Checkout Code	2025-12-01T03:18:03.0836359Z remote: Enumerating objects: 95, done.        
+test	Checkout Code	2025-12-01T03:18:03.0837673Z remote: Counting objects:   1% (1/95)        
+test	Checkout Code	2025-12-01T03:18:03.0838432Z remote: Counting objects:   2% (2/95)        
+test	Checkout Code	2025-12-01T03:18:03.0839252Z remote: Counting objects:   3% (3/95)        
+test	Checkout Code	2025-12-01T03:18:03.0839932Z remote: Counting objects:   4% (4/95)        
+test	Checkout Code	2025-12-01T03:18:03.0840931Z remote: Counting objects:   5% (5/95)        
+test	Checkout Code	2025-12-01T03:18:03.0841680Z remote: Counting objects:   6% (6/95)        
+test	Checkout Code	2025-12-01T03:18:03.0842421Z remote: Counting objects:   7% (7/95)        
+test	Checkout Code	2025-12-01T03:18:03.0843107Z remote: Counting objects:   8% (8/95)        
+test	Checkout Code	2025-12-01T03:18:03.0843842Z remote: Counting objects:   9% (9/95)        
+test	Checkout Code	2025-12-01T03:18:03.0844602Z remote: Counting objects:  10% (10/95)        
+test	Checkout Code	2025-12-01T03:18:03.0845300Z remote: Counting objects:  11% (11/95)        
+test	Checkout Code	2025-12-01T03:18:03.0845928Z remote: Counting objects:  12% (12/95)        
+test	Checkout Code	2025-12-01T03:18:03.0846500Z remote: Counting objects:  13% (13/95)        
+test	Checkout Code	2025-12-01T03:18:03.0847084Z remote: Counting objects:  14% (14/95)        
+test	Checkout Code	2025-12-01T03:18:03.0847635Z remote: Counting objects:  15% (15/95)        
+test	Checkout Code	2025-12-01T03:18:03.0848260Z remote: Counting objects:  16% (16/95)        
+test	Checkout Code	2025-12-01T03:18:03.0849003Z remote: Counting objects:  17% (17/95)        
+test	Checkout Code	2025-12-01T03:18:03.0849801Z remote: Counting objects:  18% (18/95)        
+test	Checkout Code	2025-12-01T03:18:03.0850700Z remote: Counting objects:  20% (19/95)        
+test	Checkout Code	2025-12-01T03:18:03.0851269Z remote: Counting objects:  21% (20/95)        
+test	Checkout Code	2025-12-01T03:18:03.0851956Z remote: Counting objects:  22% (21/95)        
+test	Checkout Code	2025-12-01T03:18:03.0852836Z remote: Counting objects:  23% (22/95)        
+test	Checkout Code	2025-12-01T03:18:03.0853768Z remote: Counting objects:  24% (23/95)        
+test	Checkout Code	2025-12-01T03:18:03.0855004Z remote: Counting objects:  25% (24/95)        
+test	Checkout Code	2025-12-01T03:18:03.0855776Z remote: Counting objects:  26% (25/95)        
+test	Checkout Code	2025-12-01T03:18:03.0856374Z remote: Counting objects:  27% (26/95)        
+test	Checkout Code	2025-12-01T03:18:03.0856953Z remote: Counting objects:  28% (27/95)        
+test	Checkout Code	2025-12-01T03:18:03.0857900Z remote: Counting objects:  29% (28/95)        
+test	Checkout Code	2025-12-01T03:18:03.0858518Z remote: Counting objects:  30% (29/95)        
+test	Checkout Code	2025-12-01T03:18:03.0859078Z remote: Counting objects:  31% (30/95)        
+test	Checkout Code	2025-12-01T03:18:03.0859682Z remote: Counting objects:  32% (31/95)        
+test	Checkout Code	2025-12-01T03:18:03.0860241Z remote: Counting objects:  33% (32/95)        
+test	Checkout Code	2025-12-01T03:18:03.0860998Z remote: Counting objects:  34% (33/95)        
+test	Checkout Code	2025-12-01T03:18:03.0861625Z remote: Counting objects:  35% (34/95)        
+test	Checkout Code	2025-12-01T03:18:03.0862209Z remote: Counting objects:  36% (35/95)        
+test	Checkout Code	2025-12-01T03:18:03.0862800Z remote: Counting objects:  37% (36/95)        
+test	Checkout Code	2025-12-01T03:18:03.0863379Z remote: Counting objects:  38% (37/95)        
+test	Checkout Code	2025-12-01T03:18:03.0863982Z remote: Counting objects:  40% (38/95)        
+test	Checkout Code	2025-12-01T03:18:03.0864532Z remote: Counting objects:  41% (39/95)        
+test	Checkout Code	2025-12-01T03:18:03.0865134Z remote: Counting objects:  42% (40/95)        
+test	Checkout Code	2025-12-01T03:18:03.0865748Z remote: Counting objects:  43% (41/95)        
+test	Checkout Code	2025-12-01T03:18:03.0866307Z remote: Counting objects:  44% (42/95)        
+test	Checkout Code	2025-12-01T03:18:03.0866900Z remote: Counting objects:  45% (43/95)        
+test	Checkout Code	2025-12-01T03:18:03.0867462Z remote: Counting objects:  46% (44/95)        
+test	Checkout Code	2025-12-01T03:18:03.0868050Z remote: Counting objects:  47% (45/95)        
+test	Checkout Code	2025-12-01T03:18:03.0868591Z remote: Counting objects:  48% (46/95)        
+test	Checkout Code	2025-12-01T03:18:03.0869224Z remote: Counting objects:  49% (47/95)        
+test	Checkout Code	2025-12-01T03:18:03.0869813Z remote: Counting objects:  50% (48/95)        
+test	Checkout Code	2025-12-01T03:18:03.0870497Z remote: Counting objects:  51% (49/95)        
+test	Checkout Code	2025-12-01T03:18:03.0871127Z remote: Counting objects:  52% (50/95)        
+test	Checkout Code	2025-12-01T03:18:03.0871807Z remote: Counting objects:  53% (51/95)        
+test	Checkout Code	2025-12-01T03:18:03.0872389Z remote: Counting objects:  54% (52/95)        
+test	Checkout Code	2025-12-01T03:18:03.0873009Z remote: Counting objects:  55% (53/95)        
+test	Checkout Code	2025-12-01T03:18:03.0873622Z remote: Counting objects:  56% (54/95)        
+test	Checkout Code	2025-12-01T03:18:03.0874197Z remote: Counting objects:  57% (55/95)        
+test	Checkout Code	2025-12-01T03:18:03.0874786Z remote: Counting objects:  58% (56/95)        
+test	Checkout Code	2025-12-01T03:18:03.0875369Z remote: Counting objects:  60% (57/95)        
+test	Checkout Code	2025-12-01T03:18:03.0875916Z remote: Counting objects:  61% (58/95)        
+test	Checkout Code	2025-12-01T03:18:03.0876547Z remote: Counting objects:  62% (59/95)        
+test	Checkout Code	2025-12-01T03:18:03.0877097Z remote: Counting objects:  63% (60/95)        
+test	Checkout Code	2025-12-01T03:18:03.0877685Z remote: Counting objects:  64% (61/95)        
+test	Checkout Code	2025-12-01T03:18:03.0878296Z remote: Counting objects:  65% (62/95)        
+test	Checkout Code	2025-12-01T03:18:03.0878849Z remote: Counting objects:  66% (63/95)        
+test	Checkout Code	2025-12-01T03:18:03.0879444Z remote: Counting objects:  67% (64/95)        
+test	Checkout Code	2025-12-01T03:18:03.0880073Z remote: Counting objects:  68% (65/95)        
+test	Checkout Code	2025-12-01T03:18:03.0880785Z remote: Counting objects:  69% (66/95)        
+test	Checkout Code	2025-12-01T03:18:03.0881389Z remote: Counting objects:  70% (67/95)        
+test	Checkout Code	2025-12-01T03:18:03.0881980Z remote: Counting objects:  71% (68/95)        
+test	Checkout Code	2025-12-01T03:18:03.0882593Z remote: Counting objects:  72% (69/95)        
+test	Checkout Code	2025-12-01T03:18:03.0883159Z remote: Counting objects:  73% (70/95)        
+test	Checkout Code	2025-12-01T03:18:03.0883774Z remote: Counting objects:  74% (71/95)        
+test	Checkout Code	2025-12-01T03:18:03.0884371Z remote: Counting objects:  75% (72/95)        
+test	Checkout Code	2025-12-01T03:18:03.0884921Z remote: Counting objects:  76% (73/95)        
+test	Checkout Code	2025-12-01T03:18:03.0885509Z remote: Counting objects:  77% (74/95)        
+test	Checkout Code	2025-12-01T03:18:03.0886076Z remote: Counting objects:  78% (75/95)        
+test	Checkout Code	2025-12-01T03:18:03.0886758Z remote: Counting objects:  80% (76/95)        
+test	Checkout Code	2025-12-01T03:18:03.0887318Z remote: Counting objects:  81% (77/95)        
+test	Checkout Code	2025-12-01T03:18:03.0887939Z remote: Counting objects:  82% (78/95)        
+test	Checkout Code	2025-12-01T03:18:03.0888531Z remote: Counting objects:  83% (79/95)        
+test	Checkout Code	2025-12-01T03:18:03.0889073Z remote: Counting objects:  84% (80/95)        
+test	Checkout Code	2025-12-01T03:18:03.0889707Z remote: Counting objects:  85% (81/95)        
+test	Checkout Code	2025-12-01T03:18:03.0890565Z remote: Counting objects:  86% (82/95)        
+test	Checkout Code	2025-12-01T03:18:03.0891182Z remote: Counting objects:  87% (83/95)        
+test	Checkout Code	2025-12-01T03:18:03.0891788Z remote: Counting objects:  88% (84/95)        
+test	Checkout Code	2025-12-01T03:18:03.0892378Z remote: Counting objects:  89% (85/95)        
+test	Checkout Code	2025-12-01T03:18:03.0892951Z remote: Counting objects:  90% (86/95)        
+test	Checkout Code	2025-12-01T03:18:03.0893545Z remote: Counting objects:  91% (87/95)        
+test	Checkout Code	2025-12-01T03:18:03.0894129Z remote: Counting objects:  92% (88/95)        
+test	Checkout Code	2025-12-01T03:18:03.0894709Z remote: Counting objects:  93% (89/95)        
+test	Checkout Code	2025-12-01T03:18:03.0895313Z remote: Counting objects:  94% (90/95)        
+test	Checkout Code	2025-12-01T03:18:03.0895865Z remote: Counting objects:  95% (91/95)        
+test	Checkout Code	2025-12-01T03:18:03.0896452Z remote: Counting objects:  96% (92/95)        
+test	Checkout Code	2025-12-01T03:18:03.0897053Z remote: Counting objects:  97% (93/95)        
+test	Checkout Code	2025-12-01T03:18:03.0897605Z remote: Counting objects:  98% (94/95)        
+test	Checkout Code	2025-12-01T03:18:03.0898209Z remote: Counting objects: 100% (95/95)        
+test	Checkout Code	2025-12-01T03:18:03.0898797Z remote: Counting objects: 100% (95/95), done.        
+test	Checkout Code	2025-12-01T03:18:03.0899438Z remote: Compressing objects:   1% (1/89)        
+test	Checkout Code	2025-12-01T03:18:03.0900010Z remote: Compressing objects:   2% (2/89)        
+test	Checkout Code	2025-12-01T03:18:03.0900760Z remote: Compressing objects:   3% (3/89)        
+test	Checkout Code	2025-12-01T03:18:03.0901365Z remote: Compressing objects:   4% (4/89)        
+test	Checkout Code	2025-12-01T03:18:03.0901962Z remote: Compressing objects:   5% (5/89)        
+test	Checkout Code	2025-12-01T03:18:03.0902606Z remote: Compressing objects:   6% (6/89)        
+test	Checkout Code	2025-12-01T03:18:03.1204071Z remote: Compressing objects:   7% (7/89)        
+test	Checkout Code	2025-12-01T03:18:03.1205923Z remote: Compressing objects:   8% (8/89)        
+test	Checkout Code	2025-12-01T03:18:03.1206662Z remote: Compressing objects:  10% (9/89)        
+test	Checkout Code	2025-12-01T03:18:03.1207491Z remote: Compressing objects:  11% (10/89)        
+test	Checkout Code	2025-12-01T03:18:03.1208261Z remote: Compressing objects:  12% (11/89)        
+test	Checkout Code	2025-12-01T03:18:03.1208977Z remote: Compressing objects:  13% (12/89)        
+test	Checkout Code	2025-12-01T03:18:03.1210200Z remote: Compressing objects:  14% (13/89)        
+test	Checkout Code	2025-12-01T03:18:03.1321787Z remote: Compressing objects:  15% (14/89)        
+test	Checkout Code	2025-12-01T03:18:03.1322796Z remote: Compressing objects:  16% (15/89)        
+test	Checkout Code	2025-12-01T03:18:03.1323634Z remote: Compressing objects:  17% (16/89)        
+test	Checkout Code	2025-12-01T03:18:03.1324564Z remote: Compressing objects:  19% (17/89)        
+test	Checkout Code	2025-12-01T03:18:03.1325745Z remote: Compressing objects:  20% (18/89)        
+test	Checkout Code	2025-12-01T03:18:03.1326764Z remote: Compressing objects:  21% (19/89)        
+test	Checkout Code	2025-12-01T03:18:03.1327794Z remote: Compressing objects:  22% (20/89)        
+test	Checkout Code	2025-12-01T03:18:03.1328860Z remote: Compressing objects:  23% (21/89)        
+test	Checkout Code	2025-12-01T03:18:03.1329888Z remote: Compressing objects:  24% (22/89)        
+test	Checkout Code	2025-12-01T03:18:03.1331037Z remote: Compressing objects:  25% (23/89)        
+test	Checkout Code	2025-12-01T03:18:03.1332067Z remote: Compressing objects:  26% (24/89)        
+test	Checkout Code	2025-12-01T03:18:03.1333100Z remote: Compressing objects:  28% (25/89)        
+test	Checkout Code	2025-12-01T03:18:03.1334179Z remote: Compressing objects:  29% (26/89)        
+test	Checkout Code	2025-12-01T03:18:03.1335227Z remote: Compressing objects:  30% (27/89)        
+test	Checkout Code	2025-12-01T03:18:03.1336243Z remote: Compressing objects:  31% (28/89)        
+test	Checkout Code	2025-12-01T03:18:03.1337282Z remote: Compressing objects:  32% (29/89)        
+test	Checkout Code	2025-12-01T03:18:03.1338305Z remote: Compressing objects:  33% (30/89)        
+test	Checkout Code	2025-12-01T03:18:03.1339322Z remote: Compressing objects:  34% (31/89)        
+test	Checkout Code	2025-12-01T03:18:03.1340451Z remote: Compressing objects:  35% (32/89)        
+test	Checkout Code	2025-12-01T03:18:03.1341367Z remote: Compressing objects:  37% (33/89)        
+test	Checkout Code	2025-12-01T03:18:03.1342109Z remote: Compressing objects:  38% (34/89)        
+test	Checkout Code	2025-12-01T03:18:03.1342885Z remote: Compressing objects:  39% (35/89)        
+test	Checkout Code	2025-12-01T03:18:03.1343707Z remote: Compressing objects:  40% (36/89)        
+test	Checkout Code	2025-12-01T03:18:03.1344250Z remote: Compressing objects:  41% (37/89)        
+test	Checkout Code	2025-12-01T03:18:03.1344796Z remote: Compressing objects:  42% (38/89)        
+test	Checkout Code	2025-12-01T03:18:03.1345682Z remote: Compressing objects:  43% (39/89)        
+test	Checkout Code	2025-12-01T03:18:03.1346260Z remote: Compressing objects:  44% (40/89)        
+test	Checkout Code	2025-12-01T03:18:03.1346823Z remote: Compressing objects:  46% (41/89)        
+test	Checkout Code	2025-12-01T03:18:03.1347358Z remote: Compressing objects:  47% (42/89)        
+test	Checkout Code	2025-12-01T03:18:03.1348038Z remote: Compressing objects:  48% (43/89)        
+test	Checkout Code	2025-12-01T03:18:03.1348580Z remote: Compressing objects:  49% (44/89)        
+test	Checkout Code	2025-12-01T03:18:03.1349129Z remote: Compressing objects:  50% (45/89)        
+test	Checkout Code	2025-12-01T03:18:03.1349674Z remote: Compressing objects:  51% (46/89)        
+test	Checkout Code	2025-12-01T03:18:03.1350233Z remote: Compressing objects:  52% (47/89)        
+test	Checkout Code	2025-12-01T03:18:03.1350907Z remote: Compressing objects:  53% (48/89)        
+test	Checkout Code	2025-12-01T03:18:03.1351441Z remote: Compressing objects:  55% (49/89)        
+test	Checkout Code	2025-12-01T03:18:03.1351995Z remote: Compressing objects:  56% (50/89)        
+test	Checkout Code	2025-12-01T03:18:03.1352535Z remote: Compressing objects:  57% (51/89)        
+test	Checkout Code	2025-12-01T03:18:03.1353089Z remote: Compressing objects:  58% (52/89)        
+test	Checkout Code	2025-12-01T03:18:03.1353632Z remote: Compressing objects:  59% (53/89)        
+test	Checkout Code	2025-12-01T03:18:03.1354179Z remote: Compressing objects:  60% (54/89)        
+test	Checkout Code	2025-12-01T03:18:03.1354727Z remote: Compressing objects:  61% (55/89)        
+test	Checkout Code	2025-12-01T03:18:03.1355298Z remote: Compressing objects:  62% (56/89)        
+test	Checkout Code	2025-12-01T03:18:03.1355871Z remote: Compressing objects:  64% (57/89)        
+test	Checkout Code	2025-12-01T03:18:03.1356413Z remote: Compressing objects:  65% (58/89)        
+test	Checkout Code	2025-12-01T03:18:03.1356964Z remote: Compressing objects:  66% (59/89)        
+test	Checkout Code	2025-12-01T03:18:03.1357625Z remote: Compressing objects:  67% (60/89)        
+test	Checkout Code	2025-12-01T03:18:03.1358172Z remote: Compressing objects:  68% (61/89)        
+test	Checkout Code	2025-12-01T03:18:03.1358723Z remote: Compressing objects:  69% (62/89)        
+test	Checkout Code	2025-12-01T03:18:03.1359272Z remote: Compressing objects:  70% (63/89)        
+test	Checkout Code	2025-12-01T03:18:03.1359810Z remote: Compressing objects:  71% (64/89)        
+test	Checkout Code	2025-12-01T03:18:03.1360419Z remote: Compressing objects:  73% (65/89)        
+test	Checkout Code	2025-12-01T03:18:03.1360960Z remote: Compressing objects:  74% (66/89)        
+test	Checkout Code	2025-12-01T03:18:03.1361488Z remote: Compressing objects:  75% (67/89)        
+test	Checkout Code	2025-12-01T03:18:03.1362032Z remote: Compressing objects:  76% (68/89)        
+test	Checkout Code	2025-12-01T03:18:03.1362569Z remote: Compressing objects:  77% (69/89)        
+test	Checkout Code	2025-12-01T03:18:03.1363096Z remote: Compressing objects:  78% (70/89)        
+test	Checkout Code	2025-12-01T03:18:03.1363627Z remote: Compressing objects:  79% (71/89)        
+test	Checkout Code	2025-12-01T03:18:03.1365037Z remote: Compressing objects:  80% (72/89)        
+test	Checkout Code	2025-12-01T03:18:03.1366425Z remote: Compressing objects:  82% (73/89)        
+test	Checkout Code	2025-12-01T03:18:03.1367045Z remote: Compressing objects:  83% (74/89)        
+test	Checkout Code	2025-12-01T03:18:03.1367572Z remote: Compressing objects:  84% (75/89)        
+test	Checkout Code	2025-12-01T03:18:03.1368508Z remote: Compressing objects:  85% (76/89)        
+test	Checkout Code	2025-12-01T03:18:03.1369313Z remote: Compressing objects:  86% (77/89)        
+test	Checkout Code	2025-12-01T03:18:03.1369866Z remote: Compressing objects:  87% (78/89)        
+test	Checkout Code	2025-12-01T03:18:03.1370556Z remote: Compressing objects:  88% (79/89)        
+test	Checkout Code	2025-12-01T03:18:03.1371109Z remote: Compressing objects:  89% (80/89)        
+test	Checkout Code	2025-12-01T03:18:03.1371639Z remote: Compressing objects:  91% (81/89)        
+test	Checkout Code	2025-12-01T03:18:03.1372174Z remote: Compressing objects:  92% (82/89)        
+test	Checkout Code	2025-12-01T03:18:03.1372693Z remote: Compressing objects:  93% (83/89)        
+test	Checkout Code	2025-12-01T03:18:03.1373221Z remote: Compressing objects:  94% (84/89)        
+test	Checkout Code	2025-12-01T03:18:03.1373744Z remote: Compressing objects:  95% (85/89)        
+test	Checkout Code	2025-12-01T03:18:03.1374268Z remote: Compressing objects:  96% (86/89)        
+test	Checkout Code	2025-12-01T03:18:03.1374796Z remote: Compressing objects:  97% (87/89)        
+test	Checkout Code	2025-12-01T03:18:03.1375318Z remote: Compressing objects:  98% (88/89)        
+test	Checkout Code	2025-12-01T03:18:03.1375841Z remote: Compressing objects: 100% (89/89)        
+test	Checkout Code	2025-12-01T03:18:03.1376597Z remote: Compressing objects: 100% (89/89), done.        
+test	Checkout Code	2025-12-01T03:18:03.3668677Z remote: Total 95 (delta 4), reused 44 (delta 0), pack-reused 0 (from 0)        
+test	Checkout Code	2025-12-01T03:18:03.3838054Z From https://github.com/aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:18:03.3839335Z  * [new ref]         19ad8532d4ea04699a86ead988a882ae342faf1c -> origin/f-ai
+test	Checkout Code	2025-12-01T03:18:03.3863922Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:03.3864906Z ##[group]Determining the checkout info
+test	Checkout Code	2025-12-01T03:18:03.3866054Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:03.3867007Z ##[group]Checking out the ref
+test	Checkout Code	2025-12-01T03:18:03.3870906Z [command]/usr/bin/git checkout --progress --force -B f-ai refs/remotes/origin/f-ai
+test	Checkout Code	2025-12-01T03:18:03.4010784Z Switched to a new branch 'f-ai'
+test	Checkout Code	2025-12-01T03:18:03.4011572Z branch 'f-ai' set up to track 'origin/f-ai'.
+test	Checkout Code	2025-12-01T03:18:03.4017759Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:18:03.4049848Z [command]/usr/bin/git log -1 --format='%H'
+test	Checkout Code	2025-12-01T03:18:03.4069283Z '19ad8532d4ea04699a86ead988a882ae342faf1c'
+test	Install Neovim	﻿2025-12-01T03:18:03.4229496Z ##[group]Run sudo snap install nvim --classic
+test	Install Neovim	2025-12-01T03:18:03.4230144Z [36;1msudo snap install nvim --classic[0m
+test	Install Neovim	2025-12-01T03:18:03.4253189Z shell: /usr/bin/bash -e {0}
+test	Install Neovim	2025-12-01T03:18:03.4253643Z ##[endgroup]
+test	Install Neovim	2025-12-01T03:18:09.8946927Z 2025-12-01T03:18:09Z INFO Waiting for automatic snapd restart...
+test	Install Neovim	2025-12-01T03:18:20.8481354Z nvim v0.11.5 from neovim-snap (neovim-snap) installed
+test	Install Plenary	﻿2025-12-01T03:18:20.8533304Z ##[group]Run mkdir -p $HOME/.local/share/nvim/lazy/
+test	Install Plenary	2025-12-01T03:18:20.8533786Z [36;1mmkdir -p $HOME/.local/share/nvim/lazy/[0m
+test	Install Plenary	2025-12-01T03:18:20.8534214Z [36;1mgit clone https://github.com/nvim-lua/plenary.nvim.git[0m
+test	Install Plenary	2025-12-01T03:18:20.8534614Z [36;1mmv plenary.nvim $HOME/.local/share/nvim/lazy/[0m
+test	Install Plenary	2025-12-01T03:18:20.8555446Z shell: /usr/bin/bash -e {0}
+test	Install Plenary	2025-12-01T03:18:20.8555769Z ##[endgroup]
+test	Install Plenary	2025-12-01T03:18:20.8615030Z Cloning into 'plenary.nvim'...
+test	Install nvim-treesitter	﻿2025-12-01T03:18:21.8394093Z ##[group]Run mkdir -p $HOME/.local/share/nvim/lazy/
+test	Install nvim-treesitter	2025-12-01T03:18:21.8394560Z [36;1mmkdir -p $HOME/.local/share/nvim/lazy/[0m
+test	Install nvim-treesitter	2025-12-01T03:18:21.8395029Z [36;1mgit clone https://github.com/nvim-treesitter/nvim-treesitter.git[0m
+test	Install nvim-treesitter	2025-12-01T03:18:21.8395464Z [36;1mmv nvim-treesitter $HOME/.local/share/nvim/lazy/[0m
+test	Install nvim-treesitter	2025-12-01T03:18:21.8417177Z shell: /usr/bin/bash -e {0}
+test	Install nvim-treesitter	2025-12-01T03:18:21.8417500Z ##[endgroup]
+test	Install nvim-treesitter	2025-12-01T03:18:21.8482203Z Cloning into 'nvim-treesitter'...
+test	Run luacheck type check / linter	﻿2025-12-01T03:18:23.0972339Z ##[group]Run sudo apt-get install lua-check -y --no-install-recommends
+test	Run luacheck type check / linter	2025-12-01T03:18:23.0972859Z [36;1msudo apt-get install lua-check -y --no-install-recommends[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:23.0973185Z [36;1mmake check[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:23.0993003Z shell: /usr/bin/bash -e {0}
+test	Run luacheck type check / linter	2025-12-01T03:18:23.0993271Z ##[endgroup]
+test	Run luacheck type check / linter	2025-12-01T03:18:26.5820935Z Reading package lists...
+test	Run luacheck type check / linter	2025-12-01T03:18:26.7946459Z Building dependency tree...
+test	Run luacheck type check / linter	2025-12-01T03:18:26.8001730Z Reading state information...
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0080818Z The following additional packages will be installed:
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0082872Z   lua-argparse lua-filesystem lua5.1
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0473190Z The following NEW packages will be installed:
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0478489Z   lua-argparse lua-check lua-filesystem lua5.1
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0846818Z 0 upgraded, 4 newly installed, 0 to remove and 21 not upgraded.
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0847618Z Need to get 280 kB of archives.
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0848049Z After this operation, 1031 kB of additional disk space will be used.
+test	Run luacheck type check / linter	2025-12-01T03:18:27.0848605Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+test	Run luacheck type check / linter	2025-12-01T03:18:27.1685714Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-argparse all 0.7.1-2 [36.1 kB]
+test	Run luacheck type check / linter	2025-12-01T03:18:27.2219951Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-filesystem amd64 1.8.0-3 [13.0 kB]
+test	Run luacheck type check / linter	2025-12-01T03:18:27.2732838Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua5.1 amd64 5.1.5-9build2 [125 kB]
+test	Run luacheck type check / linter	2025-12-01T03:18:27.3264152Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-check all 1.1.2-1 [106 kB]
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6019461Z Fetched 280 kB in 0s (1049 kB/s)
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6518313Z Selecting previously unselected package lua-argparse.
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6966428Z (Reading database ... 
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6967072Z (Reading database ... 5%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6967514Z (Reading database ... 10%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6967900Z (Reading database ... 15%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6968299Z (Reading database ... 20%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6968729Z (Reading database ... 25%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6969101Z (Reading database ... 30%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6969475Z (Reading database ... 35%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6969915Z (Reading database ... 40%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6970544Z (Reading database ... 45%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.6970961Z (Reading database ... 50%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.7591717Z (Reading database ... 55%
+test	Run luacheck type check / linter	2025-12-01T03:18:27.9889225Z (Reading database ... 60%
+test	Run luacheck type check / linter	2025-12-01T03:18:28.1132173Z (Reading database ... 65%
+test	Run luacheck type check / linter	2025-12-01T03:18:28.1891352Z (Reading database ... 70%
+test	Run luacheck type check / linter	2025-12-01T03:18:28.2868180Z (Reading database ... 75%
+test	Run luacheck type check / linter	2025-12-01T03:18:28.5970960Z (Reading database ... 80%
+test	Run luacheck type check / linter	2025-12-01T03:18:29.0166954Z (Reading database ... 85%
+test	Run luacheck type check / linter	2025-12-01T03:18:29.4535394Z (Reading database ... 90%
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8485643Z (Reading database ... 95%
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8486442Z (Reading database ... 100%
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8487138Z (Reading database ... 216225 files and directories currently installed.)
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8534175Z Preparing to unpack .../lua-argparse_0.7.1-2_all.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8558519Z Unpacking lua-argparse (0.7.1-2) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8811735Z Selecting previously unselected package lua-filesystem:amd64.
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8931801Z Preparing to unpack .../lua-filesystem_1.8.0-3_amd64.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.8956959Z Unpacking lua-filesystem:amd64 (1.8.0-3) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9157271Z Selecting previously unselected package lua5.1.
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9277290Z Preparing to unpack .../lua5.1_5.1.5-9build2_amd64.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9293786Z Unpacking lua5.1 (5.1.5-9build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9585561Z Selecting previously unselected package lua-check.
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9704015Z Preparing to unpack .../lua-check_1.1.2-1_all.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:18:29.9718357Z Unpacking lua-check (1.1.2-1) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0306542Z Setting up lua5.1 (5.1.5-9build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0366324Z update-alternatives: using /usr/bin/lua5.1 to provide /usr/bin/lua (lua-interpreter) in auto mode
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0406981Z update-alternatives: using /usr/bin/luac5.1 to provide /usr/bin/luac (lua-compiler) in auto mode
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0430977Z Setting up lua-filesystem:amd64 (1.8.0-3) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0459129Z Setting up lua-argparse (0.7.1-2) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0487364Z Setting up lua-check (1.1.2-1) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0522379Z Processing triggers for man-db (2.12.0-4build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0610707Z Not building database; man-db/auto-update is not 'true'.
+test	Run luacheck type check / linter	2025-12-01T03:18:30.0632124Z Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2290441Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2291214Z Running kernel seems to be up-to-date.
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2291608Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2291781Z No services need to be restarted.
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2292052Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2292726Z No containers need to be restarted.
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2293076Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2293247Z No user sessions are running outdated binaries.
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2293566Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:33.2293901Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4863319Z Checking check_parsers.lua                        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4864132Z Checking checks/rogue_util_calls_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4864675Z Checking lua/treewalker/augment.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4865196Z Checking lua/treewalker/init.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4865724Z Checking lua/treewalker/lines.lua                 [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4866699Z Checking lua/treewalker/markdown/ast_utils.lua    [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4867242Z Checking lua/treewalker/markdown/heading.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4867788Z Checking lua/treewalker/markdown/navigation.lua   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4868343Z Checking lua/treewalker/markdown/section_utils.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4868896Z Checking lua/treewalker/markdown/selectors.lua    [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4869471Z Checking lua/treewalker/markdown/sibling_utils.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4870026Z Checking lua/treewalker/markdown/swap/section.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4870985Z Checking lua/treewalker/markdown/targets.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4871965Z Checking lua/treewalker/markdown/validation.lua   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4872888Z Checking lua/treewalker/movement.lua              [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4873499Z Checking lua/treewalker/nodes.lua                 [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4874105Z Checking lua/treewalker/operations.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4874640Z Checking lua/treewalker/options.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4875164Z Checking lua/treewalker/strategies.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4875870Z Checking lua/treewalker/swap.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4876805Z Checking lua/treewalker/targets.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4877413Z Checking lua/treewalker/util.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4878260Z Checking plugin/init.lua                          [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4878817Z Checking tests/load_fixture.lua                   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4879331Z Checking tests/minimal_init.lua                   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4879842Z Checking tests/treewalker/c_sharp_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4880539Z Checking tests/treewalker/c_spec.lua              [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4881112Z Checking tests/treewalker/haskell_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4881642Z Checking tests/treewalker/helpers.lua             [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4882169Z Checking tests/treewalker/highlight_spec.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4882887Z Checking tests/treewalker/html_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4883409Z Checking tests/treewalker/java_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4883930Z Checking tests/treewalker/javascript_spec.lua     [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4884463Z Checking tests/treewalker/jump_list_spec.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4884996Z Checking tests/treewalker/lines_spec.lua          [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4885521Z Checking tests/treewalker/lua_spec.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4886047Z Checking tests/treewalker/lua_spec_spec.lua       [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4886575Z Checking tests/treewalker/markdown_spec.lua       [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4887104Z Checking tests/treewalker/missing_parser_spec.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4887625Z Checking tests/treewalker/options_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4888153Z Checking tests/treewalker/php_spec.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4888690Z Checking tests/treewalker/python_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4889217Z Checking tests/treewalker/ruby_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4889729Z Checking tests/treewalker/rust_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4890251Z Checking tests/treewalker/select_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4890983Z Checking tests/treewalker/typescript_spec.lua     [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4891504Z Checking tests/treewalker/util_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4892174Z Checking tests/treewalker/yaml_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4892465Z 
+test	Run luacheck type check / linter	2025-12-01T03:18:34.4892781Z Total: [0m[0m[1m0[0m warnings / [0m[0m[1m0[0m errors in 48 files
+test	Check for errant util calls	﻿2025-12-01T03:18:34.4915254Z ##[group]Run make no-utils
+test	Check for errant util calls	2025-12-01T03:18:34.4915520Z [36;1mmake no-utils[0m
+test	Check for errant util calls	2025-12-01T03:18:34.4935146Z shell: /usr/bin/bash -e {0}
+test	Check for errant util calls	2025-12-01T03:18:34.4935396Z ##[endgroup]
+test	Check for errant util calls	2025-12-01T03:18:36.0906770Z Downloading tree-sitter-lua...
+test	Check for errant util calls	2025-12-01T03:18:36.0935588Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:36.1066010Z Extracting tree-sitter-lua...
+test	Check for errant util calls	2025-12-01T03:18:36.5239281Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:36.5296538Z Treesitter parser for lua has been installed
+test	Check for errant util calls	2025-12-01T03:18:37.3053730Z Downloading tree-sitter-c...
+test	Check for errant util calls	2025-12-01T03:18:37.3078469Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:37.3356473Z Extracting tree-sitter-c...
+test	Check for errant util calls	2025-12-01T03:18:37.7758537Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:37.7822226Z Treesitter parser for c has been installed
+test	Check for errant util calls	2025-12-01T03:18:38.5511122Z Downloading tree-sitter-python...
+test	Check for errant util calls	2025-12-01T03:18:38.5536631Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:38.5891198Z Extracting tree-sitter-python...
+test	Check for errant util calls	2025-12-01T03:18:39.2286552Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:39.2342296Z Treesitter parser for python has been installed
+test	Check for errant util calls	2025-12-01T03:18:40.0326750Z Downloading tree-sitter-rust...
+test	Check for errant util calls	2025-12-01T03:18:40.0356524Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:40.0702417Z Extracting tree-sitter-rust...
+test	Check for errant util calls	2025-12-01T03:18:40.9039764Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:40.9103686Z Treesitter parser for rust has been installed
+test	Check for errant util calls	2025-12-01T03:18:41.8724868Z Downloading tree-sitter-haskell...
+test	Check for errant util calls	2025-12-01T03:18:41.8754016Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:41.9534360Z Extracting tree-sitter-haskell...
+test	Check for errant util calls	2025-12-01T03:18:44.3386612Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:44.3444171Z Treesitter parser for haskell has been installed
+test	Check for errant util calls	2025-12-01T03:18:44.9193439Z Downloading tree-sitter-html...
+test	Check for errant util calls	2025-12-01T03:18:44.9221322Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:44.9343876Z Extracting tree-sitter-html...
+test	Check for errant util calls	2025-12-01T03:18:45.1591244Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:45.1649329Z Treesitter parser for html has been installed
+test	Check for errant util calls	2025-12-01T03:18:45.8922677Z Downloading tree-sitter-javascript...
+test	Check for errant util calls	2025-12-01T03:18:45.8948432Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:45.9181164Z Extracting tree-sitter-javascript...
+test	Check for errant util calls	2025-12-01T03:18:46.5050907Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:46.5102343Z Treesitter parser for javascript has been installed
+test	Check for errant util calls	2025-12-01T03:18:47.5972437Z Downloading tree-sitter-c_sharp...
+test	Check for errant util calls	2025-12-01T03:18:47.5999045Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:47.7012083Z Extracting tree-sitter-c_sharp...
+test	Check for errant util calls	2025-12-01T03:18:50.1943437Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:50.2002963Z Treesitter parser for c_sharp has been installed
+test	Check for errant util calls	2025-12-01T03:18:50.9444219Z Downloading tree-sitter-typescript...
+test	Check for errant util calls	2025-12-01T03:18:50.9470861Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:51.0223919Z Extracting tree-sitter-typescript...
+test	Check for errant util calls	2025-12-01T03:18:52.0555392Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:52.0612774Z Treesitter parser for typescript has been installed
+test	Check for errant util calls	2025-12-01T03:18:52.7722855Z Downloading tree-sitter-php...
+test	Check for errant util calls	2025-12-01T03:18:52.7755003Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:52.8248334Z Extracting tree-sitter-php...
+test	Check for errant util calls	2025-12-01T03:18:53.7620923Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:53.7676653Z Treesitter parser for php has been installed
+test	Check for errant util calls	2025-12-01T03:18:54.5471514Z Downloading tree-sitter-markdown...
+test	Check for errant util calls	2025-12-01T03:18:54.5496691Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:54.5798307Z Extracting tree-sitter-markdown...
+test	Check for errant util calls	2025-12-01T03:18:55.1701351Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:55.1755982Z Treesitter parser for markdown has been installed
+test	Check for errant util calls	2025-12-01T03:18:56.0848842Z Downloading tree-sitter-ruby...
+test	Check for errant util calls	2025-12-01T03:18:56.0875421Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:56.1461405Z Extracting tree-sitter-ruby...
+test	Check for errant util calls	2025-12-01T03:18:57.5477839Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:57.5530623Z Treesitter parser for ruby has been installed
+test	Check for errant util calls	2025-12-01T03:18:58.3196930Z Downloading tree-sitter-scheme...
+test	Check for errant util calls	2025-12-01T03:18:58.3227083Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:58.3373633Z Extracting tree-sitter-scheme...
+test	Check for errant util calls	2025-12-01T03:18:58.5290184Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:58.5344462Z Treesitter parser for scheme has been installed
+test	Check for errant util calls	2025-12-01T03:18:59.1766608Z Downloading tree-sitter-yaml...
+test	Check for errant util calls	2025-12-01T03:18:59.1792472Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:18:59.1970771Z Extracting tree-sitter-yaml...
+test	Check for errant util calls	2025-12-01T03:18:59.6517660Z Compiling...
+test	Check for errant util calls	2025-12-01T03:18:59.6573420Z Treesitter parser for yaml has been installed
+test	Check for errant util calls	2025-12-01T03:19:00.3329749Z Downloading tree-sitter-java...
+test	Check for errant util calls	2025-12-01T03:19:00.3355650Z Creating temporary directory
+test	Check for errant util calls	2025-12-01T03:19:00.3567668Z Extracting tree-sitter-java...
+test	Check for errant util calls	2025-12-01T03:19:00.8013675Z Compiling...
+test	Check for errant util calls	2025-12-01T03:19:00.8146836Z Treesitter parser for java has been installed
+test	Check for errant util calls	2025-12-01T03:19:00.8172442Z Scheduling: checks/rogue_util_calls_spec.lua
+test	Check for errant util calls	2025-12-01T03:19:00.8294652Z 
+test	Check for errant util calls	2025-12-01T03:19:00.8295211Z ========================================	
+test	Check for errant util calls	2025-12-01T03:19:00.8296584Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/checks/rogue_util_calls_spec.lua	
+test	Check for errant util calls	2025-12-01T03:19:00.8462560Z [32mSuccess[0m	||	Extent util calls: Treewalker Up encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8493179Z [32mSuccess[0m	||	Extent util calls: Treewalker Up encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8520683Z [32mSuccess[0m	||	Extent util calls: Treewalker Down encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8546786Z [32mSuccess[0m	||	Extent util calls: Treewalker Down encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8569980Z [32mSuccess[0m	||	Extent util calls: Treewalker Right encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8595226Z [32mSuccess[0m	||	Extent util calls: Treewalker Right encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8619560Z [32mSuccess[0m	||	Extent util calls: Treewalker Left encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8645150Z [32mSuccess[0m	||	Extent util calls: Treewalker Left encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8674184Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapUp encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8711411Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapUp encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8738518Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapDown encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8765701Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapDown encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8877378Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapRight encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8904078Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapRight encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8926629Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapLeft encounters no util.R calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8949149Z [32mSuccess[0m	||	Extent util calls: Treewalker SwapLeft encounters no util.log calls	
+test	Check for errant util calls	2025-12-01T03:19:00.8949845Z 	
+test	Check for errant util calls	2025-12-01T03:19:00.8950684Z [32mSuccess: [0m	16	
+test	Check for errant util calls	2025-12-01T03:19:00.8951446Z [31mFailed : [0m	0	
+test	Check for errant util calls	2025-12-01T03:19:00.8952015Z [31mErrors : [0m	0	
+test	Check for errant util calls	2025-12-01T03:19:00.8952376Z ========================================	
+test	Check for errant util calls	2025-12-01T03:19:01.0001199Z Starting...
+test	Check Parser Information	﻿2025-12-01T03:19:01.0033471Z ##[group]Run echo "=== Parser Information ==="
+test	Check Parser Information	2025-12-01T03:19:01.0033815Z [36;1mecho "=== Parser Information ==="[0m
+test	Check Parser Information	2025-12-01T03:19:01.0034059Z [36;1mmake check-parsers[0m
+test	Check Parser Information	2025-12-01T03:19:01.0034268Z [36;1mecho ""[0m
+test	Check Parser Information	2025-12-01T03:19:01.0034473Z [36;1mecho "=== Saving Treesitter Trees ==="[0m
+test	Check Parser Information	2025-12-01T03:19:01.0034715Z [36;1mmake save-trees[0m
+test	Check Parser Information	2025-12-01T03:19:01.0034909Z [36;1mecho ""[0m
+test	Check Parser Information	2025-12-01T03:19:01.0035122Z [36;1mecho "=== TypeScript Tree (first 50 lines) ==="[0m
+test	Check Parser Information	2025-12-01T03:19:01.0035397Z [36;1mhead -50 ts_tree_local.txt[0m
+test	Check Parser Information	2025-12-01T03:19:01.0035603Z [36;1mecho ""[0m
+test	Check Parser Information	2025-12-01T03:19:01.0035800Z [36;1mecho "=== Java Tree (first 50 lines) ==="[0m
+test	Check Parser Information	2025-12-01T03:19:01.0036051Z [36;1mhead -50 java_tree_local.txt[0m
+test	Check Parser Information	2025-12-01T03:19:01.0055292Z shell: /usr/bin/bash -e {0}
+test	Check Parser Information	2025-12-01T03:19:01.0055533Z ##[endgroup]
+test	Check Parser Information	2025-12-01T03:19:01.0091162Z === Parser Information ===
+test	Check Parser Information	2025-12-01T03:19:01.1543153Z Neovim version: 0.11.5
+test	Check Parser Information	2025-12-01T03:19:01.1543563Z Treesitter module version: NVIM v0.11.5
+test	Check Parser Information	2025-12-01T03:19:01.1625756Z typescript parser: available
+test	Check Parser Information	2025-12-01T03:19:01.1626233Z   Symbols: 0
+test	Check Parser Information	2025-12-01T03:19:01.1671961Z java parser: available
+test	Check Parser Information	2025-12-01T03:19:01.1672373Z   Symbols: 0
+test	Check Parser Information	2025-12-01T03:19:01.1672688Z nvim-treesitter installation:
+test	Check Parser Information	2025-12-01T03:19:01.1673034Z   nvim-treesitter is loaded
+test	Check Parser Information	2025-12-01T03:19:01.1673386Z   typescript parser config exists
+test	Check Parser Information	2025-12-01T03:19:01.1673874Z     URL: https://github.com/tree-sitter/tree-sitter-typescript
+test	Check Parser Information	2025-12-01T03:19:01.1674329Z     Revision: unknown
+test	Check Parser Information	2025-12-01T03:19:01.1674637Z   java parser config exists
+test	Check Parser Information	2025-12-01T03:19:01.1675072Z     URL: https://github.com/tree-sitter/tree-sitter-java
+test	Check Parser Information	2025-12-01T03:19:01.1675520Z     Revision: unknown
+test	Check Parser Information	2025-12-01T03:19:01.1675860Z Installed parser files:
+test	Check Parser Information	2025-12-01T03:19:01.1676357Z   /home/runner/.local/share/nvim/lazy/nvim-treesitter/parser/typescript.so: EXISTS
+test	Check Parser Information	2025-12-01T03:19:01.1676890Z     Modified: 2025-12-01 03:18:52
+test	Check Parser Information	2025-12-01T03:19:01.1677192Z     Size: 1431200 bytes
+test	Check Parser Information	2025-12-01T03:19:01.1677652Z   /home/runner/.local/share/nvim/lazy/nvim-treesitter/parser/java.so: EXISTS
+test	Check Parser Information	2025-12-01T03:19:01.1678210Z     Modified: 2025-12-01 03:19:00
+test	Check Parser Information	2025-12-01T03:19:01.1685965Z 
+test	Check Parser Information	2025-12-01T03:19:01.1686436Z === Saving Treesitter Trees ===
+test	Check Parser Information	2025-12-01T03:19:01.1707784Z Saving TypeScript tree...
+test	Check Parser Information	2025-12-01T03:19:01.3197785Z Saving Java tree...
+test	Check Parser Information	2025-12-01T03:19:01.4560927Z Trees saved to ts_tree_local.txt and java_tree_local.txt
+test	Check Parser Information	2025-12-01T03:19:01.4562766Z 
+test	Check Parser Information	2025-12-01T03:19:01.4563179Z === TypeScript Tree (first 50 lines) ===
+test	Check Parser Information	2025-12-01T03:19:01.4571705Z make[1]: Entering directory '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Check Parser Information	2025-12-01T03:19:01.4572366Z (program ; [0, 0] - [127, 0]
+test	Check Parser Information	2025-12-01T03:19:01.4572757Z   (comment) ; [0, 0] - [0, 20]
+test	Check Parser Information	2025-12-01T03:19:01.4573142Z   (import_statement ; [1, 0] - [1, 34]
+test	Check Parser Information	2025-12-01T03:19:01.4573560Z     (import_clause ; [1, 7] - [1, 17]
+test	Check Parser Information	2025-12-01T03:19:01.4573970Z       (named_imports ; [1, 7] - [1, 17]
+test	Check Parser Information	2025-12-01T03:19:01.4574384Z         (import_specifier ; [1, 9] - [1, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4574830Z           name: (identifier)))) ; [1, 9] - [1, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4575275Z     source: (string ; [1, 23] - [1, 33]
+test	Check Parser Information	2025-12-01T03:19:01.4575739Z       (string_fragment))) ; [1, 24] - [1, 32]
+test	Check Parser Information	2025-12-01T03:19:01.4576152Z   (import_statement ; [2, 0] - [2, 29]
+test	Check Parser Information	2025-12-01T03:19:01.4576452Z     (import_clause ; [2, 7] - [2, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4576751Z       (namespace_import ; [2, 7] - [2, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4577061Z         (identifier))) ; [2, 12] - [2, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4577357Z     source: (string ; [2, 22] - [2, 28]
+test	Check Parser Information	2025-12-01T03:19:01.4577655Z       (string_fragment))) ; [2, 23] - [2, 27]
+test	Check Parser Information	2025-12-01T03:19:01.4577965Z   (comment) ; [4, 0] - [4, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4578262Z   (type_alias_declaration ; [5, 0] - [8, 2]
+test	Check Parser Information	2025-12-01T03:19:01.4578592Z     name: (type_identifier) ; [5, 5] - [5, 9]
+test	Check Parser Information	2025-12-01T03:19:01.4578908Z     value: (object_type ; [5, 12] - [8, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4579239Z       (property_signature ; [6, 2] - [6, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4579929Z         name: (property_identifier) ; [6, 2] - [6, 6]
+test	Check Parser Information	2025-12-01T03:19:01.4580582Z         type: (type_annotation ; [6, 6] - [6, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4580972Z           (predefined_type))) ; [6, 8] - [6, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4581305Z       (property_signature ; [7, 2] - [7, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4581689Z         name: (property_identifier) ; [7, 2] - [7, 7]
+test	Check Parser Information	2025-12-01T03:19:01.4582133Z         type: (type_annotation ; [7, 7] - [7, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4582653Z           (predefined_type))))) ; [7, 9] - [7, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4583191Z   (type_alias_declaration ; [10, 0] - [13, 2]
+test	Check Parser Information	2025-12-01T03:19:01.4583702Z     name: (type_identifier) ; [10, 5] - [10, 12]
+test	Check Parser Information	2025-12-01T03:19:01.4584216Z     value: (object_type ; [10, 15] - [13, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4584849Z       (property_signature ; [11, 2] - [11, 12]
+test	Check Parser Information	2025-12-01T03:19:01.4585405Z         name: (property_identifier) ; [11, 2] - [11, 4]
+test	Check Parser Information	2025-12-01T03:19:01.4585769Z         type: (type_annotation ; [11, 4] - [11, 12]
+test	Check Parser Information	2025-12-01T03:19:01.4586129Z           (predefined_type))) ; [11, 6] - [11, 12]
+test	Check Parser Information	2025-12-01T03:19:01.4586463Z       (property_signature ; [12, 2] - [12, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4586806Z         name: (property_identifier) ; [12, 2] - [12, 7]
+test	Check Parser Information	2025-12-01T03:19:01.4587161Z         type: (type_annotation ; [12, 7] - [12, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4587500Z           (predefined_type))))) ; [12, 9] - [12, 15]
+test	Check Parser Information	2025-12-01T03:19:01.4587825Z   (comment) ; [15, 0] - [15, 25]
+test	Check Parser Information	2025-12-01T03:19:01.4588110Z   (interface_declaration ; [16, 0] - [19, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4588443Z     name: (type_identifier) ; [16, 10] - [16, 24]
+test	Check Parser Information	2025-12-01T03:19:01.4588772Z     body: (interface_body ; [16, 25] - [19, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4589100Z       (property_signature ; [17, 2] - [17, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4589453Z         name: (property_identifier) ; [17, 2] - [17, 6]
+test	Check Parser Information	2025-12-01T03:19:01.4589795Z         type: (type_annotation ; [17, 6] - [17, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4590133Z           (predefined_type))) ; [17, 8] - [17, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4590670Z       (property_signature ; [18, 2] - [18, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4591113Z         name: (property_identifier) ; [18, 2] - [18, 6]
+test	Check Parser Information	2025-12-01T03:19:01.4591461Z         type: (type_annotation ; [18, 6] - [18, 14]
+test	Check Parser Information	2025-12-01T03:19:01.4591705Z 
+test	Check Parser Information	2025-12-01T03:19:01.4591803Z === Java Tree (first 50 lines) ===
+test	Check Parser Information	2025-12-01T03:19:01.4592179Z make[1]: Entering directory '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Check Parser Information	2025-12-01T03:19:01.4592563Z (program ; [0, 0] - [205, 0]
+test	Check Parser Information	2025-12-01T03:19:01.4592803Z   (package_declaration ; [0, 0] - [0, 31]
+test	Check Parser Information	2025-12-01T03:19:01.4593060Z     (scoped_identifier ; [0, 8] - [0, 30]
+test	Check Parser Information	2025-12-01T03:19:01.4593332Z       scope: (scoped_identifier ; [0, 8] - [0, 19]
+test	Check Parser Information	2025-12-01T03:19:01.4593599Z         scope: (identifier) ; [0, 8] - [0, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4593869Z         name: (identifier)) ; [0, 12] - [0, 19]
+test	Check Parser Information	2025-12-01T03:19:01.4594128Z       name: (identifier))) ; [0, 20] - [0, 30]
+test	Check Parser Information	2025-12-01T03:19:01.4594385Z   (import_declaration ; [2, 0] - [2, 22]
+test	Check Parser Information	2025-12-01T03:19:01.4594648Z     (scoped_identifier ; [2, 7] - [2, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4594907Z       scope: (scoped_identifier ; [2, 7] - [2, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4595179Z         scope: (identifier) ; [2, 7] - [2, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4595437Z         name: (identifier)) ; [2, 12] - [2, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4595696Z       name: (identifier))) ; [2, 17] - [2, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4595944Z   (import_declaration ; [3, 0] - [3, 27]
+test	Check Parser Information	2025-12-01T03:19:01.4596200Z     (scoped_identifier ; [3, 7] - [3, 26]
+test	Check Parser Information	2025-12-01T03:19:01.4596464Z       scope: (scoped_identifier ; [3, 7] - [3, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4596737Z         scope: (identifier) ; [3, 7] - [3, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4596996Z         name: (identifier)) ; [3, 12] - [3, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4597254Z       name: (identifier))) ; [3, 17] - [3, 26]
+test	Check Parser Information	2025-12-01T03:19:01.4597513Z   (import_declaration ; [4, 0] - [4, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4597763Z     (scoped_identifier ; [4, 7] - [4, 20]
+test	Check Parser Information	2025-12-01T03:19:01.4598027Z       scope: (scoped_identifier ; [4, 7] - [4, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4598433Z         scope: (identifier) ; [4, 7] - [4, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4598703Z         name: (identifier)) ; [4, 12] - [4, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4598964Z       name: (identifier))) ; [4, 17] - [4, 20]
+test	Check Parser Information	2025-12-01T03:19:01.4599223Z   (import_declaration ; [5, 0] - [5, 25]
+test	Check Parser Information	2025-12-01T03:19:01.4599477Z     (scoped_identifier ; [5, 7] - [5, 24]
+test	Check Parser Information	2025-12-01T03:19:01.4599737Z       scope: (scoped_identifier ; [5, 7] - [5, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4600013Z         scope: (identifier) ; [5, 7] - [5, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4600272Z         name: (identifier)) ; [5, 12] - [5, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4601691Z       name: (identifier))) ; [5, 17] - [5, 24]
+test	Check Parser Information	2025-12-01T03:19:01.4601956Z   (import_declaration ; [6, 0] - [6, 35]
+test	Check Parser Information	2025-12-01T03:19:01.4602311Z     (scoped_identifier ; [6, 7] - [6, 34]
+test	Check Parser Information	2025-12-01T03:19:01.4602570Z       scope: (scoped_identifier ; [6, 7] - [6, 23]
+test	Check Parser Information	2025-12-01T03:19:01.4602861Z         scope: (scoped_identifier ; [6, 7] - [6, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4603142Z           scope: (identifier) ; [6, 7] - [6, 11]
+test	Check Parser Information	2025-12-01T03:19:01.4603413Z           name: (identifier)) ; [6, 12] - [6, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4603688Z         name: (identifier)) ; [6, 17] - [6, 23]
+test	Check Parser Information	2025-12-01T03:19:01.4603943Z       name: (identifier))) ; [6, 24] - [6, 34]
+test	Check Parser Information	2025-12-01T03:19:01.4604201Z   (block_comment) ; [8, 0] - [11, 3]
+test	Check Parser Information	2025-12-01T03:19:01.4604444Z   (class_declaration ; [12, 0] - [204, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4604691Z     (modifiers) ; [12, 0] - [12, 6]
+test	Check Parser Information	2025-12-01T03:19:01.4604928Z     name: (identifier) ; [12, 13] - [12, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4605182Z     body: (class_body ; [12, 22] - [204, 1]
+test	Check Parser Information	2025-12-01T03:19:01.4605438Z       (field_declaration ; [13, 2] - [13, 22]
+test	Check Parser Information	2025-12-01T03:19:01.4605686Z         (modifiers) ; [13, 2] - [13, 9]
+test	Check Parser Information	2025-12-01T03:19:01.4605961Z         type: (type_identifier) ; [13, 10] - [13, 16]
+test	Check Parser Information	2025-12-01T03:19:01.4606269Z         declarator: (variable_declarator ; [13, 17] - [13, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4606586Z           name: (identifier))) ; [13, 17] - [13, 21]
+test	Check Parser Information	2025-12-01T03:19:01.4606854Z     Size: 429536 bytes
+test	Run Tests	﻿2025-12-01T03:19:01.4640303Z ##[group]Run make test
+test	Run Tests	2025-12-01T03:19:01.4640911Z [36;1mmake test[0m
+test	Run Tests	2025-12-01T03:19:01.4669378Z shell: /usr/bin/bash -e {0}
+test	Run Tests	2025-12-01T03:19:01.4669764Z ##[endgroup]
+test	Run Tests	2025-12-01T03:19:01.5579590Z Scheduling: tests/treewalker/ruby_spec.lua
+test	Run Tests	2025-12-01T03:19:01.6265180Z Scheduling: tests/treewalker/missing_parser_spec.lua
+test	Run Tests	2025-12-01T03:19:01.6265628Z 
+test	Run Tests	2025-12-01T03:19:01.6265771Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.6266174Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/ruby_spec.lua	
+test	Run Tests	2025-12-01T03:19:01.6272078Z [32mSuccess[0m	||	In a ruby file:  ::The test suite has the [ruby/] parser::	
+test	Run Tests	2025-12-01T03:19:01.6272549Z [32mSuccess[0m	||	In a ruby file:  moves around	
+test	Run Tests	2025-12-01T03:19:01.6272878Z [32mSuccess[0m	||	In a ruby file:  swaps up	
+test	Run Tests	2025-12-01T03:19:01.6273183Z [32mSuccess[0m	||	In a ruby file:  swaps down	
+test	Run Tests	2025-12-01T03:19:01.6273417Z 	
+test	Run Tests	2025-12-01T03:19:01.6273599Z [32mSuccess: [0m	4	
+test	Run Tests	2025-12-01T03:19:01.6273801Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.6274045Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.6274228Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.6921547Z Scheduling: tests/treewalker/haskell_spec.lua
+test	Run Tests	2025-12-01T03:19:01.6922539Z 
+test	Run Tests	2025-12-01T03:19:01.6922856Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.6923926Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/missing_parser_spec.lua	
+test	Run Tests	2025-12-01T03:19:01.6925692Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when move_down is called	
+test	Run Tests	2025-12-01T03:19:01.6927371Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when swap_right is called	
+test	Run Tests	2025-12-01T03:19:01.6928738Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when move_in is called	
+test	Run Tests	2025-12-01T03:19:01.6930081Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when swap_left is called	
+test	Run Tests	2025-12-01T03:19:01.6931685Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when move_up is called	
+test	Run Tests	2025-12-01T03:19:01.6932783Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when swap_down is called	
+test	Run Tests	2025-12-01T03:19:01.6933750Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when move_out is called	
+test	Run Tests	2025-12-01T03:19:01.6934806Z [32mSuccess[0m	||	For a file in which there is a missing parser notifies once when swap_up is called	
+test	Run Tests	2025-12-01T03:19:01.6935908Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when move_down is called	
+test	Run Tests	2025-12-01T03:19:01.6936944Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when swap_right is called	
+test	Run Tests	2025-12-01T03:19:01.6938309Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when move_in is called	
+test	Run Tests	2025-12-01T03:19:01.6939419Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when swap_left is called	
+test	Run Tests	2025-12-01T03:19:01.6940721Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when move_up is called	
+test	Run Tests	2025-12-01T03:19:01.6941860Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when swap_down is called	
+test	Run Tests	2025-12-01T03:19:01.6943005Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when move_out is called	
+test	Run Tests	2025-12-01T03:19:01.6944101Z [32mSuccess[0m	||	For a file in which there is a parser present does not notify when swap_up is called	
+test	Run Tests	2025-12-01T03:19:01.6945421Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when move_down is called	
+test	Run Tests	2025-12-01T03:19:01.6946819Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when swap_right is called	
+test	Run Tests	2025-12-01T03:19:01.6948366Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when move_in is called	
+test	Run Tests	2025-12-01T03:19:01.6950101Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when swap_left is called	
+test	Run Tests	2025-12-01T03:19:01.6951787Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when move_up is called	
+test	Run Tests	2025-12-01T03:19:01.6953305Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when swap_down is called	
+test	Run Tests	2025-12-01T03:19:01.6954789Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when move_out is called	
+test	Run Tests	2025-12-01T03:19:01.6956251Z [32mSuccess[0m	||	For a file in which there is a missing parser, when notifications are turned off does not notify when swap_up is called	
+test	Run Tests	2025-12-01T03:19:01.6957080Z 	
+test	Run Tests	2025-12-01T03:19:01.6957397Z [32mSuccess: [0m	24	
+test	Run Tests	2025-12-01T03:19:01.6957769Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.6958152Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.6958457Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.7645804Z Scheduling: tests/treewalker/javascript_spec.lua
+test	Run Tests	2025-12-01T03:19:01.7646281Z 
+test	Run Tests	2025-12-01T03:19:01.7646436Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.7647158Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/haskell_spec.lua	
+test	Run Tests	2025-12-01T03:19:01.7648605Z [32mSuccess[0m	||	In a haskell file:  ::The test suite has the [haskell/] parser::	
+test	Run Tests	2025-12-01T03:19:01.7649376Z [33mPending[0m	||	In a haskell file:  moves around in a haskell file	
+test	Run Tests	2025-12-01T03:19:01.7649884Z 	
+test	Run Tests	2025-12-01T03:19:01.7650157Z [32mSuccess: [0m	1	
+test	Run Tests	2025-12-01T03:19:01.7650669Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.7650976Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.7651240Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.8182383Z Scheduling: tests/treewalker/lines_spec.lua
+test	Run Tests	2025-12-01T03:19:01.8182886Z 
+test	Run Tests	2025-12-01T03:19:01.8183068Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.8183757Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/javascript_spec.lua	
+test	Run Tests	2025-12-01T03:19:01.8184868Z [32mSuccess[0m	||	Swapping in a typescript file: ::The test suite has the [javascript/] parser::	
+test	Run Tests	2025-12-01T03:19:01.8185697Z [32mSuccess[0m	||	Swapping in a typescript file: selects the correct range when moving out from inside something with a callback	
+test	Run Tests	2025-12-01T03:19:01.8186245Z 	
+test	Run Tests	2025-12-01T03:19:01.8186456Z [32mSuccess: [0m	2	
+test	Run Tests	2025-12-01T03:19:01.8186710Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.8186948Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.8187465Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.8629436Z Scheduling: tests/treewalker/java_spec.lua
+test	Run Tests	2025-12-01T03:19:01.8629828Z 
+test	Run Tests	2025-12-01T03:19:01.8629968Z ========================================	
+test	Run Tests	2025-12-01T03:19:01.8630732Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/lines_spec.lua	
+test	Run Tests	2025-12-01T03:19:01.8631391Z [32mSuccess[0m	||	lines .get_line gets the line	
+test	Run Tests	2025-12-01T03:19:01.8631734Z [32mSuccess[0m	||	lines .get_lines gets the lines	
+test	Run Tests	2025-12-01T03:19:01.8632061Z [32mSuccess[0m	||	lines .set_line sets the line	
+test	Run Tests	2025-12-01T03:19:01.8632394Z [32mSuccess[0m	||	lines .set_lines sets multiple lines	
+test	Run Tests	2025-12-01T03:19:01.8632737Z [32mSuccess[0m	||	lines .set_lines sets one line	
+test	Run Tests	2025-12-01T03:19:01.8633099Z [32mSuccess[0m	||	lines .set_lines replaces the line entirely	
+test	Run Tests	2025-12-01T03:19:01.8633532Z [32mSuccess[0m	||	lines .insert_lines inserts lines without deleting any	
+test	Run Tests	2025-12-01T03:19:01.8633945Z [32mSuccess[0m	||	lines .insert_lines deletes multiple lines	
+test	Run Tests	2025-12-01T03:19:01.8634341Z [32mSuccess[0m	||	lines .delete_lines deletes single lines	
+test	Run Tests	2025-12-01T03:19:01.8634720Z [32mSuccess[0m	||	lines .delete_lines deletes multiple lines	
+test	Run Tests	2025-12-01T03:19:01.8635087Z [32mSuccess[0m	||	lines .get_indent gets the indent	
+test	Run Tests	2025-12-01T03:19:01.8635344Z 	
+test	Run Tests	2025-12-01T03:19:01.8635521Z [32mSuccess: [0m	11	
+test	Run Tests	2025-12-01T03:19:01.8636217Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.8636508Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:01.8636770Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.0547531Z Scheduling: tests/treewalker/markdown_spec.lua
+test	Run Tests	2025-12-01T03:19:02.0548005Z 
+test	Run Tests	2025-12-01T03:19:02.0548125Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.0548672Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/java_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.0549763Z [32mSuccess[0m	||	In a java file: ::The test suite has the [java/] parser::	
+test	Run Tests	2025-12-01T03:19:02.0550513Z [32mSuccess[0m	||	In a java file: moves down between methods	
+test	Run Tests	2025-12-01T03:19:02.0551146Z [32mSuccess[0m	||	In a java file: moves up between methods	
+test	Run Tests	2025-12-01T03:19:02.0551597Z [32mSuccess[0m	||	In a java file: moves into method body	
+test	Run Tests	2025-12-01T03:19:02.0552081Z [32mSuccess[0m	||	In a java file: moves out from method body to method	
+test	Run Tests	2025-12-01T03:19:02.0552576Z [32mSuccess[0m	||	In a java file: moves into if statement body	
+test	Run Tests	2025-12-01T03:19:02.0553040Z [32mSuccess[0m	||	In a java file: moves into try block	
+test	Run Tests	2025-12-01T03:19:02.0553484Z [32mSuccess[0m	||	In a java file: moves into switch statement	
+test	Run Tests	2025-12-01T03:19:02.0553953Z [32mSuccess[0m	||	In a java file: moves down between switch cases	
+test	Run Tests	2025-12-01T03:19:02.0554424Z [32mSuccess[0m	||	In a java file: moves into while loop body	
+test	Run Tests	2025-12-01T03:19:02.0554892Z [32mSuccess[0m	||	In a java file: moves down between enum values	
+test	Run Tests	2025-12-01T03:19:02.0555379Z [32mSuccess[0m	||	In a java file: moves down between interface methods	
+test	Run Tests	2025-12-01T03:19:02.0555873Z [32mSuccess[0m	||	In a java file: moves through lambda expression	
+test	Run Tests	2025-12-01T03:19:02.0556318Z [32mSuccess[0m	||	In a java file: swaps methods down	
+test	Run Tests	2025-12-01T03:19:02.0556734Z [32mSuccess[0m	||	In a java file: swaps methods up	
+test	Run Tests	2025-12-01T03:19:02.0557171Z [32mSuccess[0m	||	In a java file: swaps annotated methods down	
+test	Run Tests	2025-12-01T03:19:02.0557668Z [32mSuccess[0m	||	In a java file: moves down from javadoc comment to method	
+test	Run Tests	2025-12-01T03:19:02.0558192Z [32mSuccess[0m	||	In a java file: moves out from inside javadoc to class	
+test	Run Tests	2025-12-01T03:19:02.0558552Z 	
+test	Run Tests	2025-12-01T03:19:02.0558762Z [32mSuccess: [0m	18	
+test	Run Tests	2025-12-01T03:19:02.0559016Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.0559267Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.0559477Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.3525504Z Scheduling: tests/treewalker/jump_list_spec.lua
+test	Run Tests	2025-12-01T03:19:02.3526004Z 
+test	Run Tests	2025-12-01T03:19:02.3526103Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.3526613Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/markdown_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.3528350Z [32mSuccess[0m	||	Movement in a markdown file ::The test suite has the [markdown/] parser::	
+test	Run Tests	2025-12-01T03:19:02.3529016Z [32mSuccess[0m	||	Movement in a markdown file jumps from one header to another at same level	
+test	Run Tests	2025-12-01T03:19:02.3529647Z [32mSuccess[0m	||	Movement in a markdown file moves to inner headings with move_in	
+test	Run Tests	2025-12-01T03:19:02.3530275Z [32mSuccess[0m	||	Movement in a markdown file moves to parent headings with move_out	
+test	Run Tests	2025-12-01T03:19:02.3531315Z [32mSuccess[0m	||	Movement in a markdown file correctly handles h1 headings with underline style (===)	
+test	Run Tests	2025-12-01T03:19:02.3532071Z [32mSuccess[0m	||	Movement in a markdown file correctly handles h2 headings with underline style (---)	
+test	Run Tests	2025-12-01T03:19:02.3532712Z [32mSuccess[0m	||	Movement in a markdown file doesn't move from h1 upward	
+test	Run Tests	2025-12-01T03:19:02.3533294Z [32mSuccess[0m	||	Movement in a markdown file doesn't move outward from h1 headings	
+test	Run Tests	2025-12-01T03:19:02.3533930Z [32mSuccess[0m	||	Movement in a markdown file stops at document boundaries when moving down	
+test	Run Tests	2025-12-01T03:19:02.3534565Z [32mSuccess[0m	||	Movement in a markdown file handles no inner headings gracefully	
+test	Run Tests	2025-12-01T03:19:02.3535215Z [32mSuccess[0m	||	Movement in a markdown file navigates up from text content to the nearest header	
+test	Run Tests	2025-12-01T03:19:02.3536058Z [32mSuccess[0m	||	Movement in a markdown file navigates down from text content to the nearest header	
+test	Run Tests	2025-12-01T03:19:02.3536777Z [32mSuccess[0m	||	Movement in a markdown file navigates out from text content to the nearest header	
+test	Run Tests	2025-12-01T03:19:02.3537474Z [32mSuccess[0m	||	Movement in a markdown file Moves up to same level node the same way it moves down	
+test	Run Tests	2025-12-01T03:19:02.3538184Z [32mSuccess[0m	||	Movement in a markdown file Moves down to same level node the same way it moves up	
+test	Run Tests	2025-12-01T03:19:02.3538822Z [32mSuccess[0m	||	Movement in a markdown file Disables move in when not on header	
+test	Run Tests	2025-12-01T03:19:02.3539480Z [32mSuccess[0m	||	Movement in a markdown file navigates between nested headers of different levels	
+test	Run Tests	2025-12-01T03:19:02.3540273Z [32mSuccess[0m	||	Movement in a markdown file handles navigation through document sections with various content types	
+test	Run Tests	2025-12-01T03:19:02.3541430Z [32mSuccess[0m	||	Movement in a markdown file handles headings that are out of order	
+test	Run Tests	2025-12-01T03:19:02.3542130Z [32mSuccess[0m	||	Movement in a markdown file navigates between headers across different content blocks	
+test	Run Tests	2025-12-01T03:19:02.3542852Z [32mSuccess[0m	||	Movement in a markdown file moves out from content to the correct heading level	
+test	Run Tests	2025-12-01T03:19:02.3543452Z [32mSuccess[0m	||	Movement in a markdown file highlights whole h2	
+test	Run Tests	2025-12-01T03:19:02.3543998Z [32mSuccess[0m	||	Movement in a markdown file moves out in out of order headings	
+test	Run Tests	2025-12-01T03:19:02.3544544Z [32mSuccess[0m	||	Movement in a markdown file moves in in out of order headings	
+test	Run Tests	2025-12-01T03:19:02.3545164Z [32mSuccess[0m	||	Swapping in a markdown file: ::The test suite has the [markdown/md] parser::	
+test	Run Tests	2025-12-01T03:19:02.3612759Z [32mSuccess[0m	||	Swapping in a markdown file: swaps only work when on headers	
+test	Run Tests	2025-12-01T03:19:02.3613649Z [32mSuccess[0m	||	Swapping in a markdown file: swaps h2 headers down with their content	
+test	Run Tests	2025-12-01T03:19:02.3614440Z [32mSuccess[0m	||	Swapping in a markdown file: swaps h2 headers up with their content	
+test	Run Tests	2025-12-01T03:19:02.3615339Z [32mSuccess[0m	||	Swapping in a markdown file: left and right swap are disabled	
+test	Run Tests	2025-12-01T03:19:02.3616279Z [32mSuccess[0m	||	Swapping in a markdown file: doesn't swap when not on header	
+test	Run Tests	2025-12-01T03:19:02.3617022Z [32mSuccess[0m	||	Swapping in a markdown file: doesn't break when swapping single h1	
+test	Run Tests	2025-12-01T03:19:02.3617866Z [32mSuccess[0m	||	Swapping in a markdown file: doesn't swap headers of different levels	
+test	Run Tests	2025-12-01T03:19:02.3618745Z [32mSuccess[0m	||	Swapping in a markdown file: doesn't swap headers outside of their parent blocks	
+test	Run Tests	2025-12-01T03:19:02.3620194Z [32mSuccess[0m	||	Swapping in a markdown file with h2s at the top: ::The test suite has the [markdown/md] parser::	
+test	Run Tests	2025-12-01T03:19:02.3621482Z [32mSuccess[0m	||	Swapping in a markdown file with h2s at the top: swaps h2s even when they're at the top of the file (#40)	
+test	Run Tests	2025-12-01T03:19:02.3622132Z 	
+test	Run Tests	2025-12-01T03:19:02.3622438Z [32mSuccess: [0m	35	
+test	Run Tests	2025-12-01T03:19:02.3622781Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.3623142Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.3623468Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.4193926Z Scheduling: tests/treewalker/python_spec.lua
+test	Run Tests	2025-12-01T03:19:02.4194412Z 
+test	Run Tests	2025-12-01T03:19:02.4194573Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.4195228Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/jump_list_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.4196142Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_down adds jumps to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4196860Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_up adds jumps to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4197619Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_in adds single line jumps to the jumplist	
+test	Run Tests	2025-12-01T03:19:02.4198416Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_out adds single line jumps to the jumplist	
+test	Run Tests	2025-12-01T03:19:02.4199562Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_down doesn't add single line jumps to the jumplist	
+test	Run Tests	2025-12-01T03:19:02.4200615Z [32mSuccess[0m	||	When opts.jumplist = true (default behavior) move_up doesn't add single line jumps to the jumplist	
+test	Run Tests	2025-12-01T03:19:02.4201319Z [32mSuccess[0m	||	When opts.jumplist = false move_down does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4201902Z [32mSuccess[0m	||	When opts.jumplist = false move_up does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4202464Z [32mSuccess[0m	||	When opts.jumplist = false move_out does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4203031Z [32mSuccess[0m	||	When opts.jumplist = false move_in does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4203574Z [32mSuccess[0m	||	When opts.jumplist = 'left' move_out adds to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4204116Z [32mSuccess[0m	||	When opts.jumplist = 'left' move_in does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4204675Z [32mSuccess[0m	||	When opts.jumplist = 'left' move_up does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4205244Z [32mSuccess[0m	||	When opts.jumplist = 'left' move_down does NOT add to jumplist	
+test	Run Tests	2025-12-01T03:19:02.4205624Z 	
+test	Run Tests	2025-12-01T03:19:02.4205848Z [32mSuccess: [0m	14	
+test	Run Tests	2025-12-01T03:19:02.4206094Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.4206339Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.4206551Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.4661845Z Scheduling: tests/treewalker/select_spec.lua
+test	Run Tests	2025-12-01T03:19:02.4662360Z 
+test	Run Tests	2025-12-01T03:19:02.4662509Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.4663013Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/python_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.4664043Z [32mSuccess[0m	||	In a python file:  ::The test suite has the [python/] parser::	
+test	Run Tests	2025-12-01T03:19:02.4664596Z [32mSuccess[0m	||	In a python file:  move_in doesn't land on non target nodes	
+test	Run Tests	2025-12-01T03:19:02.4665231Z [32mSuccess[0m	||	In a python file:  Moves into the body of a function with multiline signature	
+test	Run Tests	2025-12-01T03:19:02.4665877Z [32mSuccess[0m	||	In a python file:  swaps up annotated functions of different length	
+test	Run Tests	2025-12-01T03:19:02.4666484Z [32mSuccess[0m	||	In a python file:  swaps down annotated functions of different length	
+test	Run Tests	2025-12-01T03:19:02.4667114Z [32mSuccess[0m	||	In a python file:  swaps up from a decorated/commented node to a bare one	
+test	Run Tests	2025-12-01T03:19:02.4667760Z [32mSuccess[0m	||	In a python file:  swaps down from a bare node to a decorated/commented one	
+test	Run Tests	2025-12-01T03:19:02.4668181Z 	
+test	Run Tests	2025-12-01T03:19:02.4668390Z [32mSuccess: [0m	7	
+test	Run Tests	2025-12-01T03:19:02.4668911Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.4669144Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.4669360Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.5447135Z Scheduling: tests/treewalker/c_sharp_spec.lua
+test	Run Tests	2025-12-01T03:19:02.5447649Z 
+test	Run Tests	2025-12-01T03:19:02.5447801Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.5448452Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/select_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.5449331Z [32mSuccess[0m	||	Select creates visual selection when moving and select is enabled	
+test	Run Tests	2025-12-01T03:19:02.5449922Z [32mSuccess[0m	||	Select does not create highlights when select is enabled	
+test	Run Tests	2025-12-01T03:19:02.5450637Z [32mSuccess[0m	||	Select selects the correct range when moving up	
+test	Run Tests	2025-12-01T03:19:02.5451154Z [32mSuccess[0m	||	Select selects the correct range when moving down	
+test	Run Tests	2025-12-01T03:19:02.5451661Z [32mSuccess[0m	||	Select selects the correct range when moving in	
+test	Run Tests	2025-12-01T03:19:02.5452163Z [32mSuccess[0m	||	Select selects the correct range when moving out	
+test	Run Tests	2025-12-01T03:19:02.5452777Z [33mPending[0m	||	Select does not interfere with normal highlight when select is disabled	
+test	Run Tests	2025-12-01T03:19:02.5453389Z [33mPending[0m	||	Select respects both select and highlight being disabled	
+test	Run Tests	2025-12-01T03:19:02.5453753Z 	
+test	Run Tests	2025-12-01T03:19:02.5453971Z [32mSuccess: [0m	6	
+test	Run Tests	2025-12-01T03:19:02.5454464Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.5454710Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.5454920Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.6538770Z Scheduling: tests/treewalker/highlight_spec.lua
+test	Run Tests	2025-12-01T03:19:02.6539355Z 
+test	Run Tests	2025-12-01T03:19:02.6539497Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.6540162Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/c_sharp_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.6541384Z [32mSuccess[0m	||	In a C Sharp file ::The test suite has the [c_sharp/] parser::	
+test	Run Tests	2025-12-01T03:19:02.6541864Z [32mSuccess[0m	||	In a C Sharp file moves around	
+test	Run Tests	2025-12-01T03:19:02.6542357Z [32mSuccess[0m	||	In a C Sharp file moves through foreach/try/catch blocks	
+test	Run Tests	2025-12-01T03:19:02.6542837Z [32mSuccess[0m	||	In a C Sharp file swaps down classes	
+test	Run Tests	2025-12-01T03:19:02.6543275Z [32mSuccess[0m	||	In a C Sharp file swaps down functions	
+test	Run Tests	2025-12-01T03:19:02.6543702Z [32mSuccess[0m	||	In a C Sharp file swaps up classes	
+test	Run Tests	2025-12-01T03:19:02.6544124Z [32mSuccess[0m	||	In a C Sharp file swaps up functions	
+test	Run Tests	2025-12-01T03:19:02.6544596Z [32mSuccess[0m	||	In a C Sharp file swaps inner blocks across functions	
+test	Run Tests	2025-12-01T03:19:02.6544944Z 	
+test	Run Tests	2025-12-01T03:19:02.6545163Z [32mSuccess: [0m	8	
+test	Run Tests	2025-12-01T03:19:02.6545411Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.6545653Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.6545862Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.7055491Z Scheduling: tests/treewalker/php_spec.lua
+test	Run Tests	2025-12-01T03:19:02.7056016Z 
+test	Run Tests	2025-12-01T03:19:02.7056164Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.7056766Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/highlight_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.7057761Z [32mSuccess[0m	||	Highlights creates visible highlights when moving and clears them after timeout	
+test	Run Tests	2025-12-01T03:19:02.7058439Z [32mSuccess[0m	||	Highlights clears previous highlights when making new movement	
+test	Run Tests	2025-12-01T03:19:02.7059097Z [32mSuccess[0m	||	Highlights does not create highlights when highlight option is disabled	
+test	Run Tests	2025-12-01T03:19:02.7059743Z [32mSuccess[0m	||	Highlights highlights appear when moving in any direction	
+test	Run Tests	2025-12-01T03:19:02.7060616Z [32mSuccess[0m	||	Highlights highlights full block on move_in() (identified in gh #30)	
+test	Run Tests	2025-12-01T03:19:02.7061206Z [32mSuccess[0m	||	Highlights respects default highlight_duration	
+test	Run Tests	2025-12-01T03:19:02.7061697Z [32mSuccess[0m	||	Highlights respects default highlight_group	
+test	Run Tests	2025-12-01T03:19:02.7062200Z [32mSuccess[0m	||	Highlights respects highlight_group config option	
+test	Run Tests	2025-12-01T03:19:02.7062680Z [32mSuccess[0m	||	Highlights highlights whole functions	
+test	Run Tests	2025-12-01T03:19:02.7063493Z [32mSuccess[0m	||	Highlights highlights whole lines starting with identifiers	
+test	Run Tests	2025-12-01T03:19:02.7064087Z [32mSuccess[0m	||	Highlights highlights whole lines starting with assignments	
+test	Run Tests	2025-12-01T03:19:02.7064586Z [32mSuccess[0m	||	Highlights highlights out reliably	
+test	Run Tests	2025-12-01T03:19:02.7065005Z [32mSuccess[0m	||	Highlights highlights out reliably	
+test	Run Tests	2025-12-01T03:19:02.7065455Z [32mSuccess[0m	||	Highlights doesn't highlight the whole file	
+test	Run Tests	2025-12-01T03:19:02.7065960Z [32mSuccess[0m	||	Highlights highlights only the first item in a block	
+test	Run Tests	2025-12-01T03:19:02.7066591Z [32mSuccess[0m	||	Highlights given in a line with no parent, move_out highlights the whole node	
+test	Run Tests	2025-12-01T03:19:02.7067020Z 	
+test	Run Tests	2025-12-01T03:19:02.7067243Z [32mSuccess: [0m	16	
+test	Run Tests	2025-12-01T03:19:02.7067496Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.7067747Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.7067960Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.7680704Z Scheduling: tests/treewalker/lua_spec_spec.lua
+test	Run Tests	2025-12-01T03:19:02.7681037Z 
+test	Run Tests	2025-12-01T03:19:02.7681149Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.7681627Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/php_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.7682823Z [32mSuccess[0m	||	In a php file ::The test suite has the [php/] parser::	
+test	Run Tests	2025-12-01T03:19:02.7683988Z [33mPending[0m	||	In a php file respects embedded html	
+test	Run Tests	2025-12-01T03:19:02.7684487Z 	
+test	Run Tests	2025-12-01T03:19:02.7684833Z [32mSuccess: [0m	1	
+test	Run Tests	2025-12-01T03:19:02.7685239Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.7685633Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.7685979Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.8286241Z Scheduling: tests/treewalker/yaml_spec.lua
+test	Run Tests	2025-12-01T03:19:02.8286613Z 
+test	Run Tests	2025-12-01T03:19:02.8286710Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.8287224Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/lua_spec_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.8288267Z [32mSuccess[0m	||	In a lua spec file:  ::The test suite has the [lua/] parser::	
+test	Run Tests	2025-12-01T03:19:02.8288815Z [32mSuccess[0m	||	In a lua spec file:  moves up and down at the same pace	
+test	Run Tests	2025-12-01T03:19:02.8289339Z [32mSuccess[0m	||	In a lua spec file:  always moves down at least one line	
+test	Run Tests	2025-12-01T03:19:02.8289846Z [32mSuccess[0m	||	In a lua spec file:  swaps strings right in a list	
+test	Run Tests	2025-12-01T03:19:02.8290586Z [32mSuccess[0m	||	In a lua spec file:  swaps strings left in a list	
+test	Run Tests	2025-12-01T03:19:02.8291183Z [32mSuccess[0m	||	In a lua spec file:  follows right swaps across rows (like in these it args)	
+test	Run Tests	2025-12-01T03:19:02.8291850Z [32mSuccess[0m	||	In a lua spec file:  follows left swaps across rows (like in these it args)	
+test	Run Tests	2025-12-01T03:19:02.8292402Z [32mSuccess[0m	||	In a lua spec file:  swaps it blocks down	
+test	Run Tests	2025-12-01T03:19:02.8292869Z [32mSuccess[0m	||	In a lua spec file:  swaps it blocks up	
+test	Run Tests	2025-12-01T03:19:02.8293187Z 	
+test	Run Tests	2025-12-01T03:19:02.8293408Z [32mSuccess: [0m	9	
+test	Run Tests	2025-12-01T03:19:02.8293676Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.8293914Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.8294131Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.8882706Z Scheduling: tests/treewalker/html_spec.lua
+test	Run Tests	2025-12-01T03:19:02.8883034Z 
+test	Run Tests	2025-12-01T03:19:02.8883132Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.8883684Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/yaml_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.8884760Z [32mSuccess[0m	||	Movement in a YAML file: ::The test suite has the [yaml/] parser::	
+test	Run Tests	2025-12-01T03:19:02.8885289Z [32mSuccess[0m	||	Movement in a YAML file: moves in	
+test	Run Tests	2025-12-01T03:19:02.8885730Z [32mSuccess[0m	||	Movement in a YAML file: moves down on keys	
+test	Run Tests	2025-12-01T03:19:02.8886200Z [32mSuccess[0m	||	Movement in a YAML file: moves up on keys	
+test	Run Tests	2025-12-01T03:19:02.8886677Z [32mSuccess[0m	||	Movement in a YAML file: moves out within just keys	
+test	Run Tests	2025-12-01T03:19:02.8887191Z [32mSuccess[0m	||	Movement in a YAML file: moves out within arrays	
+test	Run Tests	2025-12-01T03:19:02.8887972Z [32mSuccess[0m	||	Movement in a YAML file: moves down in array	
+test	Run Tests	2025-12-01T03:19:02.8888440Z [32mSuccess[0m	||	Movement in a YAML file: moves up in array	
+test	Run Tests	2025-12-01T03:19:02.8888947Z [32mSuccess[0m	||	Movement in a YAML file: navigates mixedList part	
+test	Run Tests	2025-12-01T03:19:02.8889460Z [32mSuccess[0m	||	Movement in a YAML file: navigates complexKeys part	
+test	Run Tests	2025-12-01T03:19:02.8889827Z 	
+test	Run Tests	2025-12-01T03:19:02.8890050Z [32mSuccess: [0m	10	
+test	Run Tests	2025-12-01T03:19:02.8890481Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.8890831Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.8891056Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.9847348Z Scheduling: tests/treewalker/c_spec.lua
+test	Run Tests	2025-12-01T03:19:02.9847756Z 
+test	Run Tests	2025-12-01T03:19:02.9847871Z ========================================	
+test	Run Tests	2025-12-01T03:19:02.9848520Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/html_spec.lua	
+test	Run Tests	2025-12-01T03:19:02.9849696Z [32mSuccess[0m	||	In an html file ::The test suite has the [html/] parser::	
+test	Run Tests	2025-12-01T03:19:02.9850642Z [32mSuccess[0m	||	In an html file ::The test suite has the [javascript/html] parser::	
+test	Run Tests	2025-12-01T03:19:02.9851207Z [32mSuccess[0m	||	In an html file doesn't stop on closing tags	
+test	Run Tests	2025-12-01T03:19:02.9851704Z [32mSuccess[0m	||	In an html file can move_in into embedded javascript	
+test	Run Tests	2025-12-01T03:19:02.9852509Z [33mPending[0m	||	In an html file can move around embedded javascript	
+test	Run Tests	2025-12-01T03:19:02.9853024Z [33mPending[0m	||	In an html file can move_out out of embedded javascript	
+test	Run Tests	2025-12-01T03:19:02.9853540Z [33mPending[0m	||	In an html file moves correctly around embedded css	
+test	Run Tests	2025-12-01T03:19:02.9854076Z [33mPending[0m	||	In an html file moves from non-sibling nested node into css node	
+test	Run Tests	2025-12-01T03:19:02.9854458Z 	
+test	Run Tests	2025-12-01T03:19:02.9854677Z [32mSuccess: [0m	4	
+test	Run Tests	2025-12-01T03:19:02.9854927Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.9855167Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:02.9855373Z ========================================	
+test	Run Tests	2025-12-01T03:19:03.0552329Z Scheduling: tests/treewalker/typescript_spec.lua
+test	Run Tests	2025-12-01T03:19:03.0552857Z 
+test	Run Tests	2025-12-01T03:19:03.0553029Z ========================================	
+test	Run Tests	2025-12-01T03:19:03.0553674Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/c_spec.lua	
+test	Run Tests	2025-12-01T03:19:03.0554668Z [32mSuccess[0m	||	In a c file: ::The test suite has the [c/] parser::	
+test	Run Tests	2025-12-01T03:19:03.0555178Z [32mSuccess[0m	||	In a c file: Moves around	
+test	Run Tests	2025-12-01T03:19:03.0555696Z [32mSuccess[0m	||	In a c file: swaps right, when cursor is inside a string, the whole string	
+test	Run Tests	2025-12-01T03:19:03.0556336Z [32mSuccess[0m	||	In a c file: swaps left, when cursor is inside a string, the whole string	
+test	Run Tests	2025-12-01T03:19:03.0556942Z [32mSuccess[0m	||	In a c file: swaps down on next line bracket structured functions	
+test	Run Tests	2025-12-01T03:19:03.0557511Z [32mSuccess[0m	||	In a c file: swaps up on next line bracket structured functions	
+test	Run Tests	2025-12-01T03:19:03.0558056Z [32mSuccess[0m	||	In a c file: highlights the whole node on move_out	
+test	Run Tests	2025-12-01T03:19:03.0558562Z [32mSuccess[0m	||	In a c file: highlights the whole node on move_down	
+test	Run Tests	2025-12-01T03:19:03.0559053Z [32mSuccess[0m	||	In a c file: highlights the whole node on move_up	
+test	Run Tests	2025-12-01T03:19:03.0559382Z 	
+test	Run Tests	2025-12-01T03:19:03.0559605Z [32mSuccess: [0m	9	
+test	Run Tests	2025-12-01T03:19:03.0559859Z [31mFailed : [0m	0	
+test	Run Tests	2025-12-01T03:19:03.0560107Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:03.0560476Z ========================================	
+test	Run Tests	2025-12-01T03:19:03.1631324Z 
+test	Run Tests	2025-12-01T03:19:03.1631966Z ========================================	
+test	Run Tests	2025-12-01T03:19:03.1632572Z Testing: 	/home/runner/work/treewalker.nvim/treewalker.nvim/tests/treewalker/typescript_spec.lua	
+test	Run Tests	2025-12-01T03:19:03.1633529Z [32mSuccess[0m	||	In a typescript file: ::The test suite has the [typescript/] parser::	
+test	Run Tests	2025-12-01T03:19:03.1634068Z [32mSuccess[0m	||	In a typescript file: swaps up annotated functions of different length	
+test	Run Tests	2025-12-01T03:19:03.1634892Z [32mSuccess[0m	||	In a typescript file: swaps down annotated functions of different length	
+test	Run Tests	2025-12-01T03:19:03.1635416Z [32mSuccess[0m	||	In a typescript file: Moves down from an indented comment block	
+test	Run Tests	2025-12-01T03:19:03.1635881Z [32mSuccess[0m	||	In a typescript file: Moves down from inside a comment	
+test	Run Tests	2025-12-01T03:19:03.1636344Z [32mSuccess[0m	||	In a typescript file: Moves down from the start of a comment	
+test	Run Tests	2025-12-01T03:19:03.1636852Z [32mSuccess[0m	||	In a typescript file: Moves down from Ok class comment to constructor	
+test	Run Tests	2025-12-01T03:19:03.1637376Z [31mFail[0m	||	In a typescript file: Moves out from Ok class comment to class declaration	
+test	Run Tests	2025-12-01T03:19:03.1637885Z             ./tests/treewalker/helpers.lua:38: expected to be at [119/1](|class Ok {) but was at [121/3](|/**)
+test	Run Tests	2025-12-01T03:19:03.1638281Z             Expected objects to be the same.
+test	Run Tests	2025-12-01T03:19:03.1638517Z             Passed in:
+test	Run Tests	2025-12-01T03:19:03.1638707Z             (table: 0x7f7192bb2be0) {
+test	Run Tests	2025-12-01T03:19:03.1638937Z              *[1] = 121
+test	Run Tests	2025-12-01T03:19:03.1639115Z               [2] = 3 }
+test	Run Tests	2025-12-01T03:19:03.1639286Z             Expected:
+test	Run Tests	2025-12-01T03:19:03.1639473Z             (table: 0x7f7192bb2b80) {
+test	Run Tests	2025-12-01T03:19:03.1639674Z              *[1] = 119
+test	Run Tests	2025-12-01T03:19:03.1639843Z               [2] = 1 }
+test	Run Tests	2025-12-01T03:19:03.1640006Z             
+test	Run Tests	2025-12-01T03:19:03.1640272Z             stack traceback:
+test	Run Tests	2025-12-01T03:19:03.1640731Z             	./tests/treewalker/helpers.lua:38: in function 'assert_cursor_at'
+test	Run Tests	2025-12-01T03:19:03.1641477Z             	...vim/treewalker.nvim/tests/treewalker/typescript_spec.lua:136: in function <...vim/treewalker.nvim/tests/treewalker/typescript_spec.lua:133>
+test	Run Tests	2025-12-01T03:19:03.1642002Z             	
+test	Run Tests	2025-12-01T03:19:03.1642170Z 	
+test	Run Tests	2025-12-01T03:19:03.1642363Z [32mSuccess: [0m	7	
+test	Run Tests	2025-12-01T03:19:03.1642577Z [31mFailed : [0m	1	
+test	Run Tests	2025-12-01T03:19:03.1642771Z [31mErrors : [0m	0	
+test	Run Tests	2025-12-01T03:19:03.1642956Z ========================================	
+test	Run Tests	2025-12-01T03:19:03.1643185Z Tests Failed. Exit: 1	
+test	Run Tests	2025-12-01T03:19:03.2657557Z Starting...make: *** [Makefile:8: test] Error 1
+test	Run Tests	2025-12-01T03:19:03.2674183Z ##[error]Process completed with exit code 2.
+test	Post Checkout Code	﻿2025-12-01T03:19:03.2754360Z Post job cleanup.
+test	Post Checkout Code	2025-12-01T03:19:03.3435414Z [command]/usr/bin/git version
+test	Post Checkout Code	2025-12-01T03:19:03.3467383Z git version 2.51.2
+test	Post Checkout Code	2025-12-01T03:19:03.3507347Z Temporarily overriding HOME='/home/runner/work/_temp/c6ec5ce7-40be-4d8c-a5e2-fbe8ecc72a3f' before making global git config changes
+test	Post Checkout Code	2025-12-01T03:19:03.3508687Z Adding repository directory to the temporary git global config as a safe directory
+test	Post Checkout Code	2025-12-01T03:19:03.3512429Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Post Checkout Code	2025-12-01T03:19:03.3541115Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	Post Checkout Code	2025-12-01T03:19:03.3565175Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	Post Checkout Code	2025-12-01T03:19:03.3745791Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	Post Checkout Code	2025-12-01T03:19:03.3763774Z http.https://github.com/.extraheader
+test	Post Checkout Code	2025-12-01T03:19:03.3773277Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+test	Post Checkout Code	2025-12-01T03:19:03.3796856Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	Complete job	﻿2025-12-01T03:19:03.4064183Z Cleaning up orphan processes
