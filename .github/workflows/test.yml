@@ -26,24 +26,13 @@ jobs:
 
     - name: Install nvim-treesitter
       run: |
-        # Clean any cached parsers first
-        rm -rf $HOME/.local/share/nvim/lazy/nvim-treesitter/parser
         mkdir -p $HOME/.local/share/nvim/lazy/
         # TODO specifying 0.10.0 is a workaround - something later than it is
         # breaking ts/java comment nodes
         git clone --depth 1 --branch v0.10.0 https://github.com/nvim-treesitter/nvim-treesitter.git
         mv nvim-treesitter $HOME/.local/share/nvim/lazy/
-
-    - name: Compile parsers and verify binaries
-      run: |
-        echo "=== Forcing parser compilation ==="
-        nvim --headless -u tests/minimal_init.lua -c "TSInstallSync java typescript" -c "qa!" 2>&1 | head -20
-        echo ""
-        echo "=== Parser binary checksums ==="
-        find $HOME/.local/share/nvim/lazy/nvim-treesitter/parser -name "*.so" -exec sh -c 'echo "{}:"; md5sum {}' \;
-        echo ""
-        echo "=== Parser files info ==="
-        ls -lh $HOME/.local/share/nvim/lazy/nvim-treesitter/parser/*.so
+        # Ensure clean parser directory for consistent builds
+        rm -rf $HOME/.local/share/nvim/lazy/nvim-treesitter/parser
 
     - name: Run luacheck type check / linter
       run: |
