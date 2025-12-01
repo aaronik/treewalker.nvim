@@ -28,6 +28,12 @@ function M.out(node)
         if not parent then break end
         node = parent
       end
+      -- After escaping comment, try to find a good ancestor
+      -- This handles TypeScript case where we need to move out further
+      local temp_candidate = strategies.get_first_ancestor_with_diff_scol(node)
+      if temp_candidate then
+        node = temp_candidate
+      end
     end
   end
 
