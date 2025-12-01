@@ -82,14 +82,16 @@ jobs:
         cd $GITHUB_WORKSPACE
         nvim --headless -u tests/minimal_init.lua \
           -c "edit tests/fixtures/typescript.ts" \
+          -c "lua vim.treesitter.get_parser():parse()" \
           -c "lua vim.fn.cursor(121, 3)" \
-          -c "lua local node = vim.treesitter.get_node(); print('Current node at 121,3:'); print('  Type: ' .. node:type()); print('  Range: ' .. node:range()); local parent = node:parent(); if parent then print('Parent node:'); print('  Type: ' .. parent:type()); print('  Range: ' .. parent:range()) end" \
-          -c "qa!" 2>&1 || echo "Tree dump failed"
+          -c "lua local nodes = require('treewalker.nodes'); local node = nodes.get_highest_node_at_current_row(); print('Node at 121,3 (using get_highest_node_at_current_row):'); print('  Type:', node:type()); print('  Is comment?', nodes.is_comment_node(node)); print('  Is augment target?', nodes.is_augment_target(node)); print('  Srow:', nodes.get_srow(node)); local p = node:parent(); if p then print('  Parent:', p:type()) end" \
+          -c "quitall" 2>&1 || echo "Tree dump failed"
         echo ""
         echo "=== Dump Java Test Tree Structure ==="
         nvim --headless -u tests/minimal_init.lua \
           -c "edit tests/fixtures/java.java" \
+          -c "lua vim.treesitter.get_parser():parse()" \
           -c "lua vim.fn.cursor(31, 1)" \
-          -c "lua local node = vim.treesitter.get_node(); print('Current node at 31,1:'); print('  Type: ' .. node:type()); print('  Range: ' .. node:range()); local parent = node:parent(); if parent then print('Parent node:'); print('  Type: ' .. parent:type()); print('  Range: ' .. parent:range()) end" \
-          -c "qa!" 2>&1 || echo "Tree dump failed"
+          -c "lua local nodes = require('treewalker.nodes'); local node = nodes.get_highest_node_at_current_row(); print('Node at 31,1 (using get_highest_node_at_current_row):'); print('  Type:', node:type()); print('  Is comment?', nodes.is_comment_node(node)); print('  Is augment target?', nodes.is_augment_target(node)); print('  Srow:', nodes.get_srow(node)); local p = node:parent(); if p then print('  Parent:', p:type()) end" \
+          -c "quitall" 2>&1 || echo "Tree dump failed"
 

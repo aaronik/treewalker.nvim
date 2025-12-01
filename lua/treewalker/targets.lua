@@ -17,24 +17,7 @@ function M.out(node)
   -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
   -- but does fail on CI. TODO figure out the differences)
   if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
-    -- Try moving down first - this works for Java on CI
-    local down_node = M.down(node, nodes.get_srow(node))
-    if down_node then
-      node = down_node
-    else
-      -- If down doesn't work (TypeScript case), walk up parent chain to find non-comment
-      while node and (nodes.is_comment_node(node) or nodes.is_augment_target(node)) do
-        local parent = node:parent()
-        if not parent then break end
-        node = parent
-      end
-      -- After escaping comment, try to find a good ancestor
-      -- This handles TypeScript case where we need to move out further
-      local temp_candidate = strategies.get_first_ancestor_with_diff_scol(node)
-      if temp_candidate then
-        node = temp_candidate
-      end
-    end
+    node = M.down(node, nodes.get_srow(node)) or node
   end
 
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
