@@ -1,0 +1,442 @@
+test	Set up job	﻿2025-12-01T03:15:43.5752967Z Current runner version: '2.329.0'
+test	Set up job	2025-12-01T03:15:43.5776029Z ##[group]Runner Image Provisioner
+test	Set up job	2025-12-01T03:15:43.5776915Z Hosted Compute Agent
+test	Set up job	2025-12-01T03:15:43.5777580Z Version: 20251016.436
+test	Set up job	2025-12-01T03:15:43.5778161Z Commit: 8ab8ac8bfd662a3739dab9fe09456aba92132568
+test	Set up job	2025-12-01T03:15:43.5778860Z Build Date: 2025-10-15T20:44:12Z
+test	Set up job	2025-12-01T03:15:43.5779507Z ##[endgroup]
+test	Set up job	2025-12-01T03:15:43.5780035Z ##[group]Operating System
+test	Set up job	2025-12-01T03:15:43.5780595Z Ubuntu
+test	Set up job	2025-12-01T03:15:43.5781082Z 24.04.3
+test	Set up job	2025-12-01T03:15:43.5781788Z LTS
+test	Set up job	2025-12-01T03:15:43.5782252Z ##[endgroup]
+test	Set up job	2025-12-01T03:15:43.5782802Z ##[group]Runner Image
+test	Set up job	2025-12-01T03:15:43.5783375Z Image: ubuntu-24.04
+test	Set up job	2025-12-01T03:15:43.5783888Z Version: 20251112.124.1
+test	Set up job	2025-12-01T03:15:43.5784952Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20251112.124/images/ubuntu/Ubuntu2404-Readme.md
+test	Set up job	2025-12-01T03:15:43.5786322Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20251112.124
+test	Set up job	2025-12-01T03:15:43.5787516Z ##[endgroup]
+test	Set up job	2025-12-01T03:15:43.5788623Z ##[group]GITHUB_TOKEN Permissions
+test	Set up job	2025-12-01T03:15:43.5790359Z Contents: read
+test	Set up job	2025-12-01T03:15:43.5791044Z Metadata: read
+test	Set up job	2025-12-01T03:15:43.5791749Z Packages: read
+test	Set up job	2025-12-01T03:15:43.5792303Z ##[endgroup]
+test	Set up job	2025-12-01T03:15:43.5794351Z Secret source: Actions
+test	Set up job	2025-12-01T03:15:43.5795103Z Prepare workflow directory
+test	Set up job	2025-12-01T03:15:43.6105918Z Prepare all required actions
+test	Set up job	2025-12-01T03:15:43.6142959Z Getting action download info
+test	Set up job	2025-12-01T03:15:44.0332872Z Download action repository 'actions/checkout@v3' (SHA:f43a0e5ff2bd294095638e18286ca9a3d1956744)
+test	Set up job	2025-12-01T03:15:44.2479859Z Complete job name: test
+test	Checkout Code	﻿2025-12-01T03:15:44.3243749Z ##[group]Run actions/checkout@v3
+test	Checkout Code	2025-12-01T03:15:44.3244606Z with:
+test	Checkout Code	2025-12-01T03:15:44.3245033Z   repository: aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.3245710Z   token: ***
+test	Checkout Code	2025-12-01T03:15:44.3246101Z   ssh-strict: true
+test	Checkout Code	2025-12-01T03:15:44.3246521Z   persist-credentials: true
+test	Checkout Code	2025-12-01T03:15:44.3246985Z   clean: true
+test	Checkout Code	2025-12-01T03:15:44.3247411Z   sparse-checkout-cone-mode: true
+test	Checkout Code	2025-12-01T03:15:44.3247890Z   fetch-depth: 1
+test	Checkout Code	2025-12-01T03:15:44.3248279Z   fetch-tags: false
+test	Checkout Code	2025-12-01T03:15:44.3248675Z   lfs: false
+test	Checkout Code	2025-12-01T03:15:44.3249042Z   submodules: false
+test	Checkout Code	2025-12-01T03:15:44.3249457Z   set-safe-directory: true
+test	Checkout Code	2025-12-01T03:15:44.3250083Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.4090700Z Syncing repository: aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.4092728Z ##[group]Getting Git version info
+test	Checkout Code	2025-12-01T03:15:44.4093531Z Working directory is '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Checkout Code	2025-12-01T03:15:44.4094749Z [command]/usr/bin/git version
+test	Checkout Code	2025-12-01T03:15:44.4177811Z git version 2.51.2
+test	Checkout Code	2025-12-01T03:15:44.4203790Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.4217767Z Temporarily overriding HOME='/home/runner/work/_temp/01ead1e8-7659-413d-afc3-75583cb1032d' before making global git config changes
+test	Checkout Code	2025-12-01T03:15:44.4219993Z Adding repository directory to the temporary git global config as a safe directory
+test	Checkout Code	2025-12-01T03:15:44.4221912Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.4254765Z Deleting the contents of '/home/runner/work/treewalker.nvim/treewalker.nvim'
+test	Checkout Code	2025-12-01T03:15:44.4258393Z ##[group]Initializing the repository
+test	Checkout Code	2025-12-01T03:15:44.4261016Z [command]/usr/bin/git init /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.4370510Z hint: Using 'master' as the name for the initial branch. This default branch name
+test	Checkout Code	2025-12-01T03:15:44.4371983Z hint: is subject to change. To configure the initial branch name to use in all
+test	Checkout Code	2025-12-01T03:15:44.4373116Z hint: of your new repositories, which will suppress this warning, call:
+test	Checkout Code	2025-12-01T03:15:44.4373881Z hint:
+test	Checkout Code	2025-12-01T03:15:44.4374536Z hint: 	git config --global init.defaultBranch <name>
+test	Checkout Code	2025-12-01T03:15:44.4375648Z hint:
+test	Checkout Code	2025-12-01T03:15:44.4376772Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+test	Checkout Code	2025-12-01T03:15:44.4378513Z hint: 'development'. The just-created branch can be renamed via this command:
+test	Checkout Code	2025-12-01T03:15:44.4380227Z hint:
+test	Checkout Code	2025-12-01T03:15:44.4381098Z hint: 	git branch -m <name>
+test	Checkout Code	2025-12-01T03:15:44.4382232Z hint:
+test	Checkout Code	2025-12-01T03:15:44.4383374Z hint: Disable this message with "git config set advice.defaultBranchName false"
+test	Checkout Code	2025-12-01T03:15:44.4385609Z Initialized empty Git repository in /home/runner/work/treewalker.nvim/treewalker.nvim/.git/
+test	Checkout Code	2025-12-01T03:15:44.4388613Z [command]/usr/bin/git remote add origin https://github.com/aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.4420500Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.4421277Z ##[group]Disabling automatic garbage collection
+test	Checkout Code	2025-12-01T03:15:44.4424485Z [command]/usr/bin/git config --local gc.auto 0
+test	Checkout Code	2025-12-01T03:15:44.4451883Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.4453103Z ##[group]Setting up auth
+test	Checkout Code	2025-12-01T03:15:44.4457829Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	Checkout Code	2025-12-01T03:15:44.4485158Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	Checkout Code	2025-12-01T03:15:44.4841810Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	Checkout Code	2025-12-01T03:15:44.4868726Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	Checkout Code	2025-12-01T03:15:44.5082222Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+test	Checkout Code	2025-12-01T03:15:44.5113492Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.5114306Z ##[group]Fetching the repository
+test	Checkout Code	2025-12-01T03:15:44.5121552Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --progress --no-recurse-submodules --depth=1 origin +6c36b112ead791f6249f3db16ee287fce645f166:refs/remotes/origin/f-ai
+test	Checkout Code	2025-12-01T03:15:44.8363203Z remote: Enumerating objects: 94, done.        
+test	Checkout Code	2025-12-01T03:15:44.8364311Z remote: Counting objects:   1% (1/94)        
+test	Checkout Code	2025-12-01T03:15:44.8365329Z remote: Counting objects:   2% (2/94)        
+test	Checkout Code	2025-12-01T03:15:44.8366158Z remote: Counting objects:   3% (3/94)        
+test	Checkout Code	2025-12-01T03:15:44.8366789Z remote: Counting objects:   4% (4/94)        
+test	Checkout Code	2025-12-01T03:15:44.8367405Z remote: Counting objects:   5% (5/94)        
+test	Checkout Code	2025-12-01T03:15:44.8368026Z remote: Counting objects:   6% (6/94)        
+test	Checkout Code	2025-12-01T03:15:44.8368645Z remote: Counting objects:   7% (7/94)        
+test	Checkout Code	2025-12-01T03:15:44.8369268Z remote: Counting objects:   8% (8/94)        
+test	Checkout Code	2025-12-01T03:15:44.8369875Z remote: Counting objects:   9% (9/94)        
+test	Checkout Code	2025-12-01T03:15:44.8370515Z remote: Counting objects:  10% (10/94)        
+test	Checkout Code	2025-12-01T03:15:44.8371144Z remote: Counting objects:  11% (11/94)        
+test	Checkout Code	2025-12-01T03:15:44.8372011Z remote: Counting objects:  12% (12/94)        
+test	Checkout Code	2025-12-01T03:15:44.8372643Z remote: Counting objects:  13% (13/94)        
+test	Checkout Code	2025-12-01T03:15:44.8373267Z remote: Counting objects:  14% (14/94)        
+test	Checkout Code	2025-12-01T03:15:44.8373898Z remote: Counting objects:  15% (15/94)        
+test	Checkout Code	2025-12-01T03:15:44.8374521Z remote: Counting objects:  17% (16/94)        
+test	Checkout Code	2025-12-01T03:15:44.8375147Z remote: Counting objects:  18% (17/94)        
+test	Checkout Code	2025-12-01T03:15:44.8375718Z remote: Counting objects:  19% (18/94)        
+test	Checkout Code	2025-12-01T03:15:44.8376305Z remote: Counting objects:  20% (19/94)        
+test	Checkout Code	2025-12-01T03:15:44.8376881Z remote: Counting objects:  21% (20/94)        
+test	Checkout Code	2025-12-01T03:15:44.8377450Z remote: Counting objects:  22% (21/94)        
+test	Checkout Code	2025-12-01T03:15:44.8378017Z remote: Counting objects:  23% (22/94)        
+test	Checkout Code	2025-12-01T03:15:44.8378583Z remote: Counting objects:  24% (23/94)        
+test	Checkout Code	2025-12-01T03:15:44.8379174Z remote: Counting objects:  25% (24/94)        
+test	Checkout Code	2025-12-01T03:15:44.8379737Z remote: Counting objects:  26% (25/94)        
+test	Checkout Code	2025-12-01T03:15:44.8380309Z remote: Counting objects:  27% (26/94)        
+test	Checkout Code	2025-12-01T03:15:44.8380880Z remote: Counting objects:  28% (27/94)        
+test	Checkout Code	2025-12-01T03:15:44.8381864Z remote: Counting objects:  29% (28/94)        
+test	Checkout Code	2025-12-01T03:15:44.8382434Z remote: Counting objects:  30% (29/94)        
+test	Checkout Code	2025-12-01T03:15:44.8383167Z remote: Counting objects:  31% (30/94)        
+test	Checkout Code	2025-12-01T03:15:44.8384114Z remote: Counting objects:  32% (31/94)        
+test	Checkout Code	2025-12-01T03:15:44.8385028Z remote: Counting objects:  34% (32/94)        
+test	Checkout Code	2025-12-01T03:15:44.8385842Z remote: Counting objects:  35% (33/94)        
+test	Checkout Code	2025-12-01T03:15:44.8386393Z remote: Counting objects:  36% (34/94)        
+test	Checkout Code	2025-12-01T03:15:44.8386948Z remote: Counting objects:  37% (35/94)        
+test	Checkout Code	2025-12-01T03:15:44.8387521Z remote: Counting objects:  38% (36/94)        
+test	Checkout Code	2025-12-01T03:15:44.8388097Z remote: Counting objects:  39% (37/94)        
+test	Checkout Code	2025-12-01T03:15:44.8388682Z remote: Counting objects:  40% (38/94)        
+test	Checkout Code	2025-12-01T03:15:44.8389242Z remote: Counting objects:  41% (39/94)        
+test	Checkout Code	2025-12-01T03:15:44.8389827Z remote: Counting objects:  42% (40/94)        
+test	Checkout Code	2025-12-01T03:15:44.8390395Z remote: Counting objects:  43% (41/94)        
+test	Checkout Code	2025-12-01T03:15:44.8390958Z remote: Counting objects:  44% (42/94)        
+test	Checkout Code	2025-12-01T03:15:44.8391675Z remote: Counting objects:  45% (43/94)        
+test	Checkout Code	2025-12-01T03:15:44.8392243Z remote: Counting objects:  46% (44/94)        
+test	Checkout Code	2025-12-01T03:15:44.8392799Z remote: Counting objects:  47% (45/94)        
+test	Checkout Code	2025-12-01T03:15:44.8393357Z remote: Counting objects:  48% (46/94)        
+test	Checkout Code	2025-12-01T03:15:44.8393934Z remote: Counting objects:  50% (47/94)        
+test	Checkout Code	2025-12-01T03:15:44.8394496Z remote: Counting objects:  51% (48/94)        
+test	Checkout Code	2025-12-01T03:15:44.8395069Z remote: Counting objects:  52% (49/94)        
+test	Checkout Code	2025-12-01T03:15:44.8395636Z remote: Counting objects:  53% (50/94)        
+test	Checkout Code	2025-12-01T03:15:44.8396403Z remote: Counting objects:  54% (51/94)        
+test	Checkout Code	2025-12-01T03:15:44.8396968Z remote: Counting objects:  55% (52/94)        
+test	Checkout Code	2025-12-01T03:15:44.8397532Z remote: Counting objects:  56% (53/94)        
+test	Checkout Code	2025-12-01T03:15:44.8398093Z remote: Counting objects:  57% (54/94)        
+test	Checkout Code	2025-12-01T03:15:44.8398658Z remote: Counting objects:  58% (55/94)        
+test	Checkout Code	2025-12-01T03:15:44.8399236Z remote: Counting objects:  59% (56/94)        
+test	Checkout Code	2025-12-01T03:15:44.8399825Z remote: Counting objects:  60% (57/94)        
+test	Checkout Code	2025-12-01T03:15:44.8400384Z remote: Counting objects:  61% (58/94)        
+test	Checkout Code	2025-12-01T03:15:44.8400943Z remote: Counting objects:  62% (59/94)        
+test	Checkout Code	2025-12-01T03:15:44.8401671Z remote: Counting objects:  63% (60/94)        
+test	Checkout Code	2025-12-01T03:15:44.8402246Z remote: Counting objects:  64% (61/94)        
+test	Checkout Code	2025-12-01T03:15:44.8402794Z remote: Counting objects:  65% (62/94)        
+test	Checkout Code	2025-12-01T03:15:44.8403361Z remote: Counting objects:  67% (63/94)        
+test	Checkout Code	2025-12-01T03:15:44.8403919Z remote: Counting objects:  68% (64/94)        
+test	Checkout Code	2025-12-01T03:15:44.8404490Z remote: Counting objects:  69% (65/94)        
+test	Checkout Code	2025-12-01T03:15:44.8405068Z remote: Counting objects:  70% (66/94)        
+test	Checkout Code	2025-12-01T03:15:44.8405623Z remote: Counting objects:  71% (67/94)        
+test	Checkout Code	2025-12-01T03:15:44.8406186Z remote: Counting objects:  72% (68/94)        
+test	Checkout Code	2025-12-01T03:15:44.8406741Z remote: Counting objects:  73% (69/94)        
+test	Checkout Code	2025-12-01T03:15:44.8407316Z remote: Counting objects:  74% (70/94)        
+test	Checkout Code	2025-12-01T03:15:44.8407882Z remote: Counting objects:  75% (71/94)        
+test	Checkout Code	2025-12-01T03:15:44.8408439Z remote: Counting objects:  76% (72/94)        
+test	Checkout Code	2025-12-01T03:15:44.8408999Z remote: Counting objects:  77% (73/94)        
+test	Checkout Code	2025-12-01T03:15:44.8409551Z remote: Counting objects:  78% (74/94)        
+test	Checkout Code	2025-12-01T03:15:44.8410108Z remote: Counting objects:  79% (75/94)        
+test	Checkout Code	2025-12-01T03:15:44.8410666Z remote: Counting objects:  80% (76/94)        
+test	Checkout Code	2025-12-01T03:15:44.8411223Z remote: Counting objects:  81% (77/94)        
+test	Checkout Code	2025-12-01T03:15:44.8412061Z remote: Counting objects:  82% (78/94)        
+test	Checkout Code	2025-12-01T03:15:44.8412633Z remote: Counting objects:  84% (79/94)        
+test	Checkout Code	2025-12-01T03:15:44.8413188Z remote: Counting objects:  85% (80/94)        
+test	Checkout Code	2025-12-01T03:15:44.8413736Z remote: Counting objects:  86% (81/94)        
+test	Checkout Code	2025-12-01T03:15:44.8414455Z remote: Counting objects:  87% (82/94)        
+test	Checkout Code	2025-12-01T03:15:44.8415003Z remote: Counting objects:  88% (83/94)        
+test	Checkout Code	2025-12-01T03:15:44.8415569Z remote: Counting objects:  89% (84/94)        
+test	Checkout Code	2025-12-01T03:15:44.8416111Z remote: Counting objects:  90% (85/94)        
+test	Checkout Code	2025-12-01T03:15:44.8416881Z remote: Counting objects:  91% (86/94)        
+test	Checkout Code	2025-12-01T03:15:44.8417436Z remote: Counting objects:  92% (87/94)        
+test	Checkout Code	2025-12-01T03:15:44.8418196Z remote: Counting objects:  93% (88/94)        
+test	Checkout Code	2025-12-01T03:15:44.8419138Z remote: Counting objects:  94% (89/94)        
+test	Checkout Code	2025-12-01T03:15:44.8420041Z remote: Counting objects:  95% (90/94)        
+test	Checkout Code	2025-12-01T03:15:44.8420806Z remote: Counting objects:  96% (91/94)        
+test	Checkout Code	2025-12-01T03:15:44.8421365Z remote: Counting objects:  97% (92/94)        
+test	Checkout Code	2025-12-01T03:15:44.8422162Z remote: Counting objects:  98% (93/94)        
+test	Checkout Code	2025-12-01T03:15:44.8422715Z remote: Counting objects: 100% (94/94)        
+test	Checkout Code	2025-12-01T03:15:44.8423488Z remote: Counting objects: 100% (94/94), done.        
+test	Checkout Code	2025-12-01T03:15:44.8424173Z remote: Compressing objects:   1% (1/88)        
+test	Checkout Code	2025-12-01T03:15:44.8424758Z remote: Compressing objects:   2% (2/88)        
+test	Checkout Code	2025-12-01T03:15:44.8425373Z remote: Compressing objects:   3% (3/88)        
+test	Checkout Code	2025-12-01T03:15:44.8425967Z remote: Compressing objects:   4% (4/88)        
+test	Checkout Code	2025-12-01T03:15:44.8426537Z remote: Compressing objects:   5% (5/88)        
+test	Checkout Code	2025-12-01T03:15:44.8427177Z remote: Compressing objects:   6% (6/88)        
+test	Checkout Code	2025-12-01T03:15:44.8427924Z remote: Compressing objects:   7% (7/88)        
+test	Checkout Code	2025-12-01T03:15:44.8428527Z remote: Compressing objects:   9% (8/88)        
+test	Checkout Code	2025-12-01T03:15:44.8429303Z remote: Compressing objects:  10% (9/88)        
+test	Checkout Code	2025-12-01T03:15:44.8429891Z remote: Compressing objects:  11% (10/88)        
+test	Checkout Code	2025-12-01T03:15:44.8430478Z remote: Compressing objects:  12% (11/88)        
+test	Checkout Code	2025-12-01T03:15:44.8431049Z remote: Compressing objects:  13% (12/88)        
+test	Checkout Code	2025-12-01T03:15:44.8431795Z remote: Compressing objects:  14% (13/88)        
+test	Checkout Code	2025-12-01T03:15:44.8432394Z remote: Compressing objects:  15% (14/88)        
+test	Checkout Code	2025-12-01T03:15:44.8432990Z remote: Compressing objects:  17% (15/88)        
+test	Checkout Code	2025-12-01T03:15:44.8433606Z remote: Compressing objects:  18% (16/88)        
+test	Checkout Code	2025-12-01T03:15:44.8434202Z remote: Compressing objects:  19% (17/88)        
+test	Checkout Code	2025-12-01T03:15:44.8434790Z remote: Compressing objects:  20% (18/88)        
+test	Checkout Code	2025-12-01T03:15:44.8435364Z remote: Compressing objects:  21% (19/88)        
+test	Checkout Code	2025-12-01T03:15:44.8435932Z remote: Compressing objects:  22% (20/88)        
+test	Checkout Code	2025-12-01T03:15:44.8436505Z remote: Compressing objects:  23% (21/88)        
+test	Checkout Code	2025-12-01T03:15:44.8437075Z remote: Compressing objects:  25% (22/88)        
+test	Checkout Code	2025-12-01T03:15:44.8437645Z remote: Compressing objects:  26% (23/88)        
+test	Checkout Code	2025-12-01T03:15:44.8438215Z remote: Compressing objects:  27% (24/88)        
+test	Checkout Code	2025-12-01T03:15:44.8438781Z remote: Compressing objects:  28% (25/88)        
+test	Checkout Code	2025-12-01T03:15:44.8439353Z remote: Compressing objects:  29% (26/88)        
+test	Checkout Code	2025-12-01T03:15:44.8439930Z remote: Compressing objects:  30% (27/88)        
+test	Checkout Code	2025-12-01T03:15:44.8440496Z remote: Compressing objects:  31% (28/88)        
+test	Checkout Code	2025-12-01T03:15:44.8441061Z remote: Compressing objects:  32% (29/88)        
+test	Checkout Code	2025-12-01T03:15:44.8441750Z remote: Compressing objects:  34% (30/88)        
+test	Checkout Code	2025-12-01T03:15:44.8442316Z remote: Compressing objects:  35% (31/88)        
+test	Checkout Code	2025-12-01T03:15:44.8442884Z remote: Compressing objects:  36% (32/88)        
+test	Checkout Code	2025-12-01T03:15:44.8443453Z remote: Compressing objects:  37% (33/88)        
+test	Checkout Code	2025-12-01T03:15:44.8444026Z remote: Compressing objects:  38% (34/88)        
+test	Checkout Code	2025-12-01T03:15:44.8444603Z remote: Compressing objects:  39% (35/88)        
+test	Checkout Code	2025-12-01T03:15:44.8445176Z remote: Compressing objects:  40% (36/88)        
+test	Checkout Code	2025-12-01T03:15:44.8445752Z remote: Compressing objects:  42% (37/88)        
+test	Checkout Code	2025-12-01T03:15:44.8446327Z remote: Compressing objects:  43% (38/88)        
+test	Checkout Code	2025-12-01T03:15:44.8446903Z remote: Compressing objects:  44% (39/88)        
+test	Checkout Code	2025-12-01T03:15:44.8447617Z remote: Compressing objects:  45% (40/88)        
+test	Checkout Code	2025-12-01T03:15:44.8448197Z remote: Compressing objects:  46% (41/88)        
+test	Checkout Code	2025-12-01T03:15:44.8448787Z remote: Compressing objects:  47% (42/88)        
+test	Checkout Code	2025-12-01T03:15:44.8449352Z remote: Compressing objects:  48% (43/88)        
+test	Checkout Code	2025-12-01T03:15:44.8449961Z remote: Compressing objects:  50% (44/88)        
+test	Checkout Code	2025-12-01T03:15:44.8450530Z remote: Compressing objects:  51% (45/88)        
+test	Checkout Code	2025-12-01T03:15:44.8455907Z remote: Compressing objects:  52% (46/88)        
+test	Checkout Code	2025-12-01T03:15:44.8456789Z remote: Compressing objects:  53% (47/88)        
+test	Checkout Code	2025-12-01T03:15:44.8457571Z remote: Compressing objects:  54% (48/88)        
+test	Checkout Code	2025-12-01T03:15:44.8458528Z remote: Compressing objects:  55% (49/88)        
+test	Checkout Code	2025-12-01T03:15:44.8459130Z remote: Compressing objects:  56% (50/88)        
+test	Checkout Code	2025-12-01T03:15:44.8459716Z remote: Compressing objects:  57% (51/88)        
+test	Checkout Code	2025-12-01T03:15:44.8460299Z remote: Compressing objects:  59% (52/88)        
+test	Checkout Code	2025-12-01T03:15:44.8460890Z remote: Compressing objects:  60% (53/88)        
+test	Checkout Code	2025-12-01T03:15:44.8461616Z remote: Compressing objects:  61% (54/88)        
+test	Checkout Code	2025-12-01T03:15:44.8462199Z remote: Compressing objects:  62% (55/88)        
+test	Checkout Code	2025-12-01T03:15:44.8462813Z remote: Compressing objects:  63% (56/88)        
+test	Checkout Code	2025-12-01T03:15:44.8463387Z remote: Compressing objects:  64% (57/88)        
+test	Checkout Code	2025-12-01T03:15:44.8463960Z remote: Compressing objects:  65% (58/88)        
+test	Checkout Code	2025-12-01T03:15:44.8464533Z remote: Compressing objects:  67% (59/88)        
+test	Checkout Code	2025-12-01T03:15:44.8465122Z remote: Compressing objects:  68% (60/88)        
+test	Checkout Code	2025-12-01T03:15:44.8465885Z remote: Compressing objects:  69% (61/88)        
+test	Checkout Code	2025-12-01T03:15:44.8466467Z remote: Compressing objects:  70% (62/88)        
+test	Checkout Code	2025-12-01T03:15:44.8467049Z remote: Compressing objects:  71% (63/88)        
+test	Checkout Code	2025-12-01T03:15:44.8467628Z remote: Compressing objects:  72% (64/88)        
+test	Checkout Code	2025-12-01T03:15:44.8468199Z remote: Compressing objects:  73% (65/88)        
+test	Checkout Code	2025-12-01T03:15:44.8468806Z remote: Compressing objects:  75% (66/88)        
+test	Checkout Code	2025-12-01T03:15:44.8469382Z remote: Compressing objects:  76% (67/88)        
+test	Checkout Code	2025-12-01T03:15:44.8469944Z remote: Compressing objects:  77% (68/88)        
+test	Checkout Code	2025-12-01T03:15:44.8474476Z remote: Compressing objects:  78% (69/88)        
+test	Checkout Code	2025-12-01T03:15:44.8475366Z remote: Compressing objects:  79% (70/88)        
+test	Checkout Code	2025-12-01T03:15:44.8476045Z remote: Compressing objects:  80% (71/88)        
+test	Checkout Code	2025-12-01T03:15:44.8476716Z remote: Compressing objects:  81% (72/88)        
+test	Checkout Code	2025-12-01T03:15:44.8477369Z remote: Compressing objects:  82% (73/88)        
+test	Checkout Code	2025-12-01T03:15:44.8478041Z remote: Compressing objects:  84% (74/88)        
+test	Checkout Code	2025-12-01T03:15:44.8478691Z remote: Compressing objects:  85% (75/88)        
+test	Checkout Code	2025-12-01T03:15:44.8479330Z remote: Compressing objects:  86% (76/88)        
+test	Checkout Code	2025-12-01T03:15:44.8479976Z remote: Compressing objects:  87% (77/88)        
+test	Checkout Code	2025-12-01T03:15:44.8480625Z remote: Compressing objects:  88% (78/88)        
+test	Checkout Code	2025-12-01T03:15:44.8481286Z remote: Compressing objects:  89% (79/88)        
+test	Checkout Code	2025-12-01T03:15:44.8482194Z remote: Compressing objects:  90% (80/88)        
+test	Checkout Code	2025-12-01T03:15:44.8482864Z remote: Compressing objects:  92% (81/88)        
+test	Checkout Code	2025-12-01T03:15:44.8483527Z remote: Compressing objects:  93% (82/88)        
+test	Checkout Code	2025-12-01T03:15:44.8484179Z remote: Compressing objects:  94% (83/88)        
+test	Checkout Code	2025-12-01T03:15:44.8484834Z remote: Compressing objects:  95% (84/88)        
+test	Checkout Code	2025-12-01T03:15:44.8485478Z remote: Compressing objects:  96% (85/88)        
+test	Checkout Code	2025-12-01T03:15:44.8486079Z remote: Compressing objects:  97% (86/88)        
+test	Checkout Code	2025-12-01T03:15:44.8486661Z remote: Compressing objects:  98% (87/88)        
+test	Checkout Code	2025-12-01T03:15:44.8487242Z remote: Compressing objects: 100% (88/88)        
+test	Checkout Code	2025-12-01T03:15:44.8487858Z remote: Compressing objects: 100% (88/88), done.        
+test	Checkout Code	2025-12-01T03:15:44.9750019Z remote: Total 94 (delta 4), reused 44 (delta 0), pack-reused 0 (from 0)        
+test	Checkout Code	2025-12-01T03:15:44.9932961Z From https://github.com/aaronik/treewalker.nvim
+test	Checkout Code	2025-12-01T03:15:44.9934039Z  * [new ref]         6c36b112ead791f6249f3db16ee287fce645f166 -> origin/f-ai
+test	Checkout Code	2025-12-01T03:15:44.9966122Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.9966848Z ##[group]Determining the checkout info
+test	Checkout Code	2025-12-01T03:15:44.9968506Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:44.9969169Z ##[group]Checking out the ref
+test	Checkout Code	2025-12-01T03:15:44.9972683Z [command]/usr/bin/git checkout --progress --force -B f-ai refs/remotes/origin/f-ai
+test	Checkout Code	2025-12-01T03:15:45.0135922Z Switched to a new branch 'f-ai'
+test	Checkout Code	2025-12-01T03:15:45.0139462Z branch 'f-ai' set up to track 'origin/f-ai'.
+test	Checkout Code	2025-12-01T03:15:45.0146091Z ##[endgroup]
+test	Checkout Code	2025-12-01T03:15:45.0177852Z [command]/usr/bin/git log -1 --format='%H'
+test	Checkout Code	2025-12-01T03:15:45.0198972Z '6c36b112ead791f6249f3db16ee287fce645f166'
+test	Install Neovim	﻿2025-12-01T03:15:45.0375058Z ##[group]Run sudo snap install nvim --classic
+test	Install Neovim	2025-12-01T03:15:45.0375744Z [36;1msudo snap install nvim --classic[0m
+test	Install Neovim	2025-12-01T03:15:45.0412268Z shell: /usr/bin/bash -e {0}
+test	Install Neovim	2025-12-01T03:15:45.0412824Z ##[endgroup]
+test	Install Neovim	2025-12-01T03:15:52.4145655Z 2025-12-01T03:15:52Z INFO Waiting for automatic snapd restart...
+test	Install Neovim	2025-12-01T03:16:06.7932014Z nvim v0.11.5 from neovim-snap (neovim-snap) installed
+test	Install Plenary	﻿2025-12-01T03:16:06.8000271Z ##[group]Run mkdir -p $HOME/.local/share/nvim/lazy/
+test	Install Plenary	2025-12-01T03:16:06.8000775Z [36;1mmkdir -p $HOME/.local/share/nvim/lazy/[0m
+test	Install Plenary	2025-12-01T03:16:06.8001217Z [36;1mgit clone https://github.com/nvim-lua/plenary.nvim.git[0m
+test	Install Plenary	2025-12-01T03:16:06.8001903Z [36;1mmv plenary.nvim $HOME/.local/share/nvim/lazy/[0m
+test	Install Plenary	2025-12-01T03:16:06.8035766Z shell: /usr/bin/bash -e {0}
+test	Install Plenary	2025-12-01T03:16:06.8036073Z ##[endgroup]
+test	Install Plenary	2025-12-01T03:16:06.8113314Z Cloning into 'plenary.nvim'...
+test	Install nvim-treesitter	﻿2025-12-01T03:16:07.6951811Z ##[group]Run mkdir -p $HOME/.local/share/nvim/lazy/
+test	Install nvim-treesitter	2025-12-01T03:16:07.6952375Z [36;1mmkdir -p $HOME/.local/share/nvim/lazy/[0m
+test	Install nvim-treesitter	2025-12-01T03:16:07.6952833Z [36;1mgit clone https://github.com/nvim-treesitter/nvim-treesitter.git[0m
+test	Install nvim-treesitter	2025-12-01T03:16:07.6953325Z [36;1mmv nvim-treesitter $HOME/.local/share/nvim/lazy/[0m
+test	Install nvim-treesitter	2025-12-01T03:16:07.6988604Z shell: /usr/bin/bash -e {0}
+test	Install nvim-treesitter	2025-12-01T03:16:07.6988926Z ##[endgroup]
+test	Install nvim-treesitter	2025-12-01T03:16:07.7062220Z Cloning into 'nvim-treesitter'...
+test	Run luacheck type check / linter	﻿2025-12-01T03:16:08.8072375Z ##[group]Run sudo apt-get install lua-check -y --no-install-recommends
+test	Run luacheck type check / linter	2025-12-01T03:16:08.8072994Z [36;1msudo apt-get install lua-check -y --no-install-recommends[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:08.8073342Z [36;1mmake check[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:08.8105244Z shell: /usr/bin/bash -e {0}
+test	Run luacheck type check / linter	2025-12-01T03:16:08.8105507Z ##[endgroup]
+test	Run luacheck type check / linter	2025-12-01T03:16:13.7865578Z Reading package lists...
+test	Run luacheck type check / linter	2025-12-01T03:16:13.9553557Z Building dependency tree...
+test	Run luacheck type check / linter	2025-12-01T03:16:13.9625150Z Reading state information...
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1063591Z The following additional packages will be installed:
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1064563Z   lua-argparse lua-filesystem lua5.1
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1430188Z The following NEW packages will be installed:
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1431782Z   lua-argparse lua-check lua-filesystem lua5.1
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1790729Z 0 upgraded, 4 newly installed, 0 to remove and 21 not upgraded.
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1791363Z Need to get 280 kB of archives.
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1792138Z After this operation, 1031 kB of additional disk space will be used.
+test	Run luacheck type check / linter	2025-12-01T03:16:14.1793791Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+test	Run luacheck type check / linter	2025-12-01T03:16:14.2897624Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-argparse all 0.7.1-2 [36.1 kB]
+test	Run luacheck type check / linter	2025-12-01T03:16:14.3598775Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-filesystem amd64 1.8.0-3 [13.0 kB]
+test	Run luacheck type check / linter	2025-12-01T03:16:14.4292104Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua5.1 amd64 5.1.5-9build2 [125 kB]
+test	Run luacheck type check / linter	2025-12-01T03:16:14.6701262Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 lua-check all 1.1.2-1 [106 kB]
+test	Run luacheck type check / linter	2025-12-01T03:16:14.9629631Z Fetched 280 kB in 1s (506 kB/s)
+test	Run luacheck type check / linter	2025-12-01T03:16:15.0446067Z Selecting previously unselected package lua-argparse.
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1187126Z (Reading database ... 
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1187913Z (Reading database ... 5%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1188313Z (Reading database ... 10%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1188668Z (Reading database ... 15%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1189018Z (Reading database ... 20%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1189255Z (Reading database ... 25%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1189464Z (Reading database ... 30%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1189678Z (Reading database ... 35%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1189953Z (Reading database ... 40%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1190174Z (Reading database ... 45%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.1190382Z (Reading database ... 50%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.2268211Z (Reading database ... 55%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.5534542Z (Reading database ... 60%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.7298629Z (Reading database ... 65%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.8230221Z (Reading database ... 70%
+test	Run luacheck type check / linter	2025-12-01T03:16:15.9421250Z (Reading database ... 75%
+test	Run luacheck type check / linter	2025-12-01T03:16:16.4227852Z (Reading database ... 80%
+test	Run luacheck type check / linter	2025-12-01T03:16:17.0995913Z (Reading database ... 85%
+test	Run luacheck type check / linter	2025-12-01T03:16:18.2017231Z (Reading database ... 90%
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2026109Z (Reading database ... 95%
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2026566Z (Reading database ... 100%
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2027059Z (Reading database ... 216225 files and directories currently installed.)
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2071366Z Preparing to unpack .../lua-argparse_0.7.1-2_all.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2096881Z Unpacking lua-argparse (0.7.1-2) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2413923Z Selecting previously unselected package lua-filesystem:amd64.
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2545027Z Preparing to unpack .../lua-filesystem_1.8.0-3_amd64.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2568518Z Unpacking lua-filesystem:amd64 (1.8.0-3) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2808019Z Selecting previously unselected package lua5.1.
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2937988Z Preparing to unpack .../lua5.1_5.1.5-9build2_amd64.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.2947973Z Unpacking lua5.1 (5.1.5-9build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.3284131Z Selecting previously unselected package lua-check.
+test	Run luacheck type check / linter	2025-12-01T03:16:19.3414237Z Preparing to unpack .../lua-check_1.1.2-1_all.deb ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.3426213Z Unpacking lua-check (1.1.2-1) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4146810Z Setting up lua5.1 (5.1.5-9build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4210888Z update-alternatives: using /usr/bin/lua5.1 to provide /usr/bin/lua (lua-interpreter) in auto mode
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4261325Z update-alternatives: using /usr/bin/luac5.1 to provide /usr/bin/luac (lua-compiler) in auto mode
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4289767Z Setting up lua-filesystem:amd64 (1.8.0-3) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4315794Z Setting up lua-argparse (0.7.1-2) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4376472Z Setting up lua-check (1.1.2-1) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4409208Z Processing triggers for man-db (2.12.0-4build2) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4537236Z Not building database; man-db/auto-update is not 'true'.
+test	Run luacheck type check / linter	2025-12-01T03:16:19.4551176Z Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+test	Run luacheck type check / linter	2025-12-01T03:16:24.1371039Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:24.1371697Z Running kernel seems to be up-to-date.
+test	Run luacheck type check / linter	2025-12-01T03:16:24.1372085Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:24.1372237Z No services need to be restarted.
+test	Run luacheck type check / linter	2025-12-01T03:16:24.1372549Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2846983Z No containers need to be restarted.
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2847366Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2847550Z No user sessions are running outdated binaries.
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2847894Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2848233Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2849293Z Checking check_parsers.lua                        [0m[31m[1m1 warning[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2849735Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2850092Z     check_parsers.lua:24:14: unused variable [0m[1mts_configs[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2850501Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2850872Z Checking checks/rogue_util_calls_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2852040Z Checking lua/treewalker/augment.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2852890Z Checking lua/treewalker/init.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2853672Z Checking lua/treewalker/lines.lua                 [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2854789Z Checking lua/treewalker/markdown/ast_utils.lua    [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2855617Z Checking lua/treewalker/markdown/heading.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2856449Z Checking lua/treewalker/markdown/navigation.lua   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2857434Z Checking lua/treewalker/markdown/section_utils.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2858261Z Checking lua/treewalker/markdown/selectors.lua    [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2859055Z Checking lua/treewalker/markdown/sibling_utils.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2859789Z Checking lua/treewalker/markdown/swap/section.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2860396Z Checking lua/treewalker/markdown/targets.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2860870Z Checking lua/treewalker/markdown/validation.lua   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2861351Z Checking lua/treewalker/movement.lua              [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2862011Z Checking lua/treewalker/nodes.lua                 [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2862489Z Checking lua/treewalker/operations.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2862940Z Checking lua/treewalker/options.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2863398Z Checking lua/treewalker/strategies.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2863933Z Checking lua/treewalker/swap.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2864757Z Checking lua/treewalker/targets.lua               [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2865551Z Checking lua/treewalker/util.lua                  [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2866323Z Checking plugin/init.lua                          [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2866800Z Checking tests/load_fixture.lua                   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2867251Z Checking tests/minimal_init.lua                   [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2867701Z Checking tests/treewalker/c_sharp_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2868161Z Checking tests/treewalker/c_spec.lua              [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2868610Z Checking tests/treewalker/haskell_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2869073Z Checking tests/treewalker/helpers.lua             [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2869748Z Checking tests/treewalker/highlight_spec.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2870222Z Checking tests/treewalker/html_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2870685Z Checking tests/treewalker/java_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2871119Z make: *** [Makefile:30: check] Error 1
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2871678Z Checking tests/treewalker/javascript_spec.lua     [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2872151Z Checking tests/treewalker/jump_list_spec.lua      [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2872625Z Checking tests/treewalker/lines_spec.lua          [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2873078Z Checking tests/treewalker/lua_spec.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2873541Z Checking tests/treewalker/lua_spec_spec.lua       [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2873989Z Checking tests/treewalker/markdown_spec.lua       [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2874451Z Checking tests/treewalker/missing_parser_spec.lua [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2874908Z Checking tests/treewalker/options_spec.lua        [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2875353Z Checking tests/treewalker/php_spec.lua            [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2875820Z Checking tests/treewalker/python_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2876266Z Checking tests/treewalker/ruby_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2876711Z Checking tests/treewalker/rust_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2877153Z Checking tests/treewalker/select_spec.lua         [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2877611Z Checking tests/treewalker/typescript_spec.lua     [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2878254Z Checking tests/treewalker/util_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2878697Z Checking tests/treewalker/yaml_spec.lua           [0m[32m[1mOK[0m
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2878942Z 
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2879261Z Total: [0m[31m[1m1[0m warning / [0m[0m[1m0[0m errors in 48 files
+test	Run luacheck type check / linter	2025-12-01T03:16:25.2889635Z ##[error]Process completed with exit code 2.
+test	Post Checkout Code	﻿2025-12-01T03:16:25.2983283Z Post job cleanup.
+test	Post Checkout Code	2025-12-01T03:16:25.3683290Z [command]/usr/bin/git version
+test	Post Checkout Code	2025-12-01T03:16:25.3716427Z git version 2.51.2
+test	Post Checkout Code	2025-12-01T03:16:25.3757322Z Temporarily overriding HOME='/home/runner/work/_temp/1fe9f4e6-757c-4964-9423-3f491ce7cdd7' before making global git config changes
+test	Post Checkout Code	2025-12-01T03:16:25.3758240Z Adding repository directory to the temporary git global config as a safe directory
+test	Post Checkout Code	2025-12-01T03:16:25.3760974Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/treewalker.nvim/treewalker.nvim
+test	Post Checkout Code	2025-12-01T03:16:25.3790601Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+test	Post Checkout Code	2025-12-01T03:16:25.3818460Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+test	Post Checkout Code	2025-12-01T03:16:25.4039091Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+test	Post Checkout Code	2025-12-01T03:16:25.4058248Z http.https://github.com/.extraheader
+test	Post Checkout Code	2025-12-01T03:16:25.4069307Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+test	Post Checkout Code	2025-12-01T03:16:25.4096382Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+test	Complete job	﻿2025-12-01T03:16:25.4413549Z Cleaning up orphan processes

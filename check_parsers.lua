@@ -21,7 +21,7 @@ end
 
 print("")
 print("nvim-treesitter installation:")
-local ts_ok, ts_configs = pcall(require, 'nvim-treesitter.configs')
+local ts_ok = pcall(require, 'nvim-treesitter.configs')
 if ts_ok then
   print("  nvim-treesitter is loaded")
   local parsers = require('nvim-treesitter.parsers')
