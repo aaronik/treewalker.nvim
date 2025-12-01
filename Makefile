@@ -15,7 +15,7 @@ test-watch: ## uses [nodemon](https://nodemon.io/) - watches for changes to lua 
 	@nodemon -e lua -x "$(MAKE) test || exit 1"
 
 test-ubuntu: ## Run tests in Ubuntu Docker container (matches CI environment)
-	@docker run --rm -v $$(PWD):/workspace -w /workspace ubuntu:latest bash -c "\
+	docker run --rm -v $$(PWD):/workspace -w /workspace ubuntu:latest bash -c "\
 		apt-get update -qq && \
 		apt-get install -y -qq software-properties-common git curl make apt-utils gcc && \
 		add-apt-repository -y ppa:neovim-ppa/unstable && \

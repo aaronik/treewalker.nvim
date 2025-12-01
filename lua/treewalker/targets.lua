@@ -17,7 +17,8 @@ function M.out(node)
   -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
   -- but does fail on CI. TODO figure out the differences)
   if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
-    node = M.down(node, nodes.get_srow(node)) or node
+    local next_node = nodes.get_from_neighboring_line(nodes.get_srow(node), "down")
+    node = next_node or node:parent() or node
   end
 
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
