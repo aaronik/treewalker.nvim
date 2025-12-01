@@ -27,6 +27,8 @@ jobs:
     - name: Install nvim-treesitter
       run: |
         mkdir -p $HOME/.local/share/nvim/lazy/
+        # TODO specifying 0.10.0 is a workaround - something later than it is
+        # breaking ts/java comment nodes
         git clone --depth 1 --branch v0.10.0 https://github.com/nvim-treesitter/nvim-treesitter.git
         mv nvim-treesitter $HOME/.local/share/nvim/lazy/
 
@@ -37,20 +39,6 @@ jobs:
 
     - name: Check for errant util calls
       run: make no-utils
-
-    - name: Check Parser Information
-      run: |
-        echo "=== Parser Information ==="
-        make check-parsers
-        echo ""
-        echo "=== Saving Treesitter Trees ==="
-        make save-trees
-        echo ""
-        echo "=== TypeScript Tree (first 50 lines) ==="
-        head -50 ts_tree_local.txt
-        echo ""
-        echo "=== Java Tree (first 50 lines) ==="
-        head -50 java_tree_local.txt
 
     - name: Run Tests
       run: make test
