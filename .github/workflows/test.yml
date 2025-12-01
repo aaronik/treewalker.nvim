@@ -42,6 +42,54 @@ jobs:
     - name: Check for errant util calls
       run: make no-utils
 
+    - name: Inspect Parser Environment (Pre-Test)
+      run: |
+        echo "=== Neovim Version ==="
+        nvim --version | head -3
+        echo ""
+        echo "=== System Info ==="
+        uname -a
+        gcc --version | head -1
+        echo ""
+        echo "=== nvim-treesitter Git Info ==="
+        cd $HOME/.local/share/nvim/lazy/nvim-treesitter
+        git log --oneline -1
+        git describe --tags --always
+        echo ""
+        echo "=== Parser Directory State (Before Tests) ==="
+        ls -lah $HOME/.local/share/nvim/lazy/nvim-treesitter/parser/ 2>&1 || echo "Parser directory does not exist yet"
+
     - name: Run Tests
       run: make test
+
+    - name: Inspect Parser Binaries (Post-Test)
+      if: always()
+      run: |
+        echo "=== Parser Directory State (After Tests) ==="
+        ls -lah $HOME/.local/share/nvim/lazy/nvim-treesitter/parser/
+        echo ""
+        echo "=== Parser Binary Checksums ==="
+        cd $HOME/.local/share/nvim/lazy/nvim-treesitter/parser/
+        for parser in *.so; do
+          echo "File: $parser"
+          ls -lh "$parser"
+          md5sum "$parser"
+          file "$parser"
+          echo ""
+        done
+        echo ""
+        echo "=== Dump TypeScript Test Tree Structure ==="
+        cd $GITHUB_WORKSPACE
+        nvim --headless -u tests/minimal_init.lua \
+          -c "edit tests/fixtures/typescript.ts" \
+          -c "lua vim.fn.cursor(121, 3)" \
+          -c "lua local node = vim.treesitter.get_node(); print('Current node at 121,3:'); print('  Type: ' .. node:type()); print('  Range: ' .. node:range()); local parent = node:parent(); if parent then print('Parent node:'); print('  Type: ' .. parent:type()); print('  Range: ' .. parent:range()) end" \
+          -c "qa!" 2>&1 || echo "Tree dump failed"
+        echo ""
+        echo "=== Dump Java Test Tree Structure ==="
+        nvim --headless -u tests/minimal_init.lua \
+          -c "edit tests/fixtures/java.java" \
+          -c "lua vim.fn.cursor(31, 1)" \
+          -c "lua local node = vim.treesitter.get_node(); print('Current node at 31,1:'); print('  Type: ' .. node:type()); print('  Range: ' .. node:range()); local parent = node:parent(); if parent then print('Parent node:'); print('  Type: ' .. parent:type()); print('  Range: ' .. parent:range()) end" \
+          -c "qa!" 2>&1 || echo "Tree dump failed"
 

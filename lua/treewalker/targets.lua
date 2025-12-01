@@ -16,12 +16,8 @@ function M.out(node)
   -- node below the comment
   -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
   -- but does fail on CI. TODO figure out the differences)
-  -- On CI, comment nodes behave differently - work from parent instead
   if nodes.is_comment_node(node) or nodes.is_augment_target(node) then
-    local parent = node:parent()
-    if parent then
-      node = parent
-    end
+    node = M.down(node, nodes.get_srow(node)) or node
   end
 
   local candidate = strategies.get_first_ancestor_with_diff_scol(node)
