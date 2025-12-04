@@ -1,9 +1,19 @@
 local nodes = require "treewalker.nodes"
 local strategies = require "treewalker.strategies"
 local util = require "treewalker.util"
+local lines = require "treewalker.lines"
 local markdown_targets = require "treewalker.markdown.targets"
 
 local M = {}
+
+-- Get visual column for node's starting position
+-- This matches lines.get_start_col() used in strategies.lua
+-- Needed because get_scol() returns byte column, but strategies uses visual column
+local function get_visual_col(node)
+  local node_srow = nodes.get_srow(node)
+  local line = lines.get_line(node_srow)
+  return line and lines.get_start_col(line) or nodes.get_scol(node)
+end
 
 ---@param node TSNode
 ---@return TSNode | nil, integer | nil
@@ -45,7 +55,7 @@ function M.up(current_node, current_row)
   if util.is_markdown_file() then
     return markdown_targets.up()
   end
-  local current_col = nodes.get_scol(current_node)
+  local current_col = get_visual_col(current_node)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
   return candidate, candidate_row
 end
@@ -57,7 +67,7 @@ function M.down(current_node, current_row)
   if util.is_markdown_file() then
     return markdown_targets.down()
   end
-  local current_col = nodes.get_scol(current_node)
+  local current_col = get_visual_col(current_node)
   local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
   return candidate, candidate_row
 end
