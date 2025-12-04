@@ -12,7 +12,12 @@ local function current()
   local current_row = vim.fn.line(".")
   local current_node = nodes.get_current()
   local highest_coincident = nodes.get_highest_row_coincident(current_node)
-  return current_row, nodes.get_scol(highest_coincident)
+  -- Use visual column to match lines.get_start_col() in strategies.lua
+  -- Get line from node's starting row (node may start on different row than cursor)
+  local node_srow = nodes.get_srow(highest_coincident)
+  local line = lines.get_line(node_srow)
+  local col = line and lines.get_start_col(line) or nodes.get_scol(highest_coincident)
+  return current_row, col
 end
 
 ---Get the highest coincident; helper
