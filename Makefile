@@ -16,14 +16,14 @@ test-watch: ## uses [nodemon](https://nodemon.io/) - watches for changes to lua 
 
 test-ubuntu: ## Run tests in Ubuntu Docker container (matches CI environment)
 	@docker run --rm -v $$(PWD):/workspace -w /workspace ubuntu:latest bash -c "\
-		apt-get update -qq && \
-		apt-get install -y -qq software-properties-common git curl make apt-utils gcc && \
+		apt-get update && \
+		apt-get install -y software-properties-common git curl make apt-utils gcc && \
 		add-apt-repository -y ppa:neovim-ppa/unstable && \
-		apt-get update -qq && \
-		apt-get install -y -qq neovim lua-check && \
+		apt-get update && \
+		apt-get install -y neovim lua-check && \
 		mkdir -p /root/.local/share/nvim/lazy/ && \
-		git clone --depth 1 -q https://github.com/nvim-lua/plenary.nvim.git /root/.local/share/nvim/lazy/plenary.nvim && \
-		git clone --depth 1 -q https://github.com/nvim-treesitter/nvim-treesitter.git /root/.local/share/nvim/lazy/nvim-treesitter && \
+		git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git /root/.local/share/nvim/lazy/plenary.nvim && \
+		git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git /root/.local/share/nvim/lazy/nvim-treesitter && \
 		make test"
 
 check: ## uses [luacheck](https://github.com/mpeterv/luacheck) - checks for any type errors or style issues
