@@ -19,7 +19,7 @@ describe("util", function()
     end)
   end)
 
-  describe("log", function()
+  describe("log_file", function()
     it("works", function()
       local io_open_stub = stub.new(io, "open")
 
@@ -44,7 +44,7 @@ describe("util", function()
 
       io_open_stub.returns(log_file)
 
-      util.log(1, 2, 3, 4, 5)
+      util.log_file(1, 2, 3, 4, 5)
 
       assert.same({ "1\n", "2\n", "3\n", "4\n", "5\n", }, writes)
       assert.equal(1, num_flushes)
