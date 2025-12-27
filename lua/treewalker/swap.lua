@@ -38,6 +38,24 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
+---@param current_node TSNode
+---@param candidate TSNode
+---@return boolean
+local function should_confine_swap(current_node, candidate)
+  local opts = require('treewalker').opts
+  if opts.scope_confined ~= true then
+    return false
+  end
+
+  local current_parent = nodes.scope_parent(current_node)
+  if not current_parent then
+    return false
+  end
+
+  local candidate_anchor = nodes.get_highest_row_coincident(candidate)
+  return not nodes.is_descendant_of(current_parent, candidate_anchor)
+end
+
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
@@ -49,6 +67,10 @@ function M.swap_down()
 
   local target = targets.down(current, row)
   if not target then return end
+
+  if should_confine_swap(current, target) then
+    return
+  end
 
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
@@ -81,6 +103,10 @@ function M.swap_up()
   local current, row = nodes.get_highest_node_at_current_row()
   local target = targets.up(current, row)
   if not target then return end
+
+  if should_confine_swap(current, target) then
+    return
+  end
 
   local current_augments = augment.get_node_augments(current)
   local current_all = { current, unpack(current_augments) }
@@ -121,6 +147,10 @@ function M.swap_right()
 
   if not current or not target then return end
 
+  if should_confine_swap(current, target) then
+    return
+  end
+
   -- set a mark to track where the target started, so we may later go there after the swap
   local ns_id = vim.api.nvim_create_namespace("treewalker#swap_right")
   local ext_id = vim.api.nvim_buf_set_extmark(
@@ -157,6 +187,10 @@ function M.swap_left()
   local target = nodes.prev_sib(current)
 
   if not current or not target then return end
+
+  if should_confine_swap(current, target) then
+    return
+  end
 
   operations.swap_nodes(target, current)
 

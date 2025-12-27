@@ -157,4 +157,39 @@ function M.assert_confined_by_parent(row, col, direction)
 	assert(vim.treesitter.is_ancestor(scope_parent, after_anchor))
 end
 
+---
+--- Swap should also respect scope_confined: when swapping at the edge of the current
+--- scope, it should not swap with a node outside that scope.
+---
+---@param row integer
+---@param col integer
+---@param direction 'up'|'down'|'left'|'right'
+function M.assert_swap_confined_by_parent(row, col, direction)
+	local nodes = require("treewalker.nodes")
+
+	vim.fn.cursor(row, col)
+
+	local before = nodes.get_highest_row_coincident(nodes.get_highest_node_at_current_row())
+	local scope_parent = before:parent()
+
+	assert(scope_parent ~= nil, "test must start within a non-top-level scope")
+
+	local original = lines.get_lines(0, -1)
+
+	if direction == "up" then
+		tw.swap_up()
+	elseif direction == "down" then
+		tw.swap_down()
+	elseif direction == "left" then
+		tw.swap_left()
+	elseif direction == "right" then
+		tw.swap_right()
+	else
+		error("invalid direction: " .. tostring(direction))
+	end
+
+	-- Should not have swapped across the scope boundary.
+	assert.same(original, lines.get_lines(0, -1))
+end
+
 return M

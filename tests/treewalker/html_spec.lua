@@ -65,5 +65,21 @@ describe("In an html file", function()
     it("confines move_up", function()
       h.assert_confined_by_parent(15, 1, 'up')
     end)
+
+    it("confines swap_down", function()
+      h.assert_swap_confined_by_parent(15, 1, 'down')
+    end)
+
+    it("confines swap_up", function()
+      h.assert_swap_confined_by_parent(15, 1, 'up')
+    end)
+
+    it("confines swap_right", function()
+      h.assert_swap_confined_by_parent(15, 1, 'right')
+    end)
+
+    it("confines swap_left", function()
+      h.assert_swap_confined_by_parent(15, 1, 'left')
+    end)
   end)
 end)

@@ -28,5 +28,21 @@ describe("Swapping in a typescript file:", function()
     it("confines move_up", function()
       h.assert_confined_by_parent(7, 1, 'up')
     end)
+
+    it("confines swap_down", function()
+      h.assert_swap_confined_by_parent(5, 3, 'down')
+    end)
+
+    it("confines swap_up", function()
+      h.assert_swap_confined_by_parent(7, 1, 'up')
+    end)
+
+    it("confines swap_right", function()
+      h.assert_swap_confined_by_parent(5, 3, 'right')
+    end)
+
+    it("confines swap_left", function()
+      h.assert_swap_confined_by_parent(7, 1, 'left')
+    end)
   end)
 end)
