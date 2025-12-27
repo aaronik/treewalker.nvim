@@ -154,6 +154,13 @@ Treewalker aims for sane behavior, but you can modify some via the options below
   --          likely jump to cause location confusion, so use this to minimize writes
   --          to the jumplist, while maintaining some ability to go back.
   jumplist = true,
+
+  -- Whether movement, when inside the scope of some node, should be confined to that scope.
+  -- When true, when moving through neighboring nodes inside some node, you won't be able to
+  -- move outside of that scope via :Treewalker Up/Down. When false, if on a node at the end
+  -- of a scope, movement will bring you to the next node of similar indentation/number of
+  -- ancestor nodes, even when it is outside of the scope you're currently in.
+  scope_confined = false,
 }
 ```
 

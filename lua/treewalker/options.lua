@@ -7,7 +7,8 @@ local M = {}
 ---    jumplist: boolean | 'left',
 ---    highlight_group: string,
 ---    select: boolean,
----    notifications: boolean }
+---    notifications: boolean,
+---    scope_confined: boolean }
 
 ---@param opts Opts
 ---@return boolean, table<string>
@@ -39,6 +40,10 @@ function M.validate_opts(opts)
 
   if type(opts.notifications) ~= "boolean" and opts.notifications ~= nil then
     table.insert(errors, "`notifications` should be boolean or nil")
+  end
+
+  if type(opts.scope_confined) ~= "boolean" and opts.scope_confined ~= nil then
+    table.insert(errors, "`scope_confined` should be boolean or nil")
   end
 
   if #errors == 0 then

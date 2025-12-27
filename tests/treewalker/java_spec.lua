@@ -142,4 +142,17 @@ describe("In a java file:", function()
     tw.move_out()
     h.assert_cursor_at(13, 1) -- public class JavaDemo
   end)
+  describe("scope_confined", function()
+    before_each(function()
+      tw.setup({ scope_confined = true })
+    end)
+
+    it("confines move_down", function()
+      h.assert_confined_by_parent(24, 1, 'down')
+    end)
+
+    it("confines move_up", function()
+      h.assert_confined_by_parent(29, 1, 'up')
+    end)
+  end)
 end)

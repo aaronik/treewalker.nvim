@@ -47,4 +47,18 @@ describe("Movement in Go file with tab indentation:", function()
     local row = vim.fn.line('.')
     assert.equals(19, row, "Should move from main to helper (line 19)")
   end)
+
+  describe("scope_confined", function()
+    before_each(function()
+      tw.setup({ scope_confined = true })
+    end)
+
+    it("confines move_down", function()
+      h.assert_confined_by_parent(17, 1, 'down')
+    end)
+
+    it("confines move_up", function()
+      h.assert_confined_by_parent(16, 1, 'up')
+    end)
+  end)
 end)

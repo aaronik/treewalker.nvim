@@ -24,6 +24,24 @@ local function add_jumplist_for_move(command)
   end
 end
 
+---@param current_node TSNode
+---@param candidate TSNode
+---@return boolean
+local function should_confine_vertical_move(current_node, candidate)
+  local opts = require('treewalker').opts
+  if opts.scope_confined ~= true then
+    return false
+  end
+
+  local current_parent = nodes.scope_parent(current_node)
+  if not current_parent then
+    return false
+  end
+
+  local candidate_anchor = nodes.get_highest_row_coincident(candidate)
+  return not nodes.is_descendant_of(current_parent, candidate_anchor)
+end
+
 ---@return nil
 function M.move_out()
   -- Add to jumplist at original cursor position before normalizing
@@ -55,6 +73,10 @@ function M.move_up()
   local target, row = targets.up(current_node, current_row)
   if not target or not row then return end
 
+  if should_confine_vertical_move(current_node, target) then
+    return
+  end
+
   local is_neighbor = nodes.have_neighbor_srow(current_node, target)
 
   if not is_neighbor then
@@ -69,6 +91,10 @@ function M.move_down()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
   local target, row = targets.down(current_node, current_row)
   if not target or not row then return end
+
+  if should_confine_vertical_move(current_node, target) then
+    return
+  end
 
   local is_neighbor = nodes.have_neighbor_srow(current_node, target)
 

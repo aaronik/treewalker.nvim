@@ -207,6 +207,27 @@ function M.get_descendants(node)
   return descendants
 end
 
+---@param parent TSNode
+---@param node TSNode
+---@return boolean
+function M.is_descendant_of(parent, node)
+  local iter = node
+  while iter do
+    if iter == parent then
+      return true
+    end
+    iter = iter:parent()
+  end
+  return false
+end
+
+---@param node TSNode
+---@return TSNode|nil
+function M.scope_parent(node)
+  local anchor = M.get_highest_row_coincident(node)
+  return anchor:parent()
+end
+
 -- Take row, give next row / node with same indentation
 ---@param current_row integer
 ---@param dir "up" | "down"

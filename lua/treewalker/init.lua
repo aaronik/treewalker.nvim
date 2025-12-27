@@ -13,6 +13,7 @@ Treewalker.opts = {
   jumplist = true,
   select = false,
   notifications = true,
+  scope_confined = false,
 }
 
 -- This does not need to be called for Treewalker to work. The defaults are preinitialized and aim to be sane.
