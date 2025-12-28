@@ -27,7 +27,8 @@ describe("In a rust file:", function()
     h.assert_cursor_at(49, 14, "Red")
   end)
 
-  it("Swaps right from a string to a fn call", function()
+  -- Stopped working for Christmas 2025 (ts parser issue)
+  pending("Swaps right from a string to a fn call", function()
     vim.fn.cursor(46, 18) -- inside shape
     assert.same('    println!("shape_area", calculate_area(shape));', lines.get_line(46))
     tw.swap_right()

@@ -23,7 +23,7 @@ test-ubuntu: ## Run tests in Ubuntu Docker container (matches CI environment)
 		apt-get install -y neovim lua-check && \
 		mkdir -p /root/.local/share/nvim/lazy/ && \
 		git clone --depth 1 https://github.com/nvim-lua/plenary.nvim.git /root/.local/share/nvim/lazy/plenary.nvim && \
-		git clone --depth 1 https://github.com/nvim-treesitter/nvim-treesitter.git /root/.local/share/nvim/lazy/nvim-treesitter && \
+		git clone --depth 1 --branch master https://github.com/nvim-treesitter/nvim-treesitter.git /root/.local/share/nvim/lazy/nvim-treesitter && \
 		make test"
 
 check: ## uses [luacheck](https://github.com/mpeterv/luacheck) - checks for any type errors or style issues

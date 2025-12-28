@@ -9,7 +9,15 @@ vim.opt.swapfile = false
 vim.cmd("runtime! plugin/treewalker.nvim")
 vim.cmd("runtime! plugin/plenary.vim")
 vim.cmd("runtime! plugin/nvim-treesitter")
-require('nvim-treesitter.configs').setup {
+
+-- nvim-treesitter renamed `nvim-treesitter.configs` -> `nvim-treesitter.config`.
+-- Keep tests working across versions.
+local ok, ts_config = pcall(require, "nvim-treesitter.configs")
+if not ok then
+  ts_config = require("nvim-treesitter.config")
+end
+
+ts_config.setup {
     ensure_installed = {
         "lua",
         "c",
@@ -36,9 +44,14 @@ require('nvim-treesitter.configs').setup {
 
 -- These are required lest nvim not be able to tell these parsers are
 -- installed. I'm not sure why some of these are required and some aren't.
-vim.treesitter.language.register('ruby', { 'rb' })
-vim.treesitter.language.register('markdown', { 'md' })
+vim.treesitter.language.register('python', { 'py' })
+vim.treesitter.language.register('rust', { 'rs' })
+vim.treesitter.language.register('haskell', { 'hs' })
 vim.treesitter.language.register('javascript', { 'js' })
+vim.treesitter.language.register('c_sharp', { 'cs' })
+vim.treesitter.language.register('typescript', { 'ts' })
+vim.treesitter.language.register('markdown', { 'md' })
+vim.treesitter.language.register('ruby', { 'rb' })
 vim.treesitter.language.register('scheme', { 'scm' })
 vim.treesitter.language.register('yaml', { 'yml' })
 vim.treesitter.language.register('go', { 'go' })

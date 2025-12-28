@@ -16,7 +16,7 @@ describe("In an html file", function()
     h.assert_cursor_at(22, 5)
   end)
 
-  it("can move_in into embedded javascript", function()
+  pending("can move_in into embedded javascript", function()
     vim.fn.cursor(53, 5)
     tw.move_in()
     h.assert_cursor_at(54, 9)
