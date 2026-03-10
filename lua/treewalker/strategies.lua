@@ -38,14 +38,65 @@ local nodes = require('treewalker.nodes')
 
 local M = {}
 
+---@param node TSNode
+---@return boolean
+local function has_augment_child(node)
+  local iter = node:iter_children()
+  local child = iter()
+
+  while child do
+    if nodes.is_augment_target(child) then
+      return true
+    end
+
+    child = iter()
+  end
+
+  return false
+end
+
+---@param current_node TSNode
+---@param node TSNode
+---@param col integer
+---@param row integer
+---@return boolean
+local function has_same_indent_jump_ancestor(current_node, node, col, row)
+  local parent = node:parent()
+  local iter = parent
+
+  while iter do
+    local iter_row = nodes.get_srow(iter)
+    local iter_line = lines.get_line(iter_row)
+
+    if
+      iter_row < row
+      and iter_line
+      and nodes.is_highlight_target(iter)
+      and not has_augment_child(iter)
+      and lines.get_start_col(iter_line) == col
+    then
+      if iter == current_node then
+        return parent ~= current_node
+      end
+
+      return true
+    end
+
+    iter = iter:parent()
+  end
+
+  return false
+end
+
 -- Gets the next target in the up/down directions
 ---@param dir "up" | "down"
+---@param current_node TSNode
 ---@param srow integer
 ---@param scol integer
 ---@param prev_candidate TSNode | nil
 ---@param prev_row integer | nil
 ---@return  TSNode | nil, integer | nil
-function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
+function M.get_neighbor_at_same_col(dir, current_node, srow, scol, prev_candidate, prev_row)
   local candidate, candidate_row, candidate_line = nodes.get_from_neighboring_line(srow, dir)
 
   while candidate and candidate_row and candidate_line do
@@ -55,6 +106,7 @@ function M.get_neighbor_at_same_col(dir, srow, scol, prev_candidate, prev_row)
         nodes.is_jump_target(candidate) -- only node types we consider jump targets
         and candidate_line ~= ""      -- no empty lines
         and candidate_col == scol     -- stay at current indent level
+        and not has_same_indent_jump_ancestor(current_node, candidate, candidate_col, candidate_row)
         and candidate_row == strow + 1 -- top of block; no end's or else's etc.
     then
       break                           -- use most recent assignment below

@@ -56,7 +56,14 @@ function M.up(current_node, current_row)
     return markdown_targets.up()
   end
   local current_col = get_visual_col(current_node)
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("up", current_row, current_col, nil, nil)
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col(
+    "up",
+    current_node,
+    current_row,
+    current_col,
+    nil,
+    nil
+  )
   return candidate, candidate_row
 end
 
@@ -68,7 +75,14 @@ function M.down(current_node, current_row)
     return markdown_targets.down()
   end
   local current_col = get_visual_col(current_node)
-  local candidate, candidate_row = strategies.get_neighbor_at_same_col("down", current_row, current_col, nil, nil)
+  local candidate, candidate_row = strategies.get_neighbor_at_same_col(
+    "down",
+    current_node,
+    current_row,
+    current_col,
+    nil,
+    nil
+  )
   return candidate, candidate_row
 end
 

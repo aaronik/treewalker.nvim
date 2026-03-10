@@ -125,3 +125,11 @@ class Ok {
     console.log(who)
   }
 }
+
+const thingy: Thingy = Stuff(
+'Thingy'
+)
+
+const moar_thingy: Thingy = Stuff(
+'Moar_thingy'
+)

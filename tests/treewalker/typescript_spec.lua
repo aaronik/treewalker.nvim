@@ -58,11 +58,11 @@ describe("In a typescript file:", function()
 
   it("Moves down from the start of a comment", function()
     -- From the comment opener "/**"
-    vim.fn.cursor(114, 1) -- At "/**"
+    vim.fn.cursor(114, 1)      -- At "/**"
     tw.move_down()
     h.assert_cursor_at(117, 1) -- This should consistently work
 
-    vim.fn.cursor(114, 2) -- At "*" in "/**"
+    vim.fn.cursor(114, 2)      -- At "*" in "/**"
     tw.move_down()
     h.assert_cursor_at(117, 1)
 
@@ -71,11 +71,11 @@ describe("In a typescript file:", function()
     h.assert_cursor_at(117, 1)
 
     -- From the comment closer "*/"
-    vim.fn.cursor(116, 1) -- At "*/"
+    vim.fn.cursor(116, 1)      -- At "*/"
     tw.move_down()
     h.assert_cursor_at(117, 1) -- This should consistently work
 
-    vim.fn.cursor(116, 2) -- At "/" in "*/"
+    vim.fn.cursor(116, 2)      -- At "/" in "*/"
     tw.move_down()
     h.assert_cursor_at(117, 1)
   end)
@@ -178,6 +178,17 @@ describe("In a typescript file:", function()
     tw.move_out()
     h.assert_cursor_at(119, 1)
   end)
+
+  describe("weirdly indented code", function()
+    it("correctly moves across siblings, not getting stuck at indentation", function()
+      vim.fn.cursor(129, 1)
+      tw.move_down()
+      h.assert_cursor_at(133, 1)
+      tw.move_up()
+      h.assert_cursor_at(129, 1)
+    end)
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })
