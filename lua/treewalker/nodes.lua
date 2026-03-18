@@ -1,120 +1,7 @@
+local classify = require "treewalker.classify"
 local lines = require "treewalker.lines"
 
--- These are regexes but just happen to be real simple so far
-local TARGET_BLACKLIST_TYPE_MATCHERS = {
-  "comment",
-  "source",             -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
-  "text",               -- Same as above but with java
-  "attribute_item",     -- decorators (rust)
-  "decorat",            -- decorators (py)
-  "else",               -- else/elseif statements (lua)
-  "elif",               -- else/elseif statements (py)
-  "end_tag",            -- html closing tags
-  "declaration_list",   -- C# class blocks
-  "compound_statement", -- C blocks when defined under their fn names like a psycho
-  "c_sharp:block",      -- C# block nodes (language-specific)
-}
-
-local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
-  "body",
-  "block",
-}
-
-local AUGMENT_TARGET_TYPE_MATCHERS = {
-  "comment",
-  "source",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
-  "text",           -- Same as above but with java
-  "attribute_item", -- decorators (rust)
-  "decorat",        -- decorators (py)
-}
-
 local M = {}
-
----Get the parser name for the current buffer
----@return string|nil
-local function get_parser_name()
-  local ok, parser = pcall(vim.treesitter.get_parser, 0)
-  if not ok or not parser then
-    return nil
-  end
-
-  local ok_lang, lang = pcall(parser.lang, parser)
-  if not ok_lang then
-    return nil
-  end
-
-  return lang
-end
-
----@param node TSNode
----@param matchers string[]
----@return boolean
-local function is_matched_in(node, matchers)
-  local parser_name = get_parser_name()
-
-  for _, matcher in ipairs(matchers) do
-    -- Check if matcher is language-specific (contains ':')
-    if matcher:find(":") then
-      local lang, node_type = matcher:match("([^:]+):(.+)")
-      -- Only apply this matcher if we're in the specified language
-      if parser_name and lang == parser_name and node:type():match(node_type) then
-        return true
-      end
-    else
-      -- Regular matcher, apply to all languages
-      if node:type():match(matcher) then
-        return true
-      end
-    end
-  end
-  return false
-end
-
----@param node TSNode
----@return boolean
-local function is_root_node(node)
-  return
-      true
-      and node:parent() == nil
-      and node:range() == 0
-end
-
----@param node TSNode
----@return boolean
-function M.is_jump_target(node)
-  return
-      true
-      and not is_matched_in(node, TARGET_BLACKLIST_TYPE_MATCHERS)
-      and not is_root_node(node)
-end
-
----@param node TSNode
----@return boolean
-function M.is_highlight_target(node)
-  return
-      true
-      and not is_matched_in(node, HIGHLIGHT_BLACKLIST_TYPE_MATCHERS)
-      and not is_root_node(node)
-end
-
----@param node TSNode
----@return boolean
-function M.is_augment_target(node)
-  return
-      true
-      and is_matched_in(node, AUGMENT_TARGET_TYPE_MATCHERS)
-      and not is_root_node(node)
-end
-
----@param node TSNode
----@return boolean
-function M.is_comment_node(node)
-  return
-      true
-      and node:type():match("comment")
-      or node:type():match("source")
-      or node:type():match("text")
-end
 
 ---Do the nodes have the same starting row
 ---@param node1 TSNode
@@ -235,7 +122,7 @@ function M.get_highest_row_coincident(node)
     -- necessary for when brackets are on lines below definitions
     -- TODO This does not belong here, but its behavior is deeply rooted.
     -- Neets to be rooted out.
-    if M.is_highlight_target(iter) then node = iter end
+    if classify.is_highlight_target(iter) then node = iter end
     iter = iter:parent()
   end
   return node
@@ -247,7 +134,7 @@ end
 function M.get_highest_coincident(node)
   local iter = node:parent()
   while iter and M.have_same_srow(node, iter) and M.have_same_scol(node, iter) do
-    if M.is_highlight_target(iter) then node = iter end
+    if classify.is_highlight_target(iter) then node = iter end
     iter = iter:parent()
   end
   return node

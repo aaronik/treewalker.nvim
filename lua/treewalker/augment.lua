@@ -1,3 +1,4 @@
+local classify = require "treewalker.classify"
 local nodes = require "treewalker.nodes"
 
 local M = {}
@@ -15,7 +16,7 @@ function M.get_node_augments(node)
   local augments = {}
   while true do
     local candidate = nodes.get_from_neighboring_line(row, "up")
-    if candidate and nodes.is_augment_target(candidate) then
+    if candidate and classify.is_augment_target(candidate) then
       table.insert(augments, candidate)
       row = nodes.get_srow(candidate)
     else

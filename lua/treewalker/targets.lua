@@ -1,5 +1,6 @@
 -- Target selection helpers for Treewalker movement and swap.
 
+local classify = require('treewalker.classify')
 local lines = require('treewalker.lines')
 local nodes = require('treewalker.nodes')
 
@@ -22,7 +23,7 @@ local function has_augment_child(node)
   local child = iter()
 
   while child do
-    if nodes.is_augment_target(child) then
+    if classify.is_augment_target(child) then
       return true
     end
 
@@ -48,7 +49,7 @@ local function has_same_indent_jump_ancestor(current_node, node, col, row)
     if
       iter_row < row
       and iter_line
-      and nodes.is_highlight_target(iter)
+      and classify.is_highlight_target(iter)
       and not has_augment_child(iter)
       and lines.get_start_col(iter_line) == col
     then
@@ -77,7 +78,7 @@ local function find_neighbor_at_same_col(dir, current_node, srow, scol)
     local candidate_col = lines.get_start_col(candidate_line)
     local strow = candidate:range()
     if
-        nodes.is_jump_target(candidate)
+        classify.is_jump_target(candidate)
         and candidate_line ~= ""
         and candidate_col == scol
         and not has_same_indent_jump_ancestor(current_node, candidate, candidate_col, candidate_row)
@@ -111,7 +112,7 @@ local function find_down_and_in(srow, scol)
 
     if candidate_col == scol or not candidate then
       goto continue
-    elseif candidate_col > scol and nodes.is_jump_target(candidate) then
+    elseif candidate_col > scol and classify.is_jump_target(candidate) then
       return candidate, candidate_row
     elseif candidate_col < scol and not is_empty then
       break
@@ -127,7 +128,7 @@ end
 local function find_first_ancestor_with_diff_scol(node)
   local iter_ancestor = node:parent()
   while iter_ancestor do
-    if nodes.is_jump_target(iter_ancestor) and not nodes.have_same_scol(node, iter_ancestor) then
+    if classify.is_jump_target(iter_ancestor) and not nodes.have_same_scol(node, iter_ancestor) then
       return iter_ancestor
     end
 
@@ -161,7 +162,7 @@ function M.find_out(node, _current_row)
   -- When starting in a comment, behave like the node below the comment.
   -- Note: For some reason, this isn't required locally (macos _or_ Makefile ubuntu,
   -- but does fail on CI. TODO figure out the differences)
-  if nodes.is_comment_node(node) then
+  if classify.is_comment_node(node) then
     node = M.find_down(node, nodes.get_srow(node)) or node
   end
 

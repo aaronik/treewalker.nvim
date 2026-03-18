@@ -1,6 +1,7 @@
 local nodes = require "treewalker.nodes"
 local operations = require "treewalker.operations"
 local augment = require "treewalker.augment"
+local classify = require "treewalker.classify"
 local markdown_heading = require "treewalker.markdown.heading"
 local markdown_swap = require "treewalker.markdown.swap.section"
 local targets = require "treewalker.targets"
@@ -32,7 +33,7 @@ function M.swap_down()
   end
 
   local node = vim.treesitter.get_node()
-  if not node or not nodes.is_jump_target(node) then return end
+  if not node or not classify.is_jump_target(node) then return end
   if vim.fn.line('.') - 1 ~= node:range() then return end
   local current, row = nodes.get_highest_node_at_current_row()
 
@@ -74,7 +75,7 @@ function M.swap_up()
   end
 
   local node = vim.treesitter.get_node()
-  if not node or not nodes.is_jump_target(node) then return end
+  if not node or not classify.is_jump_target(node) then return end
   if vim.fn.line('.') - 1 ~= node:range() then return end
   local current, row = nodes.get_highest_node_at_current_row()
   local target = targets.find_up(current, row)
