@@ -1,8 +1,7 @@
 local nodes = require "treewalker.nodes"
 local operations = require "treewalker.operations"
-local targets = require "treewalker.targets"
 local augment = require "treewalker.augment"
-local strategies = require "treewalker.strategies"
+local targets = require "treewalker.targets"
 local backend = require "treewalker.backend"
 local confinement = require "treewalker.confinement"
 local util = require "treewalker.util"
@@ -102,7 +101,7 @@ function M.swap_right()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
   local current = nodes.get_current()
-  current = strategies.get_highest_string_node(current) or current
+  current = targets.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
   local target = nodes.next_sib(current)
@@ -143,7 +142,7 @@ function M.swap_left()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
   local current = nodes.get_current()
-  current = strategies.get_highest_string_node(current) or current
+  current = targets.get_highest_string_node(current) or current
   current = nodes.get_highest_coincident(current)
 
   local target = nodes.prev_sib(current)
