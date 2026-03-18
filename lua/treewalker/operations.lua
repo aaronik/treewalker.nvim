@@ -1,7 +1,6 @@
 local nodes = require 'treewalker.nodes'
 local lines = require 'treewalker.lines'
-local util = require 'treewalker.util'
-local heading = require 'treewalker.markdown.heading'
+local backend = require 'treewalker.backend'
 
 local M = {}
 
@@ -134,14 +133,7 @@ end
 function M.jump(node, row)
   M.jump_to_line_start(row)
   local opts = require("treewalker").opts
-  local range = nodes.range(node)
-
-  if util.is_markdown_file() then
-    local _, section_start, section_end = heading.get_section_bounds(row)
-    if section_start and section_end then
-      range = { section_start - 1, 0, section_end - 1, 1 }
-    end
-  end
+  local range = backend.get_jump_range(node, row)
 
   if opts.select then
     M.select(range)

@@ -3,27 +3,11 @@ local operations = require "treewalker.operations"
 local targets = require "treewalker.targets"
 local augment = require "treewalker.augment"
 local strategies = require "treewalker.strategies"
+local backend = require "treewalker.backend"
+local confinement = require "treewalker.confinement"
 local util = require "treewalker.util"
-local markdown_swap = require "treewalker.markdown.swap.section"
-local markdown_heading = require "treewalker.markdown.heading"
 
 local M = {}
-
----@return boolean
-local function is_on_target_node()
-  local node = vim.treesitter.get_node()
-  if not node then return false end
-
-  -- Special case for markdown - use heading utility
-  if util.is_markdown_file() then
-    return markdown_heading.is_heading(vim.fn.line("."))
-  end
-
-  -- For other languages, use the standard Treesitter-based approach
-  if not nodes.is_jump_target(node) then return false end
-  if vim.fn.line('.') - 1 ~= node:range() then return false end
-  return true
-end
 
 ---@return boolean
 local function is_supported_ft()
@@ -38,37 +22,17 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
----@param current_node TSNode
----@param candidate TSNode
----@return boolean
-local function should_confine_swap(current_node, candidate)
-  local opts = require('treewalker').opts
-  if opts.scope_confined ~= true then
-    return false
-  end
-
-  local current_parent = nodes.scope_parent(current_node)
-  if not current_parent then
-    return false
-  end
-
-  local candidate_anchor = nodes.get_highest_row_coincident(candidate)
-  return not nodes.is_descendant_of(current_parent, candidate_anchor)
-end
-
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
-  if not is_on_target_node() then return end
-  if util.is_markdown_file() then
-    return markdown_swap.swap_down_markdown()
-  end
+  if not backend.is_swap_target_node() then return end
+  if backend.handle_vertical_swap("down") then return end
   local current, row = nodes.get_highest_node_at_current_row()
 
-  local target = targets.down(current, row)
+  local target = targets.find_down(current, row)
   if not target then return end
 
-  if should_confine_swap(current, target) then
+  if confinement.should_confine(current, target) then
     return
   end
 
@@ -96,15 +60,13 @@ end
 function M.swap_up()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
-  if not is_on_target_node() then return end
-  if util.is_markdown_file() then
-    return markdown_swap.swap_up_markdown()
-  end
+  if not backend.is_swap_target_node() then return end
+  if backend.handle_vertical_swap("up") then return end
   local current, row = nodes.get_highest_node_at_current_row()
-  local target = targets.up(current, row)
+  local target = targets.find_up(current, row)
   if not target then return end
 
-  if should_confine_swap(current, target) then
+  if confinement.should_confine(current, target) then
     return
   end
 
@@ -147,7 +109,7 @@ function M.swap_right()
 
   if not current or not target then return end
 
-  if should_confine_swap(current, target) then
+  if confinement.should_confine(current, target) then
     return
   end
 
@@ -188,7 +150,7 @@ function M.swap_left()
 
   if not current or not target then return end
 
-  if should_confine_swap(current, target) then
+  if confinement.should_confine(current, target) then
     return
   end
 

@@ -1,5 +1,6 @@
 local operations = require "treewalker.operations"
-local targets = require "treewalker.targets"
+local backend = require "treewalker.backend"
+local confinement = require "treewalker.confinement"
 local nodes = require "treewalker.nodes"
 
 local M = {}
@@ -24,31 +25,13 @@ local function add_jumplist_for_move(command)
   end
 end
 
----@param current_node TSNode
----@param candidate TSNode
----@return boolean
-local function should_confine_vertical_move(current_node, candidate)
-  local opts = require('treewalker').opts
-  if opts.scope_confined ~= true then
-    return false
-  end
-
-  local current_parent = nodes.scope_parent(current_node)
-  if not current_parent then
-    return false
-  end
-
-  local candidate_anchor = nodes.get_highest_row_coincident(candidate)
-  return not nodes.is_descendant_of(current_parent, candidate_anchor)
-end
-
 ---@return nil
 function M.move_out()
   -- Add to jumplist at original cursor position before normalizing
   add_jumplist_for_move('move_out')
 
   local current_node = nodes.get_highest_node_at_current_row()
-  local target, row = targets.out(current_node)
+  local target, row = backend.get_target("find_out", current_node, nodes.get_srow(current_node))
   if not (target and row) then
     operations.jump(current_node, nodes.get_srow(current_node))
     return
@@ -59,8 +42,8 @@ end
 
 ---@return nil
 function M.move_in()
-  local current_node, current_col = nodes.get_highest_node_at_current_row()
-  local target, row = targets.inn(current_node, current_col)
+  local current_node, current_row = nodes.get_highest_node_at_current_row()
+  local target, row = backend.get_target("find_in", current_node, current_row)
   if not target or not row then return end
   add_jumplist_for_move('move_in')
   operations.jump(target, row)
@@ -70,10 +53,10 @@ end
 ---@return nil
 function M.move_up()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
-  local target, row = targets.up(current_node, current_row)
+  local target, row = backend.get_target("find_up", current_node, current_row)
   if not target or not row then return end
 
-  if should_confine_vertical_move(current_node, target) then
+  if confinement.should_confine(current_node, target) then
     return
   end
 
@@ -89,10 +72,10 @@ end
 ---@return nil
 function M.move_down()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
-  local target, row = targets.down(current_node, current_row)
+  local target, row = backend.get_target("find_down", current_node, current_row)
   if not target or not row then return end
 
-  if should_confine_vertical_move(current_node, target) then
+  if confinement.should_confine(current_node, target) then
     return
   end
 
