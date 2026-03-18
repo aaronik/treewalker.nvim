@@ -1,5 +1,4 @@
 local lines = require "treewalker.lines"
-local util = require "treewalker.util"
 
 -- These are regexes but just happen to be real simple so far
 local TARGET_BLACKLIST_TYPE_MATCHERS = {
@@ -146,20 +145,6 @@ function M.have_same_scol(node1, node2)
   return scol1 == scol2
 end
 
----helper to get all the children from a node
----@param node TSNode
----@return TSNode[]
-function M.get_children(node)
-  local children = {}
-  local iter = node:iter_children()
-  local child = iter()
-  while child do
-    table.insert(children, child)
-    child = iter()
-  end
-  return children
-end
-
 ---Return the root TSNode for the given buffer (defaults to current buffer).
 ---Safe wrapper around parser/parse() that handles missing parsers and empty parse results.
 ---@param bufnr integer|nil
@@ -182,29 +167,6 @@ function M.get_root(bufnr)
   end
 
   return root
-end
-
---- Get all descendants of a given TSNode
----@param node TSNode
----@return TSNode[]
-function M.get_descendants(node)
-  local descendants = {}
-
-  -- Helper function to recursively collect descendants
-  local function collect_descendants(current_node)
-    local child_count = current_node:child_count()
-    for i = 0, child_count - 1 do
-      local child = current_node:child(i)
-      table.insert(descendants, child)
-      -- Recursively collect descendants of the child
-      collect_descendants(child)
-    end
-  end
-
-  -- Start the recursive collection with the given node
-  collect_descendants(node)
-
-  return descendants
 end
 
 ---@param parent TSNode
@@ -414,65 +376,6 @@ function M.lsp_range(node)
     start = { line = start_line, character = start_col },
     ["end"] = { line = end_line, character = end_col }
   }
-end
-
--- util.log some formatted version of the node's properties
----@param node TSNode
----@return nil
-function M.log(node)
-  local row = M.get_srow(node)
-  local col = M.get_scol(node)
-  local text = table.concat(M.get_lines(node), "\n")
-  local log_string = ""
-  log_string = log_string .. string.format(" [%s/%s]", row, col)
-  log_string = log_string .. string.format(" (%s)", node:type())
-  log_string = log_string .. string.format(" |%s|", text)
-  log_string = log_string .. string.format(" %s", vim.inspect(M.range(node)))
-  util.log(log_string)
-end
-
--- util.log some formatted version of the node's parent chain
----@param node TSNode
----@param depth number | nil
----@return nil
-function M.log_parents(node, depth)
-  if not depth then depth = 4 end
-  ---@type TSNode | nil
-  local current_node = node
-  local log_string = node:type()
-  local current_depth = 1
-
-  -- Loop to traverse up to 3 parent nodes
-  while current_node and current_depth <= depth do
-    current_node = current_node:parent()
-    if not current_node then break end
-    log_string = current_node:type() .. "->" .. log_string
-    current_depth = current_depth + 1
-  end
-
-  util.log(log_string)
-end
-
--- vim.print some formatted version of the node's parent chain
----@param node TSNode
----@param depth number | nil
----@return nil
-function M.print_parents(node, depth)
-  if not depth then depth = 4 end
-  ---@type TSNode | nil
-  local current_node = node
-  local log_string = node:type()
-  local current_depth = 1
-
-  -- Loop to traverse up to 3 parent nodes
-  while current_node and current_depth <= depth do
-    current_node = current_node:parent()
-    if not current_node then break end
-    log_string = current_node:type() .. "->" .. log_string
-    current_depth = current_depth + 1
-  end
-
-  vim.print(log_string)
 end
 
 return M

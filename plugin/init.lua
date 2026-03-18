@@ -3,9 +3,9 @@ local function tw()
     -- For development. Makes the plugin auto-reload so you
     -- don't need to restart nvim to get the changes live.
     -- F*** it, we're doing it live!
-    local util = require "treewalker.util"
     local initial_opts = require('treewalker').opts
-    local treewalker = util.R('treewalker')
+    require("plenary.reload").reload_module('treewalker')
+    local treewalker = require('treewalker')
     treewalker.setup(initial_opts)
     return treewalker
   else

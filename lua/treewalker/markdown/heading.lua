@@ -50,37 +50,6 @@ function M.is_heading(row)
 end
 
 ------------------------------------------------------------
--- Heading relationships (siblings, parent, child)
-------------------------------------------------------------
-
---- Are two rows headings at the same level?
----@param row1 integer
----@param row2 integer
----@return boolean
-function M.is_sibling(row1, row2)
-  local h1, h2 = M.heading_info(row1), M.heading_info(row2)
-  return h1.type == "heading" and h2.type == "heading" and h1.level == h2.level
-end
-
---- Is row1 the parent heading of row2?
----@param row1 integer
----@param row2 integer
----@return boolean
-function M.is_parent(row1, row2)
-  local h1, h2 = M.heading_info(row1), M.heading_info(row2)
-  return h1.type == "heading" and h2.type == "heading" and h2.level == h1.level - 1
-end
-
---- Is row1 the child heading of row2?
----@param row1 integer
----@param row2 integer
----@return boolean
-function M.is_child(row1, row2)
-  local h1, h2 = M.heading_info(row1), M.heading_info(row2)
-  return h1.type == "heading" and h2.type == "heading" and h2.level == h1.level + 1
-end
-
-------------------------------------------------------------
 -- Section detection utilities (bounds etc)
 ------------------------------------------------------------
 

@@ -1,23 +1,6 @@
 -- Utility functions
 local M = {}
 
--- remove program code from lua cache, reload
-M.RELOAD = function(...)
-	return require("plenary.reload").reload_module(...)
-end
-
--- modified 'require'; use to flush entire program from top level for plugin development.
-M.R = function(name)
-	M.RELOAD(name)
-	return require(name)
-end
-
--- print tables contents
-M.P = function(v)
-	print(vim.inspect(v))
-	return v
-end
-
 -- Log to the file debug.log in the plugin's data dir. File can be watched for easier debugging.
 M.log_file = function(...)
 	local args = { ... }
