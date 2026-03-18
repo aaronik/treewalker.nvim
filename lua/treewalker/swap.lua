@@ -1,8 +1,9 @@
 local nodes = require "treewalker.nodes"
 local operations = require "treewalker.operations"
 local augment = require "treewalker.augment"
+local markdown_heading = require "treewalker.markdown.heading"
+local markdown_swap = require "treewalker.markdown.swap.section"
 local targets = require "treewalker.targets"
-local backend = require "treewalker.backend"
 local confinement = require "treewalker.confinement"
 local util = require "treewalker.util"
 
@@ -24,8 +25,15 @@ end
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
-  if not backend.is_swap_target_node() then return end
-  if backend.handle_vertical_swap("down") then return end
+  if util.is_markdown_file() then
+    if not markdown_heading.is_heading(vim.fn.line(".")) then return end
+    markdown_swap.swap_down_markdown()
+    return
+  end
+
+  local node = vim.treesitter.get_node()
+  if not node or not nodes.is_jump_target(node) then return end
+  if vim.fn.line('.') - 1 ~= node:range() then return end
   local current, row = nodes.get_highest_node_at_current_row()
 
   local target = targets.find_down(current, row)
@@ -59,8 +67,15 @@ end
 function M.swap_up()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
-  if not backend.is_swap_target_node() then return end
-  if backend.handle_vertical_swap("up") then return end
+  if util.is_markdown_file() then
+    if not markdown_heading.is_heading(vim.fn.line(".")) then return end
+    markdown_swap.swap_up_markdown()
+    return
+  end
+
+  local node = vim.treesitter.get_node()
+  if not node or not nodes.is_jump_target(node) then return end
+  if vim.fn.line('.') - 1 ~= node:range() then return end
   local current, row = nodes.get_highest_node_at_current_row()
   local target = targets.find_up(current, row)
   if not target then return end

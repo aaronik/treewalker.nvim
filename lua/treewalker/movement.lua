@@ -1,9 +1,20 @@
 local operations = require "treewalker.operations"
-local backend = require "treewalker.backend"
 local confinement = require "treewalker.confinement"
+local markdown_targets = require "treewalker.markdown.targets"
 local nodes = require "treewalker.nodes"
+local targets = require "treewalker.targets"
+local util = require "treewalker.util"
 
 local M = {}
+
+---@return typeof(targets)
+local function current_targets()
+  if util.is_markdown_file() then
+    return markdown_targets
+  end
+
+  return targets
+end
 
 local function should_add_jumplist(command)
   local opts = require('treewalker').opts
@@ -31,7 +42,9 @@ function M.move_out()
   add_jumplist_for_move('move_out')
 
   local current_node = nodes.get_highest_node_at_current_row()
-  local target, row = backend.get_target("find_out", current_node, nodes.get_srow(current_node))
+  local current_row = nodes.get_srow(current_node)
+  local target_module = current_targets()
+  local target, row = target_module.find_out(current_node, current_row)
   if not (target and row) then
     operations.jump(current_node, nodes.get_srow(current_node))
     return
@@ -43,7 +56,8 @@ end
 ---@return nil
 function M.move_in()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
-  local target, row = backend.get_target("find_in", current_node, current_row)
+  local target_module = current_targets()
+  local target, row = target_module.find_in(current_node, current_row)
   if not target or not row then return end
   add_jumplist_for_move('move_in')
   operations.jump(target, row)
@@ -53,7 +67,8 @@ end
 ---@return nil
 function M.move_up()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
-  local target, row = backend.get_target("find_up", current_node, current_row)
+  local target_module = current_targets()
+  local target, row = target_module.find_up(current_node, current_row)
   if not target or not row then return end
 
   if confinement.should_confine(current_node, target) then
@@ -72,7 +87,8 @@ end
 ---@return nil
 function M.move_down()
   local current_node, current_row = nodes.get_highest_node_at_current_row()
-  local target, row = backend.get_target("find_down", current_node, current_row)
+  local target_module = current_targets()
+  local target, row = target_module.find_down(current_node, current_row)
   if not target or not row then return end
 
   if confinement.should_confine(current_node, target) then
