@@ -10,7 +10,7 @@ describe("Movement in Go file with tab indentation:", function()
 
   h.ensure_has_parser("go")
 
-  -- This test validates the visual column fix in targets.lua
+  -- This test validates the visual column handling in anchor.lua
   -- Go files use tabs for indentation, which previously caused
   -- sibling navigation to fail due to byte vs visual column mismatch
   it("moves down between tab-indented var declarations (sibling nodes)", function()
