@@ -19,6 +19,8 @@ local M = {}
 ---@return TSNode
 local function normalize_node(node)
   local anchor = node
+
+  ---@type TSNode | nil
   local iter = node
 
   while iter and nodes.have_same_srow(anchor, iter) do
@@ -52,6 +54,8 @@ end
 ---@return TSNode[]
 local function get_augments(node)
   local row = nodes.get_srow(node)
+
+  ---@type TSNode[]
   local augments = {}
 
   while row > 1 do
@@ -74,13 +78,18 @@ local function build_anchor(anchor_node, row)
   local start_row = nodes.get_srow(anchor_node)
   local anchor_row = row or start_row
   local line = lines.get_line(anchor_row)
-  assert(line, "Treewalker: missing line for anchor")
+  if not line then
+    error("Treewalker: missing line for anchor")
+  end
 
   local augments = get_augments(anchor_node)
+
+  ---@type [integer, integer]
   local attached_rows = nodes.whole_range({ anchor_node, unpack(augments) })
 
   local augment_length = 0
   if #augments > 0 then
+    ---@type [integer, integer]
     local augment_rows = nodes.whole_range(augments)
     augment_length = start_row - augment_rows[1] - 1
   end
@@ -91,7 +100,9 @@ local function build_anchor(anchor_node, row)
   end
 
   local indent_line = lines.get_line(indent_row)
-  assert(indent_line, "Treewalker: missing indent line for anchor")
+  if not indent_line then
+    error("Treewalker: missing indent line for anchor")
+  end
 
   return {
     node = anchor_node,
@@ -130,9 +141,11 @@ end
 ---@return TreewalkerAnchor
 function M.current()
   local row = vim.fn.line('.')
-  local anchor = M.at_row(row)
-  assert(anchor, "Treewalker: Treesitter node not found under cursor. Missing parser?")
-  return anchor
+  local current_anchor = M.at_row(row)
+  if not current_anchor then
+    error("Treewalker: Treesitter node not found under cursor. Missing parser?")
+  end
+  return current_anchor
 end
 
 ---@param node TSNode
@@ -154,7 +167,9 @@ end
 ---@return TSNode
 function M.current_lateral_node()
   local current = vim.treesitter.get_node({ ignore_injections = false })
-  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
+  if not current then
+    error("Treewalker: Treesitter node not found under cursor. Missing parser?")
+  end
   return normalize_lateral_node(current)
 end
 
@@ -195,7 +210,10 @@ end
 ---@param candidate TreewalkerAnchor
 ---@return boolean
 local function has_same_indent_jump_ancestor(current, candidate)
+  ---@type TSNode | nil
   local parent = candidate.node:parent()
+
+  ---@type TSNode | nil
   local iter = parent
 
   while iter do
@@ -304,6 +322,8 @@ end
 ---@return TSNode | nil
 function M.get_highest_string_node(node)
   local highest = nil
+
+  ---@type TSNode | nil
   local iter = node
 
   while iter do

@@ -5,10 +5,13 @@ local M = {}
 ---@param value TreewalkerAnchor | TSNode
 ---@return TreewalkerAnchor
 local function as_anchor(value)
+  -- Narrow to TreewalkerAnchor before returning or passing to from_node.
   if type(value) == "table" and value.node then
+    ---@cast value TreewalkerAnchor
     return value
   end
 
+  ---@cast value TSNode
   return anchor.from_node(value)
 end
 

@@ -1,8 +1,8 @@
 local anchor = require "treewalker.anchor"
 local classify = require "treewalker.classify"
+local markdown_anchor = require "treewalker.markdown.anchor"
 local nodes = require "treewalker.nodes"
 local operations = require "treewalker.operations"
-local markdown_heading = require "treewalker.markdown.heading"
 local markdown_swap = require "treewalker.markdown.swap.section"
 local confinement = require "treewalker.confinement"
 local util = require "treewalker.util"
@@ -34,7 +34,7 @@ function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
   if util.is_markdown_file() then
-    if not markdown_heading.is_heading(vim.fn.line(".")) then return end
+    if not markdown_anchor.current_heading(vim.fn.line('.')) then return end
     markdown_swap.swap_down_markdown()
     return
   end
@@ -60,7 +60,7 @@ function M.swap_up()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
   if util.is_markdown_file() then
-    if not markdown_heading.is_heading(vim.fn.line(".")) then return end
+    if not markdown_anchor.current_heading(vim.fn.line('.')) then return end
     markdown_swap.swap_up_markdown()
     return
   end

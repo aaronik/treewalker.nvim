@@ -1,19 +1,17 @@
 local anchor = require "treewalker.anchor"
+local markdown_anchor = require "treewalker.markdown.anchor"
 local operations = require "treewalker.operations"
 local confinement = require "treewalker.confinement"
-local markdown_targets = require "treewalker.markdown.targets"
 local util = require "treewalker.util"
 
 local M = {}
 
----@param current TreewalkerAnchor
+---@param current TreewalkerAnchor | MarkdownAnchor
 ---@param direction "find_up" | "find_down" | "find_in" | "find_out"
----@return TreewalkerAnchor | { node: TSNode, row: integer } | nil
+---@return TreewalkerAnchor | MarkdownAnchor | nil
 local function find_target(current, direction)
   if util.is_markdown_file() then
-    local node, row = markdown_targets[direction](current.node, current.row)
-    if not node or not row then return nil end
-    return { node = node, row = row }
+    return markdown_anchor[direction](current)
   end
 
   return anchor[direction](current)
@@ -24,8 +22,8 @@ local function jump_to(target)
   operations.jump(target.node, target.row)
 end
 
----@param current TreewalkerAnchor
----@param target TreewalkerAnchor | { node: TSNode, row: integer }
+---@param current TreewalkerAnchor | MarkdownAnchor
+---@param target TreewalkerAnchor | MarkdownAnchor
 ---@return boolean
 local function is_neighbor(current, target)
   return math.abs(current.row - target.row) == 1
@@ -51,12 +49,23 @@ local function add_jumplist_for_move(command)
   end
 end
 
+---@return TreewalkerAnchor | MarkdownAnchor
+local function current_anchor()
+  if util.is_markdown_file() then
+    local current = markdown_anchor.current(vim.fn.line('.'))
+    assert(current, "Treewalker: Markdown heading not found under cursor")
+    return current
+  end
+
+  return anchor.current()
+end
+
 ---@return nil
 function M.move_out()
   -- Add to jumplist at original cursor position before normalizing
   add_jumplist_for_move('move_out')
 
-  local current = anchor.current()
+  local current = current_anchor()
   local target = find_target(current, "find_out")
   if not target then
     operations.jump(current.node, current.row)
@@ -69,7 +78,7 @@ end
 
 ---@return nil
 function M.move_in()
-  local current = anchor.current()
+  local current = current_anchor()
   local target = find_target(current, "find_in")
   if not target then return end
 
@@ -80,7 +89,7 @@ end
 
 ---@return nil
 function M.move_up()
-  local current = anchor.current()
+  local current = current_anchor()
   local target = find_target(current, "find_up")
   if not target then return end
 
@@ -97,7 +106,7 @@ end
 
 ---@return nil
 function M.move_down()
-  local current = anchor.current()
+  local current = current_anchor()
   local target = find_target(current, "find_down")
   if not target then return end
 
