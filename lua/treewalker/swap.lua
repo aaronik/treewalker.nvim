@@ -1,4 +1,5 @@
 local anchor = require "treewalker.anchor"
+local classify = require "treewalker.classify"
 local nodes = require "treewalker.nodes"
 local operations = require "treewalker.operations"
 local markdown_heading = require "treewalker.markdown.heading"
@@ -21,6 +22,14 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
+---@return TreewalkerAnchor | nil
+local function current_vertical_anchor()
+  local node = vim.treesitter.get_node()
+  if not node or not classify.is_jump_target(node) then return nil end
+  if vim.fn.line('.') - 1 ~= node:range() then return nil end
+  return anchor.current()
+end
+
 function M.swap_down()
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
@@ -30,7 +39,7 @@ function M.swap_down()
     return
   end
 
-  local current = anchor.current_swap()
+  local current = current_vertical_anchor()
   if not current then return end
 
   local target = anchor.find_down(current)
@@ -44,9 +53,7 @@ function M.swap_down()
 
   -- Place cursor
   local node_length_diff = (current.end_row - current.row) - (target.end_row - target.row)
-  local x = target.row - node_length_diff
-  local y = target.col
-  vim.fn.cursor(x, y)
+  vim.fn.cursor(target.row - node_length_diff, target.col)
 end
 
 function M.swap_up()
@@ -58,7 +65,7 @@ function M.swap_up()
     return
   end
 
-  local current = anchor.current_swap()
+  local current = current_vertical_anchor()
   if not current then return end
 
   local target = anchor.find_up(current)
@@ -72,19 +79,14 @@ function M.swap_up()
   operations.swap_rows(target.attached_rows, current.attached_rows)
 
   -- Place cursor
-  local x = target.row + current.augment_length - target.augment_length
-  local y = target.col
-  vim.fn.cursor(x, y)
+  vim.fn.cursor(target.row + current.augment_length - target.augment_length, target.col)
 end
 
 function M.swap_right()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
-  local current = nodes.get_current()
-  current = anchor.get_highest_string_node(current) or current
-  current = nodes.get_highest_coincident(current)
-
-  local target = nodes.next_sib(current)
+  local current = anchor.current_lateral_node()
+  local target = anchor.next_sibling(current)
 
   if not current or not target then return end
 
@@ -105,7 +107,10 @@ function M.swap_right()
   operations.swap_nodes(current, target)
 
   local ext = vim.api.nvim_buf_get_extmark_by_id(0, ns_id, ext_id, {})
-  local new_current = nodes.get_at_rowcol(ext[1] + 1, ext[2] - 1)
+  local new_current = vim.treesitter.get_node({
+    pos = { ext[1], ext[2] - 1 },
+    ignore_injections = false,
+  })
 
   if not new_current then return end
 
@@ -121,11 +126,8 @@ end
 function M.swap_left()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
-  local current = nodes.get_current()
-  current = anchor.get_highest_string_node(current) or current
-  current = nodes.get_highest_coincident(current)
-
-  local target = nodes.prev_sib(current)
+  local current = anchor.current_lateral_node()
+  local target = anchor.prev_sibling(current)
 
   if not current or not target then return end
 

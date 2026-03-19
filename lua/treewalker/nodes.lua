@@ -1,4 +1,3 @@
-local classify = require "treewalker.classify"
 local lines = require "treewalker.lines"
 
 local M = {}
@@ -9,17 +8,6 @@ local M = {}
 ---@return boolean
 function M.have_same_srow(node1, node2)
   return M.get_srow(node1) == M.get_srow(node2)
-end
-
----Are the nodes on neighboring rows
----@param node1 TSNode
----@param node2 TSNode
----@return boolean
-function M.have_neighbor_srow(node1, node2)
-  return
-      false
-      or M.get_srow(node1) == M.get_srow(node2) + 1
-      or M.get_srow(node1) == M.get_srow(node2) - 1
 end
 
 ---Do the nodes have the same level of indentation
@@ -56,108 +44,6 @@ function M.get_root(bufnr)
   return root
 end
 
----@param parent TSNode
----@param node TSNode
----@return boolean
-function M.is_descendant_of(parent, node)
-  local iter = node
-  while iter do
-    if iter == parent then
-      return true
-    end
-    iter = iter:parent()
-  end
-  return false
-end
-
----@param node TSNode
----@return TSNode|nil
-function M.scope_parent(node)
-  local anchor = M.get_highest_row_coincident(node)
-  return anchor:parent()
-end
-
--- Take row, give next row / node with same indentation
----@param current_row integer
----@param dir "up" | "down"
----@return TSNode | nil, integer | nil, string | nil
-function M.get_from_neighboring_line(current_row, dir)
-  local candidate_row
-  if dir == "up" then
-    candidate_row = current_row - 1
-  else
-    candidate_row = current_row + 1
-  end
-  local max_row = vim.api.nvim_buf_line_count(0)
-  if candidate_row > max_row or candidate_row <= 0 then return end
-  local candidate = M.get_highest_node_at_row(candidate_row)
-  local candidate_line = lines.get_line(candidate_row)
-  return candidate, candidate_row, candidate_line
-end
-
--- Convenience for give me back next sibling of a potentially nil node
----@param node TSNode | nil
-function M.next_sib(node)
-  if not node then return nil end
-  return node:next_named_sibling()
-end
-
--- Convenience for give me back prev sibling of a potentially nil node
----@param node TSNode | nil
-function M.prev_sib(node)
-  if not node then return nil end
-  return node:prev_named_sibling()
-end
-
--- Get farthest ancestor (or self) at the same starting row
--- This method prefers row over start on account of lisps / S-expressions,
--- which start with (identifier, ..). This is used for all up/down movement/swapping
----@param node TSNode
----@return TSNode
-function M.get_highest_row_coincident(node)
-  ---@type TSNode | nil
-  local iter = node
-  while iter and M.have_same_srow(node, iter) do
-    -- Conceptually restart if we're actually still in the same node -
-    -- necessary for when brackets are on lines below definitions
-    -- TODO This does not belong here, but its behavior is deeply rooted.
-    -- Neets to be rooted out.
-    if classify.is_highlight_target(iter) then node = iter end
-    iter = iter:parent()
-  end
-  return node
-end
-
--- Get farthest ancestor (or self) at the same starting row/col
----@param node TSNode
----@return TSNode
-function M.get_highest_coincident(node)
-  local iter = node:parent()
-  while iter and M.have_same_srow(node, iter) and M.have_same_scol(node, iter) do
-    if classify.is_highlight_target(iter) then node = iter end
-    iter = iter:parent()
-  end
-  return node
-end
-
--- Get the highest coincident node at the current row.
--- Returns row as well for convenience.
----@return TSNode, number
-function M.get_highest_node_at_current_row()
-  local row = vim.fn.line('.')
-  local current = M.get_at_row(row)
-  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
-  return M.get_highest_row_coincident(current), row
-end
-
--- Get the highest coincident node at the given row.
----@param row number
----@return TSNode
-function M.get_highest_node_at_row(row)
-  local current = M.get_at_row(row)
-  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
-  return M.get_highest_row_coincident(current)
-end
 
 ---Get the given node's text
 ---@param node TSNode
@@ -197,17 +83,6 @@ function M.get_scol(node)
   return col + 1
 end
 
----Get highest node at row/col
----@param row integer
----@param col integer
----@return TSNode|nil
-function M.get_at_rowcol(row, col)
-  local node = vim.treesitter.get_node({ pos = { row - 1, col } })
-  if node then
-    return node
-  end
-end
-
 ---Get node at row (after having pressed ^)
 ---@param row integer
 ---@return TSNode|nil
@@ -219,14 +94,6 @@ function M.get_at_row(row)
     pos = { row - 1, col - 1 },
     ignore_injections = false,
   })
-end
-
----Get highest node at same row/col
----@return TSNode
-function M.get_current()
-  local current = vim.treesitter.get_node({ ignore_injections = false })
-  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
-  return current
 end
 
 -- Easy conversion to table

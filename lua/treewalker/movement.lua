@@ -6,6 +6,31 @@ local util = require "treewalker.util"
 
 local M = {}
 
+---@param current TreewalkerAnchor
+---@param direction "find_up" | "find_down" | "find_in" | "find_out"
+---@return TreewalkerAnchor | { node: TSNode, row: integer } | nil
+local function find_target(current, direction)
+  if util.is_markdown_file() then
+    local node, row = markdown_targets[direction](current.node, current.row)
+    if not node or not row then return nil end
+    return { node = node, row = row }
+  end
+
+  return anchor[direction](current)
+end
+
+---@param target TreewalkerAnchor | { node: TSNode, row: integer }
+local function jump_to(target)
+  operations.jump(target.node, target.row)
+end
+
+---@param current TreewalkerAnchor
+---@param target TreewalkerAnchor | { node: TSNode, row: integer }
+---@return boolean
+local function is_neighbor(current, target)
+  return math.abs(current.row - target.row) == 1
+end
+
 local function should_add_jumplist(command)
   local opts = require('treewalker').opts
   local jumplist = opts.jumplist
@@ -31,131 +56,64 @@ function M.move_out()
   -- Add to jumplist at original cursor position before normalizing
   add_jumplist_for_move('move_out')
 
-  if util.is_markdown_file() then
-    local current = anchor.current()
-    local target, row = markdown_targets.find_out(current.node, current.row)
-    if not (target and row) then
-      operations.jump(current.node, current.row)
-      return
-    end
-
-    operations.jump(target, row)
-    add_jumplist_for_move('move_out') -- for easy Ctrl-o/Ctrl-i navigation
-    return
-  end
-
   local current = anchor.current()
-  local target = anchor.find_out(current)
+  local target = find_target(current, "find_out")
   if not target then
     operations.jump(current.node, current.row)
     return
   end
 
-  operations.jump(target.node, target.row)
+  jump_to(target)
   add_jumplist_for_move('move_out') -- for easy Ctrl-o/Ctrl-i navigation
 end
 
 ---@return nil
 function M.move_in()
-  if util.is_markdown_file() then
-    local current = anchor.current()
-    local target, row = markdown_targets.find_in(current.node, current.row)
-    if not target or not row then return end
-    add_jumplist_for_move('move_in')
-    operations.jump(target, row)
-    add_jumplist_for_move('move_in')
-    return
-  end
-
   local current = anchor.current()
-  local target = anchor.find_in(current)
+  local target = find_target(current, "find_in")
   if not target then return end
+
   add_jumplist_for_move('move_in')
-  operations.jump(target.node, target.row)
+  jump_to(target)
   add_jumplist_for_move('move_in')
 end
 
 ---@return nil
 function M.move_up()
-  if util.is_markdown_file() then
-    local current = anchor.current()
-    local target, row = markdown_targets.find_up(current.node, current.row)
-    if not target or not row then return end
-
-    if confinement.should_confine(current.node, target) then
-      return
-    end
-
-    local is_neighbor = current.row == row + 1 or current.row == row - 1
-
-    if not is_neighbor then
-      add_jumplist_for_move('move_up')
-    end
-
-    operations.jump(target, row)
-    return
-  end
-
   local current = anchor.current()
-  local target = anchor.find_up(current)
+  local target = find_target(current, "find_up")
   if not target then return end
 
-  if confinement.should_confine(current.node, target.node) then
+  if confinement.should_confine(current, target) then
     return
   end
 
-  local is_neighbor = current.row == target.row + 1 or current.row == target.row - 1
-
-  if not is_neighbor then
+  if not is_neighbor(current, target) then
     add_jumplist_for_move('move_up')
   end
 
-  operations.jump(target.node, target.row)
+  jump_to(target)
 end
 
 ---@return nil
 function M.move_down()
-  if util.is_markdown_file() then
-    local current = anchor.current()
-    local target, row = markdown_targets.find_down(current.node, current.row)
-    if not target or not row then return end
-
-    if confinement.should_confine(current.node, target) then
-      return
-    end
-
-    local is_neighbor = current.row == row + 1 or current.row == row - 1
-
-    if not is_neighbor then
-      add_jumplist_for_move('move_down')
-    end
-
-    operations.jump(target, row)
-
-    if not is_neighbor then
-      add_jumplist_for_move('move_down')
-    end
-
-    return
-  end
-
   local current = anchor.current()
-  local target = anchor.find_down(current)
+  local target = find_target(current, "find_down")
   if not target then return end
 
-  if confinement.should_confine(current.node, target.node) then
+  if confinement.should_confine(current, target) then
     return
   end
 
-  local is_neighbor = current.row == target.row + 1 or current.row == target.row - 1
+  local neighbor = is_neighbor(current, target)
 
-  if not is_neighbor then
+  if not neighbor then
     add_jumplist_for_move('move_down')
   end
 
-  operations.jump(target.node, target.row)
+  jump_to(target)
 
-  if not is_neighbor then
+  if not neighbor then
     add_jumplist_for_move('move_down')
   end
 end

@@ -12,7 +12,6 @@ local M = {}
 ---@field col integer
 ---@field indent integer
 ---@field line string
----@field augments TSNode[]
 ---@field attached_rows [integer, integer]
 ---@field augment_length integer
 
@@ -102,7 +101,6 @@ local function build_anchor(anchor_node, row)
     col = nodes.get_scol(anchor_node),
     indent = lines.get_start_col(indent_line),
     line = line,
-    augments = augments,
     attached_rows = attached_rows,
     augment_length = augment_length,
   }
@@ -137,12 +135,43 @@ function M.current()
   return anchor
 end
 
----@return TreewalkerAnchor | nil
-function M.current_swap()
-  local node = vim.treesitter.get_node()
-  if not node or not classify.is_jump_target(node) then return nil end
-  if vim.fn.line('.') - 1 ~= node:range() then return nil end
-  return M.current()
+---@param node TSNode
+---@return TSNode
+local function normalize_lateral_node(node)
+  local lateral = M.get_highest_string_node(node) or node
+  local iter = lateral:parent()
+
+  while iter and nodes.have_same_srow(lateral, iter) and nodes.have_same_scol(lateral, iter) do
+    if classify.is_highlight_target(iter) then
+      lateral = iter
+    end
+    iter = iter:parent()
+  end
+
+  return lateral
+end
+
+---@return TSNode
+function M.current_lateral_node()
+  local current = vim.treesitter.get_node({ ignore_injections = false })
+  assert(current, "Treewalker: Treesitter node not found under cursor. Missing parser?")
+  return normalize_lateral_node(current)
+end
+
+-- Convenience for give me back next sibling of a potentially nil node
+---@param node TSNode | nil
+---@return TSNode | nil
+function M.next_sibling(node)
+  if not node then return nil end
+  return node:next_named_sibling()
+end
+
+-- Convenience for give me back prev sibling of a potentially nil node
+---@param node TSNode | nil
+---@return TSNode | nil
+function M.prev_sibling(node)
+  if not node then return nil end
+  return node:prev_named_sibling()
 end
 
 ---@param node TSNode

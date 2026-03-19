@@ -134,13 +134,12 @@ function M.get_highlight_count()
 end
 
 function M.assert_confined_by_parent(row, col, direction)
-	local nodes = require("treewalker.nodes")
+	local anchor = require("treewalker.anchor")
 
 	vim.fn.cursor(row, col)
 
-	local current = nodes.get_highest_node_at_current_row()
-	local current_anchor = nodes.get_highest_row_coincident(current)
-	local scope_parent = current_anchor:parent()
+	local current = anchor.current()
+	local scope_parent = current.node:parent()
 
 	assert(scope_parent ~= nil, "test must start within a non-top-level scope")
 
@@ -150,11 +149,10 @@ function M.assert_confined_by_parent(row, col, direction)
 		tw.move_down()
 	end
 
-	local after = nodes.get_highest_node_at_current_row()
-	local after_anchor = nodes.get_highest_row_coincident(after)
+	local after = anchor.current()
 
-	assert(scope_parent ~= after_anchor)
-	assert(vim.treesitter.is_ancestor(scope_parent, after_anchor))
+	assert(scope_parent ~= after.node)
+	assert(vim.treesitter.is_ancestor(scope_parent, after.node))
 end
 
 ---
@@ -165,12 +163,12 @@ end
 ---@param col integer
 ---@param direction 'up'|'down'|'left'|'right'
 function M.assert_swap_confined_by_parent(row, col, direction)
-	local nodes = require("treewalker.nodes")
+	local anchor = require("treewalker.anchor")
 
 	vim.fn.cursor(row, col)
 
-	local before = nodes.get_highest_row_coincident(nodes.get_highest_node_at_current_row())
-	local scope_parent = before:parent()
+	local before = anchor.current()
+	local scope_parent = before.node:parent()
 
 	assert(scope_parent ~= nil, "test must start within a non-top-level scope")
 
