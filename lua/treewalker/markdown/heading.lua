@@ -3,9 +3,92 @@
 
 local util = require "treewalker.util"
 local nodes = require "treewalker.nodes"
-local ast_utils = require "treewalker.markdown.ast_utils"
 
 local M = {}
+
+------------------------------------------------------------
+-- Shared AST utilities
+------------------------------------------------------------
+
+--- Extract heading level from an atx_heading node
+---@param heading_node TSNode
+---@return integer|nil
+function M.get_heading_level_from_node(heading_node)
+  for marker_child in heading_node:iter_children() do
+    local marker_type = marker_child:type()
+    if marker_type:match("^atx_h(%d)_marker$") then
+      return tonumber(marker_type:match("^atx_h(%d)_marker$"))
+    end
+  end
+  return nil
+end
+
+--- Get section heading row and node from a section
+---@param section_node TSNode
+---@return integer|nil, TSNode|nil
+function M.get_section_heading_row_and_node(section_node)
+  for child in section_node:iter_children() do
+    if child:type() == "atx_heading" then
+      return nodes.get_srow(child), child
+    end
+  end
+  return nil, nil
+end
+
+--- Get section level from a section node
+---@param section_node TSNode
+---@return integer|nil
+function M.get_section_level(section_node)
+  for child in section_node:iter_children() do
+    if child:type() == "atx_heading" then
+      return M.get_heading_level_from_node(child)
+    end
+  end
+  return nil
+end
+
+--- Find first child of specified type
+---@param node TSNode
+---@param child_type string
+---@return TSNode|nil
+function M.find_child_of_type(node, child_type)
+  for child in node:iter_children() do
+    if child:type() == child_type then
+      return child
+    end
+  end
+  return nil
+end
+
+--- Generic section traversal helper
+---@param root TSNode
+---@param predicate function
+---@return TSNode|nil, integer|nil
+function M.find_section_matching(root, predicate)
+  local function traverse(node)
+    if node:type() == "section" then
+      local section_row = M.get_section_heading_row_and_node(node)
+      local section_level = M.get_section_level(node)
+
+      if section_row then
+        local should_return, custom_row = predicate(node, section_row, section_level)
+        if should_return then
+          local target_row = custom_row or section_row
+          return nodes.get_at_row(target_row), target_row
+        end
+      end
+    end
+
+    for child in node:iter_children() do
+      local result_node, result_row = traverse(child)
+      if result_node then return result_node, result_row end
+    end
+
+    return nil, nil
+  end
+
+  return traverse(root)
+end
 
 ------------------------------------------------------------
 -- Heading info extraction using Treesitter AST
@@ -22,7 +105,8 @@ function M.heading_info(row)
   local current = node --[[@as TSNode?]]
   while current do
     if current:type() == "atx_heading" then
-      local level = ast_utils.get_heading_level_from_node(current)
+        local level = M.get_heading_level_from_node(current)
+
       if level then
         return { type = "heading", level = level }
       end
@@ -65,7 +149,8 @@ function M.get_section_bounds(row)
 
   local function find_section_with_heading_at_row(node)
     if node:type() == "section" then
-      local heading_row, heading_node = ast_utils.get_section_heading_row_and_node(node)
+        local heading_row, heading_node = M.get_section_heading_row_and_node(node)
+
       if heading_row == row then
         return node, heading_row, heading_node
       end
@@ -84,7 +169,8 @@ function M.get_section_bounds(row)
 
   local level = nil
   if heading_node then
-    level = ast_utils.get_heading_level_from_node(heading_node)
+      level = M.get_heading_level_from_node(heading_node)
+
   end
 
   if not level or not heading_row then return nil, nil, nil end
@@ -118,9 +204,11 @@ function M.find_parent_header(row, level)
   while parent do
     if parent:type() == "section" then
       -- Get the heading level of this parent section using ast_utils
-      local heading_child = ast_utils.find_child_of_type(parent, "atx_heading")
+        local heading_child = M.find_child_of_type(parent, "atx_heading")
+
       if heading_child then
-        local parent_level = ast_utils.get_heading_level_from_node(heading_child)
+          local parent_level = M.get_heading_level_from_node(heading_child)
+
         if parent_level and parent_level < level then
           return nodes.get_srow(heading_child), parent_level
         end
