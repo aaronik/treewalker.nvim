@@ -117,22 +117,6 @@ function M.heading_info(row)
   return { type = "none" }
 end
 
---- Returns heading level for a row or nil if not on heading
----@param row integer
----@return integer|nil
-function M.heading_level(row)
-  local info = M.heading_info(row)
-  return info.type == "heading" and info.level or nil
-end
-
---- Does this row contain a heading?
----@param row integer
----@return boolean
-function M.is_heading(row)
-  local info = M.heading_info(row)
-  return info.type == "heading"
-end
-
 ------------------------------------------------------------
 -- Section detection utilities (bounds etc)
 ------------------------------------------------------------
