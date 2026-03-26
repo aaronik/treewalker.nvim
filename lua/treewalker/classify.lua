@@ -11,11 +11,15 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "declaration_list",   -- C# class blocks
   "compound_statement", -- C blocks when defined under their fn names like a psycho
   "c_sharp:block",      -- C# block nodes (language-specific)
+  "haskell:imports",    -- Haskell top-level import collection
+  "haskell:declarations", -- Haskell top-level declaration collection
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
   "body",
   "block",
+  "haskell:imports",
+  "haskell:declarations",
 }
 
 local AUGMENT_TARGET_TYPE_MATCHERS = {

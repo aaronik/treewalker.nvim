@@ -34,20 +34,47 @@ local function normalize_node(node)
 end
 
 ---@param row integer
+---@param col integer
+---@return TSNode | nil
+local function normalized_node_at(row, col)
+  local node = nodes.get_at(row, col)
+
+  if not node then return nil end
+
+  return normalize_node(node)
+end
+
+---@param row integer
 ---@return TSNode | nil
 local function node_at_row(row)
   local line = lines.get_line(row)
   if not line then return nil end
 
   local col = lines.get_start_col(line)
-  local node = vim.treesitter.get_node({
-    pos = { row - 1, col - 1 },
-    ignore_injections = false,
-  })
+  local node = normalized_node_at(row, col)
+  local next_node = nil ---@type TSNode | nil
 
-  if not node then return nil end
+  if col <= #line then
+    next_node = normalized_node_at(row, col + 1)
+  end
 
-  return normalize_node(node)
+  if node and classify.is_highlight_target(node) and nodes.get_srow(node) == row then
+    return node
+  end
+
+  if next_node and classify.is_highlight_target(next_node) and nodes.get_srow(next_node) == row then
+    return next_node
+  end
+
+  if node and classify.is_highlight_target(node) then
+    return node
+  end
+
+  if next_node and classify.is_highlight_target(next_node) then
+    return next_node
+  end
+
+  return next_node or node
 end
 
 ---@param node TSNode

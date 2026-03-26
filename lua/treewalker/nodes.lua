@@ -85,15 +85,23 @@ end
 
 ---Get node at row (after having pressed ^)
 ---@param row integer
+---@param col integer
+---@return TSNode|nil
+function M.get_at(row, col)
+  return vim.treesitter.get_node({
+    pos = { row - 1, col - 1 },
+    ignore_injections = false,
+  })
+end
+
+---Get node at row (after having pressed ^)
+---@param row integer
 ---@return TSNode|nil
 function M.get_at_row(row)
   local line = lines.get_line(row)
   if not line then return end
   local col = lines.get_start_col(line)
-  return vim.treesitter.get_node({
-    pos = { row - 1, col - 1 },
-    ignore_injections = false,
-  })
+  return M.get_at(row, col)
 end
 
 -- Easy conversion to table

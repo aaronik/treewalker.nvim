@@ -9,8 +9,7 @@ describe("In a haskell file: ", function()
 
   h.ensure_has_parser("haskell")
 
-  -- Oh dang when did this break?
-  pending("moves around in a haskell file", function ()
+  it("moves around in a haskell file", function ()
     vim.fn.cursor(1, 1)
     tw.move_down()
     h.assert_cursor_at(2, 1)
@@ -20,6 +19,10 @@ describe("In a haskell file: ", function()
     h.assert_cursor_at(6, 1)
     tw.move_in()
     h.assert_cursor_at(9, 3)
+    tw.move_down()
+    h.assert_cursor_at(10, 3)
+    tw.move_out()
+    h.assert_cursor_at(8, 1)
   end)
 
   -- Haskell is basically completely broken - one refactor breaks this test, but I think we need to refactor then figure out haskell.
