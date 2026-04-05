@@ -153,22 +153,21 @@ describe("swap with scope_confined = true", function()
     local parent = current.node:parent()
     assert.is_not_nil(parent)
 
-    local original = lines.get_lines(125, 140)
     swap.swap_up()
 
     -- Should not have crossed scope boundary
-    -- The exact behavior depends on finding a valid target
+    -- Verify we're still in scope by checking cursor position or content
+    local pos = vim.fn.getpos(".")
+    assert.is_true(pos[2] >= 128) -- should still be within function
   end)
 
   it("does not swap down across scope boundary", function()
     vim.fn.cursor(136, 3) -- end of for loop
-    local original = lines.get_lines(130, 145)
     swap.swap_down()
 
-    -- Verify content
-    local after = lines.get_lines(130, 145)
-    -- Content may or may not change depending on valid target
-    assert.is_table(after)
+    -- Verify we're still in expected scope
+    local pos = vim.fn.getpos(".")
+    assert.is_true(pos[2] <= 140) -- should not have escaped function
   end)
 end)
 
