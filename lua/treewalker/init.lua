@@ -4,6 +4,12 @@ local options = require('treewalker.options')
 
 local Treewalker = {}
 
+---@return boolean
+local function has_parser()
+  local ok, parser = pcall(vim.treesitter.get_parser, 0)
+  return ok and parser ~= nil
+end
+
 -- Default setup() options
 ---@type Opts
 Treewalker.opts = {
@@ -35,8 +41,7 @@ local function ensuring_parser(fn)
   ---@return boolean
   return function(...)
     local ft = vim.bo.ft
-    local ok = pcall(vim.treesitter.get_parser)
-    if ok then
+    if has_parser() then
       fn(...)
       return true
     else
