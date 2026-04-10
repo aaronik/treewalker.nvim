@@ -105,7 +105,7 @@ function M.heading_info(row)
   local current = node --[[@as TSNode?]]
   while current do
     if current:type() == "atx_heading" then
-        local level = M.get_heading_level_from_node(current)
+      local level = M.get_heading_level_from_node(current)
 
       if level then
         return { type = "heading", level = level }
@@ -133,7 +133,7 @@ function M.get_section_bounds(row)
 
   local function find_section_with_heading_at_row(node)
     if node:type() == "section" then
-        local heading_row, heading_node = M.get_section_heading_row_and_node(node)
+      local heading_row, heading_node = M.get_section_heading_row_and_node(node)
 
       if heading_row == row then
         return node, heading_row, heading_node
@@ -153,7 +153,7 @@ function M.get_section_bounds(row)
 
   local level = nil
   if heading_node then
-      level = M.get_heading_level_from_node(heading_node)
+    level = M.get_heading_level_from_node(heading_node)
 
   end
 
@@ -188,10 +188,10 @@ function M.find_parent_header(row, level)
   while parent do
     if parent:type() == "section" then
       -- Get the heading level of this parent section using ast_utils
-        local heading_child = M.find_child_of_type(parent, "atx_heading")
+      local heading_child = M.find_child_of_type(parent, "atx_heading")
 
       if heading_child then
-          local parent_level = M.get_heading_level_from_node(heading_child)
+        local parent_level = M.get_heading_level_from_node(heading_child)
 
         if parent_level and parent_level < level then
           return nodes.get_srow(heading_child), parent_level

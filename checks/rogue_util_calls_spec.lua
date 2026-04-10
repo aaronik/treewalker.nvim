@@ -8,14 +8,14 @@ local stub = require("luassert.stub")
 local util = require("treewalker.util")
 
 local commands = {
-	"Treewalker Up",
-	"Treewalker Down",
-	"Treewalker Right",
-	"Treewalker Left",
-	"Treewalker SwapUp",
-	"Treewalker SwapDown",
-	"Treewalker SwapRight",
-	"Treewalker SwapLeft",
+  "Treewalker Up",
+  "Treewalker Down",
+  "Treewalker Right",
+  "Treewalker Left",
+  "Treewalker SwapUp",
+  "Treewalker SwapDown",
+  "Treewalker SwapRight",
+  "Treewalker SwapLeft",
 }
 
 -- can't get luassert (plenary) spy working
@@ -23,35 +23,35 @@ local commands = {
 ---@param obj table
 ---@param method string
 local function spy(obj, method)
-	local orig = obj[method]
-	local stoob = stub.new(obj, method)
-	stoob.callback = orig
-	---@type type obj
-	return stoob
+  local orig = obj[method]
+  local stoob = stub.new(obj, method)
+  stoob.callback = orig
+  ---@type type obj
+  return stoob
 end
 
 describe("Extent util calls:", function()
-	local spies = {
-		spy(util, "R"),
-		spy(util, "log"),
-		spy(util, "log_file"),
-	}
+  local spies = {
+    spy(util, "R"),
+    spy(util, "log"),
+    spy(util, "log_file"),
+  }
 
-	-- Simulate TREEWALKER_NVIM_ENV being set to anything other than "development", see plugin/init.lua
-	stub(os, "getenv").returns("")
+  -- Simulate TREEWALKER_NVIM_ENV being set to anything other than "development", see plugin/init.lua
+  stub(os, "getenv").returns("")
 
-	before_each(function()
-		load_fixture("/lua.lua")
-		vim.opt.fileencoding = "utf-8"
-		vim.fn.cursor(31, 26)
-	end)
+  before_each(function()
+    load_fixture("/lua.lua")
+    vim.opt.fileencoding = "utf-8"
+    vim.fn.cursor(31, 26)
+  end)
 
-	for _, spi in ipairs(spies) do
-		for _, command in ipairs(commands) do
-			it(command .. " encounters no " .. "util.R calls", function()
-				vim.cmd(command)
-				assert.stub(spi).was.called(0)
-			end)
-		end
-	end
+  for _, spi in ipairs(spies) do
+    for _, command in ipairs(commands) do
+      it(command .. " encounters no " .. "util.R calls", function()
+        vim.cmd(command)
+        assert.stub(spi).was.called(0)
+      end)
+    end
+  end
 end)

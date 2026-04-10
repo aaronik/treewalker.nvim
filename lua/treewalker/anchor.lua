@@ -312,20 +312,18 @@ function M.find_in(current)
 
   for row = current.row + 1, max_row, 1 do
     local line = lines.get_line(row)
-    if not line then goto continue end
+    if line then
+      local indent = lines.get_start_col(line)
+      local candidate = M.at_row(row)
 
-    local indent = lines.get_start_col(line)
-    local candidate = M.at_row(row)
+      if indent > current.indent and candidate and classify.is_jump_target(candidate.node) then
+        return candidate
+      end
 
-    if indent == current.indent or not candidate then
-      goto continue
-    elseif indent > current.indent and classify.is_jump_target(candidate.node) then
-      return candidate
-    elseif indent < current.indent and line ~= "" then
-      break
+      if indent < current.indent and line ~= "" then
+        break
+      end
     end
-
-    ::continue::
   end
 end
 

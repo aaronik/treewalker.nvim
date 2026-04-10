@@ -18,28 +18,28 @@ if not ok then
 end
 
 ts_config.setup {
-    ensure_installed = {
-        "lua",
-        "c",
-        "python",
-        "rust",
-        "haskell",
-        "html",
-        "javascript",
-        "c_sharp",
-        "typescript",
-        "php",
-        "markdown",
-        "ruby",
-        "scheme",
-        "yaml",
-        "java",
-        "go",
-    },
-    sync_install = true,
-    auto_install = true,
-    ignore_install = {},
-    modules = {}
+  ensure_installed = {
+    "lua",
+    "c",
+    "python",
+    "rust",
+    "haskell",
+    "html",
+    "javascript",
+    "c_sharp",
+    "typescript",
+    "php",
+    "markdown",
+    "ruby",
+    "scheme",
+    "yaml",
+    "java",
+    "go",
+  },
+  sync_install = true,
+  auto_install = true,
+  ignore_install = {},
+  modules = {}
 }
 
 -- These are required lest nvim not be able to tell these parsers are

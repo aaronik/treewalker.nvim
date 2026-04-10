@@ -240,7 +240,7 @@ function M.find_out(current)
 
       if section_row and section_level and section_row < current.heading_row and section_level <= target_level then
         if not best_match or section_row > best_match.row or
-           (section_row == best_match.row and section_level > best_match.level) then
+          (section_row == best_match.row and section_level > best_match.level) then
           best_match = { row = section_row, level = section_level }
         end
       end
