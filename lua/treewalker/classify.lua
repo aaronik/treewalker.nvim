@@ -13,11 +13,14 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
   "c_sharp:block",      -- C# block nodes (language-specific)
   "haskell:imports",    -- Haskell top-level import collection
   "haskell:declarations", -- Haskell top-level declaration collection
+  "document",           -- yaml
 }
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
   "body",
-  "block",
+  "^block$",
+  "^block_[^_]+$",
+  "document",
   "haskell:imports",
   "haskell:declarations",
 }

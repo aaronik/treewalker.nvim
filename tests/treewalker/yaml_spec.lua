@@ -1,4 +1,6 @@
 local load_fixture = require "tests.load_fixture"
+local assert = require "luassert"
+local lines = require 'treewalker.lines'
 local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 
@@ -138,6 +140,73 @@ describe("Movement in a YAML file:", function()
     tw.move_out()
     h.assert_cursor_at(49, 1)
   end)
+
+  it("moves down across top-level keys", function()
+    vim.fn.cursor(1, 1) -- appConfig:
+    tw.move_down()
+    h.assert_cursor_at(34, 1)
+    tw.move_down()
+    h.assert_cursor_at(49, 1)
+    tw.move_down()
+    h.assert_cursor_at(60, 1)
+  end)
+
+  it("moves up across top-level keys", function()
+    vim.fn.cursor(49, 1) -- complexKeys:
+    tw.move_up()
+    h.assert_cursor_at(34, 1)
+    tw.move_up()
+    h.assert_cursor_at(1, 1)
+  end)
+
+  it("swaps a top-level key up", function()
+    vim.fn.cursor(34, 1) -- users:
+    local app_config_before = lines.get_lines(1, 32)
+    local users_before = lines.get_lines(34, 47)
+
+    tw.swap_up()
+
+    h.assert_cursor_at(1, 1)
+    assert.same(users_before, lines.get_lines(1, 14))
+    assert.same(app_config_before, lines.get_lines(16, 47))
+  end)
+
+  it("swaps a top-level key down", function()
+    vim.fn.cursor(34, 1) -- users:
+    local users_before = lines.get_lines(34, 47)
+    local complex_keys_before = lines.get_lines(49, 58)
+
+    tw.swap_down()
+
+    h.assert_cursor_at(45, 1)
+    assert.same(complex_keys_before, lines.get_lines(34, 43))
+    assert.same(users_before, lines.get_lines(45, 58))
+  end)
+
+  it("swaps up nested yaml keys with their child block", function()
+    vim.fn.cursor(68, 3) -- nestedEmpty:
+    local empty_map_before = lines.get_lines(67, 67)
+    local nested_empty_before = lines.get_lines(68, 70)
+
+    tw.swap_up()
+
+    h.assert_cursor_at(67, 3)
+    assert.same(nested_empty_before, lines.get_lines(67, 69))
+    assert.same(empty_map_before, lines.get_lines(70, 70))
+  end)
+
+  it("swaps down across an augmented top-level key", function()
+    vim.fn.cursor(81, 1) -- anchorsAndAliases:
+    local anchors_and_aliases_before = lines.get_lines(81, 90)
+    local explicit_tag_before = lines.get_lines(92, 93)
+
+    tw.swap_down()
+
+    h.assert_cursor_at(84, 1)
+    assert.same(explicit_tag_before, lines.get_lines(81, 82))
+    assert.same(anchors_and_aliases_before, lines.get_lines(84, 93))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

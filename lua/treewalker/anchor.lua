@@ -27,6 +27,7 @@ local function normalize_node(node)
     if classify.is_highlight_target(iter) then
       anchor = iter
     end
+
     iter = iter:parent()
   end
 
@@ -98,11 +99,50 @@ local function get_augments(node)
   return augments
 end
 
+-- Some parsers let a node's range spill into blank lines or trailing comments that
+-- visually belong to the following sibling. When we swap by rows, that overreach can
+-- steal the next sibling's augments, so we trim this node's effective end row back to
+-- the next sibling's attached start.
+---@param node TSNode
+---@return integer
+local function attached_end_row(node)
+  local start_row, _, end_row = node:range()
+  local sibling = node:next_named_sibling()
+
+  while sibling do
+    local next_anchor = normalize_node(sibling)
+
+    if classify.is_jump_target(next_anchor) and nodes.get_srow(next_anchor) > nodes.get_srow(node) then
+      local next_start_row = nodes.get_srow(next_anchor) - 1
+      local next_augments = get_augments(next_anchor)
+
+      if #next_augments > 0 then
+        next_start_row = math.min(next_start_row, nodes.whole_range(next_augments)[1])
+      end
+
+      if end_row >= next_start_row then
+        end_row = next_start_row - 1
+
+        while end_row >= start_row and lines.get_line(end_row + 1) == "" do
+          end_row = end_row - 1
+        end
+      end
+
+      break
+    end
+
+    sibling = sibling:next_named_sibling()
+  end
+
+  return end_row
+end
+
 ---@param anchor_node TSNode
 ---@param row integer | nil
 ---@return TreewalkerAnchor
 local function build_anchor(anchor_node, row)
   local start_row = nodes.get_srow(anchor_node)
+  local end_row = attached_end_row(anchor_node) + 1
   local anchor_row = row or start_row
   local line = lines.get_line(anchor_row)
   if not line then
@@ -111,8 +151,13 @@ local function build_anchor(anchor_node, row)
 
   local augments = get_augments(anchor_node)
 
+  local attached_start_row = start_row - 1
+  if #augments > 0 then
+    attached_start_row = nodes.whole_range(augments)[1]
+  end
+
   ---@type [integer, integer]
-  local attached_rows = nodes.whole_range({ anchor_node, unpack(augments) })
+  local attached_rows = { attached_start_row, end_row - 1 }
 
   local augment_length = 0
   if #augments > 0 then
@@ -135,7 +180,7 @@ local function build_anchor(anchor_node, row)
     node = anchor_node,
     row = anchor_row,
     start_row = start_row,
-    end_row = nodes.get_erow(anchor_node),
+    end_row = end_row,
     col = nodes.get_scol(anchor_node),
     indent = lines.get_start_col(indent_line),
     line = line,
@@ -330,6 +375,10 @@ end
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
 function M.find_out(current)
+  if current.row > current.start_row then
+    return build_anchor(current.node, current.start_row)
+  end
+
   if classify.is_comment_node(current.node) then
     current = M.find_down(current) or current
   end
