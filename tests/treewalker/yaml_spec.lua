@@ -183,6 +183,37 @@ describe("Movement in a YAML file:", function()
     assert.same(users_before, lines.get_lines(45, 58))
   end)
 
+  it("swaps a yaml list item when targeting the dash", function()
+    vim.fn.cursor(35, 3) -- - id: 1001
+    local first_user_before = lines.get_lines(35, 42)
+    local second_user_before = lines.get_lines(43, 47)
+
+    tw.swap_down()
+
+    h.assert_cursor_at(40, 3)
+    assert.same(second_user_before, lines.get_lines(35, 39))
+    assert.same(first_user_before, lines.get_lines(40, 47))
+  end)
+
+  it("swaps a key within a yaml list item without moving the whole item", function()
+    vim.fn.cursor(36, 5) -- name: "Alice"
+    local first_user_before = lines.get_lines(35, 42)
+
+    tw.swap_down()
+
+    h.assert_cursor_at(37, 5)
+    assert.same({
+      first_user_before[1],
+      first_user_before[3],
+      first_user_before[2],
+      first_user_before[4],
+      first_user_before[5],
+      first_user_before[6],
+      first_user_before[7],
+      first_user_before[8],
+    }, lines.get_lines(35, 42))
+  end)
+
   it("swaps up nested yaml keys with their child block", function()
     vim.fn.cursor(68, 3) -- nestedEmpty:
     local empty_map_before = lines.get_lines(67, 67)
@@ -234,6 +265,24 @@ describe("Movement in a YAML file:", function()
 
     it("confines swap_left", function()
       h.assert_swap_confined_by_parent(43, 1, 'left')
+    end)
+
+    it("stays within the current yaml parent on move_down", function()
+      vim.fn.cursor(47, 5) -- metadata: *userMeta
+
+      tw.move_down()
+
+      h.assert_cursor_at(47, 5)
+    end)
+
+    it("stays within the current yaml parent on swap_down", function()
+      vim.fn.cursor(47, 5) -- metadata: *userMeta
+      local before = lines.get_lines(34, 72)
+
+      tw.swap_down()
+
+      h.assert_cursor_at(47, 5)
+      assert.same(before, lines.get_lines(34, 72))
     end)
   end)
 end)
