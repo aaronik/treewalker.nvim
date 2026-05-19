@@ -21,6 +21,7 @@ ts_config.setup {
   ensure_installed = {
     "lua",
     "c",
+    "cpp",
     "python",
     "rust",
     "haskell",

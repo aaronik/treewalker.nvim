@@ -303,6 +303,10 @@ local function has_same_indent_jump_ancestor(current, candidate)
         return parent ~= current.node
       end
 
+      if vim.treesitter.is_ancestor(iter, current.node) then
+        return false
+      end
+
       return true
     end
 
@@ -361,8 +365,16 @@ function M.find_in(current)
       local indent = lines.get_start_col(line)
       local candidate = M.at_row(row)
 
-      if indent > current.indent and candidate and classify.is_jump_target(candidate.node) then
-        return candidate
+      if candidate and classify.is_jump_target(candidate.node) then
+        if indent > current.indent then
+          return candidate
+        end
+
+        if indent == current.indent
+          and vim.treesitter.is_ancestor(current.node, candidate.node)
+        then
+          return candidate
+        end
       end
 
       if indent < current.indent and line ~= "" then
@@ -383,12 +395,20 @@ function M.find_out(current)
     current = M.find_down(current) or current
   end
 
+  local fallback = nil ---@type TSNode | nil
   local iter = current.node:parent()
   while iter do
-    if classify.is_jump_target(iter) and not nodes.have_same_scol(current.node, iter) then
-      return build_anchor(iter, nodes.get_srow(iter))
+    if classify.is_jump_target(iter) then
+      if not nodes.have_same_scol(current.node, iter) then
+        return build_anchor(iter, nodes.get_srow(iter))
+      end
+      fallback = iter
     end
     iter = iter:parent()
+  end
+
+  if fallback then
+    return build_anchor(fallback, nodes.get_srow(fallback))
   end
 end
 
