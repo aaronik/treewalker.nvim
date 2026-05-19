@@ -18,7 +18,7 @@ describe("In a C++ file:", function()
       tw.move_down()
       h.assert_cursor_at(18, 1) -- Should move to struct C.
       tw.move_in()
-      h.assert_cursor_at(20, 1) -- Should move into struct C to double z.
+      h.assert_cursor_at(20, 5) -- Should move into struct C to double z.
       tw.move_out()
       h.assert_cursor_at(18, 1) -- Should move back out to struct C
       tw.move_down()
