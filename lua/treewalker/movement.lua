@@ -49,12 +49,13 @@ local function add_jumplist_for_move(command)
   end
 end
 
----@return TreewalkerAnchor | MarkdownAnchor
+---@return TreewalkerAnchor | MarkdownAnchor | nil
 local function current_anchor()
   if util.is_markdown_file() then
-    local current = markdown_anchor.current(vim.fn.line('.'))
-    assert(current, "Treewalker: Markdown heading not found under cursor")
-    return current
+    local row = vim.fn.line('.')
+    -- Fall back to a preamble anchor when the cursor isn't under a heading
+    -- (e.g. YAML frontmatter) so movement degrades gracefully instead of erroring.
+    return markdown_anchor.current(row) or markdown_anchor.preamble(row)
   end
 
   return anchor.current()
@@ -66,6 +67,7 @@ function M.move_out()
   add_jumplist_for_move('move_out')
 
   local current = current_anchor()
+  if not current then return end
   local target = find_target(current, "find_out")
   if not target then
     operations.jump(current.node, current.row)
@@ -79,6 +81,7 @@ end
 ---@return nil
 function M.move_in()
   local current = current_anchor()
+  if not current then return end
   local target = find_target(current, "find_in")
   if not target then return end
 
@@ -90,6 +93,7 @@ end
 ---@return nil
 function M.move_up()
   local current = current_anchor()
+  if not current then return end
   local target = find_target(current, "find_up")
   if not target then return end
 
@@ -107,6 +111,7 @@ end
 ---@return nil
 function M.move_down()
   local current = current_anchor()
+  if not current then return end
   local target = find_target(current, "find_down")
   if not target then return end
 
