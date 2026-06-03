@@ -80,6 +80,30 @@ function M.current(row)
   return build_anchor(section, row)
 end
 
+--- Build a positional anchor for a row that sits outside any heading's section,
+--- i.e. the preamble above the first heading (commonly YAML frontmatter).
+--- It points heading_row/section at the row itself, which carries no section, so
+--- find_out -> from_heading_row returns nil and move_in/move_out become no-ops,
+--- while move_up/move_down still reach the nearest headings via find_nearest_*.
+---@param row integer
+---@return MarkdownAnchor | nil
+function M.preamble(row)
+  local node = nodes.get_at_row(row) or nodes.get_root()
+  if not node then return nil end
+
+  return {
+    node = node,
+    section = node,
+    row = row,
+    heading_row = row,
+    level = 0,
+    start = row,
+    finish = row,
+    is_heading = false,
+    parent_row = nil,
+  }
+end
+
 ---@param row integer
 ---@return MarkdownAnchor | nil
 function M.from_heading_row(row)
