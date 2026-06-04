@@ -52,10 +52,7 @@ end
 ---@return TreewalkerAnchor | MarkdownAnchor | nil
 local function current_anchor()
   if util.is_markdown_file() then
-    local row = vim.fn.line('.')
-    -- Fall back to a preamble anchor when the cursor isn't under a heading
-    -- (e.g. YAML frontmatter) so movement degrades gracefully instead of erroring.
-    return markdown_anchor.current(row) or markdown_anchor.preamble(row)
+    return markdown_anchor.current(vim.fn.line('.'))
   end
 
   return anchor.current()
@@ -63,11 +60,12 @@ end
 
 ---@return nil
 function M.move_out()
+  local current = current_anchor()
+  if not current then return end
+
   -- Add to jumplist at original cursor position before normalizing
   add_jumplist_for_move('move_out')
 
-  local current = current_anchor()
-  if not current then return end
   local target = find_target(current, "find_out")
   if not target then
     operations.jump(current.node, current.row)
@@ -82,6 +80,7 @@ end
 function M.move_in()
   local current = current_anchor()
   if not current then return end
+
   local target = find_target(current, "find_in")
   if not target then return end
 

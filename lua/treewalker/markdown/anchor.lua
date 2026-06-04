@@ -76,32 +76,13 @@ function M.current(row)
   if not util.is_markdown_file() then return nil end
 
   local section = find_section_at_row(row)
-  if not section then return nil end
+  if not section then
+    local nearest = M.find_nearest_next(row) or M.find_nearest_prev(row)
+    if not nearest then return nil end
+    section = nearest.section
+  end
+
   return build_anchor(section, row)
-end
-
---- Build a positional anchor for a row that sits outside any heading's section,
---- i.e. the preamble above the first heading (commonly YAML frontmatter).
---- It points heading_row/section at the row itself, which carries no section, so
---- find_out -> from_heading_row returns nil and move_in/move_out become no-ops,
---- while move_up/move_down still reach the nearest headings via find_nearest_*.
----@param row integer
----@return MarkdownAnchor | nil
-function M.preamble(row)
-  local node = nodes.get_at_row(row) or nodes.get_root()
-  if not node then return nil end
-
-  return {
-    node = node,
-    section = node,
-    row = row,
-    heading_row = row,
-    level = 0,
-    start = row,
-    finish = row,
-    is_heading = false,
-    parent_row = nil,
-  }
 end
 
 ---@param row integer
@@ -167,18 +148,18 @@ function M.find_prev_same_level(current)
   return last_match and M.from_heading_row(last_match) or nil
 end
 
----@param current MarkdownAnchor
+---@param row integer
 ---@return MarkdownAnchor | nil
-function M.find_nearest_prev(current)
+function M.find_nearest_prev(row)
   local root = nodes.get_root()
   if not root then return nil end
   local last_match = nil
 
   local _, target_row = heading.find_section_matching(root, function(_, section_row, _)
-    if section_row and section_row < current.row then
+    if section_row and section_row < row then
       last_match = section_row
       return false
-    elseif section_row and section_row >= current.row then
+    elseif section_row and section_row >= row then
       return last_match ~= nil, last_match
     end
     return false
@@ -188,14 +169,14 @@ function M.find_nearest_prev(current)
   return last_match and M.from_heading_row(last_match) or nil
 end
 
----@param current MarkdownAnchor
+---@param row integer
 ---@return MarkdownAnchor | nil
-function M.find_nearest_next(current)
+function M.find_nearest_next(row)
   local root = nodes.get_root()
   if not root then return nil end
 
   local _, target_row = heading.find_section_matching(root, function(_, section_row, _)
-    return section_row and section_row > current.row
+    return section_row and section_row > row
   end)
 
   if not target_row then return nil end
@@ -247,6 +228,7 @@ end
 ---@return MarkdownAnchor | nil
 function M.find_out(current)
   if not current.is_heading then
+    if current.row < current.start or current.row > current.finish then return nil end
     return M.from_heading_row(current.heading_row)
   end
 
@@ -288,7 +270,7 @@ function M.find_up(current)
     return M.find_prev_same_level(current)
   end
 
-  return M.find_nearest_prev(current)
+  return M.find_nearest_prev(current.row)
 end
 
 ---@param current MarkdownAnchor
@@ -298,7 +280,7 @@ function M.find_down(current)
     return M.find_next_same_level(current)
   end
 
-  return M.find_nearest_next(current)
+  return M.find_nearest_next(current.row)
 end
 
 ---@param level integer
