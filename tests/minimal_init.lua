@@ -37,6 +37,7 @@ ts_config.setup {
     "json",
     "java",
     "go",
+    "bash",
   },
   sync_install = true,
   auto_install = true,
@@ -58,5 +59,6 @@ vim.treesitter.language.register('scheme', { 'scm' })
 vim.treesitter.language.register('yaml', { 'yml' })
 vim.treesitter.language.register('json', { 'json' })
 vim.treesitter.language.register('go', { 'go' })
+vim.treesitter.language.register('bash', { 'sh' })
 
 dofile("plugin/init.lua") -- get the Treewalker command present
