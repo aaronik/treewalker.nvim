@@ -15,6 +15,8 @@ local M = {}
 ---@field attached_rows [integer, integer]
 ---@field augment_length integer
 
+local PARSER_ERROR_STR = "Treewalker: Treesitter node not found under cursor. Missing parser?"
+
 ---@param node TSNode
 ---@return TSNode
 local function normalize_node(node)
@@ -215,7 +217,7 @@ function M.current()
   local row = vim.fn.line('.')
   local current_anchor = M.at_row(row)
   if not current_anchor then
-    error("Treewalker: Treesitter node not found under cursor. Missing parser?")
+    error(PARSER_ERROR_STR)
   end
   return current_anchor
 end
@@ -240,7 +242,7 @@ end
 function M.current_lateral_node()
   local current = vim.treesitter.get_node({ ignore_injections = false })
   if not current then
-    error("Treewalker: Treesitter node not found under cursor. Missing parser?")
+    error(PARSER_ERROR_STR)
   end
   return normalize_lateral_node(current)
 end
