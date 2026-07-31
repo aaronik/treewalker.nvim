@@ -17,6 +17,7 @@ local M = {}
 
 local PARSER_ERROR_STR = "Treewalker: Treesitter node not found under cursor. Missing parser?"
 
+-- Choose the outermost highlightable node that starts on this line.
 ---@param node TSNode
 ---@return TSNode
 local function normalize_node(node)
@@ -36,6 +37,7 @@ local function normalize_node(node)
   return anchor
 end
 
+-- Find and normalize the node at a buffer position.
 ---@param row integer
 ---@param col integer
 ---@return TSNode | nil
@@ -47,6 +49,7 @@ local function normalized_node_at(row, col)
   return normalize_node(node)
 end
 
+-- Find the best navigation node for a line.
 ---@param row integer
 ---@return TSNode | nil
 local function node_at_row(row)
@@ -80,6 +83,7 @@ local function node_at_row(row)
   return next_node or node
 end
 
+-- Collect contiguous comments or decorators immediately above a node.
 ---@param node TSNode
 ---@return TSNode[]
 local function get_augments(node)
@@ -139,6 +143,7 @@ local function attached_end_row(node)
   return end_row
 end
 
+-- Build navigation and swap bounds for a node.
 ---@param anchor_node TSNode
 ---@param row integer | nil
 ---@return TreewalkerAnchor
@@ -191,6 +196,7 @@ local function build_anchor(anchor_node, row)
   }
 end
 
+-- Create an anchor from a node.
 ---@param node TSNode
 ---@param row integer | nil
 ---@return TreewalkerAnchor
@@ -198,6 +204,7 @@ function M.from_node(node, row)
   return build_anchor(normalize_node(node), row)
 end
 
+-- Create an anchor for the node represented by a line.
 ---@param row integer
 ---@return TreewalkerAnchor | nil
 function M.at_row(row)
@@ -212,6 +219,7 @@ function M.at_row(row)
   return M.from_node(node, anchor_row)
 end
 
+-- Create an anchor at the cursor line.
 ---@return TreewalkerAnchor
 function M.current()
   local row = vim.fn.line('.')
@@ -222,6 +230,7 @@ function M.current()
   return current_anchor
 end
 
+-- Choose the outermost same-position node for lateral swaps.
 ---@param node TSNode
 ---@return TSNode
 local function normalize_lateral_node(node)
@@ -238,6 +247,7 @@ local function normalize_lateral_node(node)
   return lateral
 end
 
+-- Get the cursor node normalized for lateral swaps.
 ---@return TSNode
 function M.current_lateral_node()
   local current = vim.treesitter.get_node({ ignore_injections = false })
@@ -248,6 +258,7 @@ function M.current_lateral_node()
 end
 
 -- Convenience for give me back next sibling of a potentially nil node
+-- Return a node’s next named sibling, if any.
 ---@param node TSNode | nil
 ---@return TSNode | nil
 function M.next_sibling(node)
@@ -256,6 +267,7 @@ function M.next_sibling(node)
 end
 
 -- Convenience for give me back prev sibling of a potentially nil node
+-- Return a node’s previous named sibling, if any.
 ---@param node TSNode | nil
 ---@return TSNode | nil
 function M.prev_sibling(node)
@@ -263,6 +275,7 @@ function M.prev_sibling(node)
   return node:prev_named_sibling()
 end
 
+-- Check whether a node owns a comment or decorator child.
 ---@param node TSNode
 ---@return boolean
 local function has_augment_child(node)
@@ -280,6 +293,7 @@ local function has_augment_child(node)
   return false
 end
 
+-- Reject a candidate nested under a competing same-indent target.
 ---@param current TreewalkerAnchor
 ---@param candidate TreewalkerAnchor
 ---@return boolean
@@ -318,6 +332,7 @@ local function has_same_indent_jump_ancestor(current, candidate)
   return false
 end
 
+-- Find the nearest eligible target at the same indentation.
 ---@param direction "up" | "down"
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
@@ -344,18 +359,21 @@ function M.find_neighbor(direction, current)
   end
 end
 
+-- Find the previous same-indent target.
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
 function M.find_up(current)
   return M.find_neighbor("up", current)
 end
 
+-- Find the next same-indent target.
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
 function M.find_down(current)
   return M.find_neighbor("down", current)
 end
 
+-- Find the first eligible target nested inside this anchor.
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
 function M.find_in(current)
@@ -386,6 +404,7 @@ function M.find_in(current)
   end
 end
 
+-- Return to this anchor’s start, then find its enclosing target.
 ---@param current TreewalkerAnchor
 ---@return TreewalkerAnchor | nil
 function M.find_out(current)
@@ -414,6 +433,7 @@ function M.find_out(current)
   end
 end
 
+-- Return the outermost string node containing a node.
 ---@param node TSNode
 ---@return TSNode | nil
 function M.get_highest_string_node(node)

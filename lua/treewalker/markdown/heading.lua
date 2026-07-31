@@ -61,6 +61,7 @@ function M.find_child_of_type(node, child_type)
 end
 
 --- Generic section traversal helper
+-- Traverse sections until a predicate chooses a heading row.
 ---@param root TSNode
 ---@param predicate function
 ---@return TSNode|nil, integer|nil

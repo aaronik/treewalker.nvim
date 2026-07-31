@@ -15,6 +15,7 @@ local M = {}
 ---@field is_heading boolean
 ---@field parent_row integer | nil
 
+-- Find the innermost Markdown section containing a line.
 ---@param row integer
 ---@return TSNode|nil
 local function find_section_at_row(row)
@@ -45,6 +46,7 @@ local function find_section_at_row(row)
   return traverse(root)
 end
 
+-- Build an anchor for a line within a Markdown section.
 ---@param section TSNode
 ---@param row integer
 ---@return MarkdownAnchor | nil
@@ -70,6 +72,7 @@ local function build_anchor(section, row)
   }
 end
 
+-- Create an anchor for a Markdown line or its nearest section.
 ---@param row integer
 ---@return MarkdownAnchor | nil
 function M.current(row)
@@ -85,6 +88,7 @@ function M.current(row)
   return build_anchor(section, row)
 end
 
+-- Create an anchor from a section heading line.
 ---@param row integer
 ---@return MarkdownAnchor | nil
 function M.from_heading_row(row)
@@ -93,6 +97,7 @@ function M.from_heading_row(row)
   return build_anchor(section, row)
 end
 
+-- Create an anchor only when the line is a heading.
 ---@param row integer | nil
 ---@return MarkdownAnchor | nil
 function M.current_heading(row)
@@ -101,6 +106,7 @@ function M.current_heading(row)
   return current
 end
 
+-- Find the next heading at the same level.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_next_same_level(current)
@@ -123,6 +129,7 @@ function M.find_next_same_level(current)
   return M.from_heading_row(target_row)
 end
 
+-- Find the previous heading at the same level.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_prev_same_level(current)
@@ -148,6 +155,7 @@ function M.find_prev_same_level(current)
   return last_match and M.from_heading_row(last_match) or nil
 end
 
+-- Find the nearest heading before a line.
 ---@param row integer
 ---@return MarkdownAnchor | nil
 function M.find_nearest_prev(row)
@@ -169,6 +177,7 @@ function M.find_nearest_prev(row)
   return last_match and M.from_heading_row(last_match) or nil
 end
 
+-- Find the nearest heading after a line.
 ---@param row integer
 ---@return MarkdownAnchor | nil
 function M.find_nearest_next(row)
@@ -183,6 +192,7 @@ function M.find_nearest_next(row)
   return M.from_heading_row(target_row)
 end
 
+-- Make an anchor for a child section below this heading.
 ---@param child TSNode
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil, boolean
@@ -201,6 +211,7 @@ local function child_anchor(child, current)
   return anchor, child_level == current.level + 1
 end
 
+-- Find the first child heading, preferring the next level.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_in(current)
@@ -224,6 +235,7 @@ function M.find_in(current)
   return fallback
 end
 
+-- Return to a section heading, then find its parent heading.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_out(current)
@@ -263,6 +275,7 @@ function M.find_out(current)
   return M.from_heading_row(best_match.row)
 end
 
+-- Move to the previous peer or preceding heading.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_up(current)
@@ -273,6 +286,7 @@ function M.find_up(current)
   return M.find_nearest_prev(current.row)
 end
 
+-- Move to the next peer or following heading.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.find_down(current)
@@ -283,6 +297,7 @@ function M.find_down(current)
   return M.find_nearest_next(current.row)
 end
 
+-- List headings with the same level and parent in a range.
 ---@param level integer
 ---@param parent_row integer | nil
 ---@param start_row integer
@@ -304,6 +319,7 @@ local function sibling_rows(level, parent_row, start_row, end_row)
   return rows
 end
 
+-- Find the next heading that can swap with this one.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.next_swappable_sibling(current)
@@ -321,6 +337,7 @@ function M.next_swappable_sibling(current)
   end
 end
 
+-- Find the previous heading that can swap with this one.
 ---@param current MarkdownAnchor
 ---@return MarkdownAnchor | nil
 function M.prev_swappable_sibling(current)

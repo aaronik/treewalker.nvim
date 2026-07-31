@@ -22,6 +22,7 @@ local function jump_to(target)
   operations.jump(target.node, target.row)
 end
 
+-- Check whether a move crosses only one line.
 ---@param current TreewalkerAnchor | MarkdownAnchor
 ---@param target TreewalkerAnchor | MarkdownAnchor
 ---@return boolean
@@ -49,6 +50,7 @@ local function add_jumplist_for_move(command)
   end
 end
 
+-- Create the appropriate anchor at the cursor.
 ---@return TreewalkerAnchor | MarkdownAnchor | nil
 local function current_anchor()
   if util.is_markdown_file() then

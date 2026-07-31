@@ -2,6 +2,7 @@ local anchor = require "treewalker.anchor"
 
 local M = {}
 
+-- Convert a node to an anchor while preserving existing anchors.
 ---@param value TreewalkerAnchor | TSNode
 ---@return TreewalkerAnchor
 local function as_anchor(value)
@@ -15,6 +16,7 @@ local function as_anchor(value)
   return anchor.from_node(value)
 end
 
+-- Reject moves that leave the current parent when confinement is enabled.
 ---@param current TreewalkerAnchor | TSNode
 ---@param candidate TreewalkerAnchor | TSNode
 ---@return boolean

@@ -36,6 +36,7 @@ function Treewalker.setup(opts)
 end
 
 -- Makes sure the treesitter parser is available, otherwise makes a notification
+-- Wrap a command to report a missing parser once.
 ---@param fn function
 local function ensuring_parser(fn)
   ---@return boolean

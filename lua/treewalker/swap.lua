@@ -22,6 +22,7 @@ local function is_supported_ft()
   return not unsupported_filetypes[ft]
 end
 
+-- Return an anchor only when the cursor starts a swappable node.
 ---@return TreewalkerAnchor | nil
 local function current_vertical_anchor()
   local node = vim.treesitter.get_node()
