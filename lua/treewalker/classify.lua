@@ -27,7 +27,7 @@ local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
 
 local AUGMENT_TARGET_TYPE_MATCHERS = {
   "comment",
-  "source",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
+  "^source$",         -- On Ubuntu, on nvim 0.11, TS is diff for comments, with source as the child of comment
   "text",           -- Same as above but with java
   "attribute_item", -- decorators (rust)
   "decorat",        -- decorators (py)

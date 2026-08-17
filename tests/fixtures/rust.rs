@@ -1,3 +1,4 @@
+
 use rand::{thread_rng, Rng};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
