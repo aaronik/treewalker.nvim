@@ -76,7 +76,7 @@ end
 ---@param node TSNode
 ---@return boolean
 local function is_root_node(node)
-  return node:parent() == nil and node:range() == 0
+  return node:parent() == nil
 end
 
 ---@param node TSNode

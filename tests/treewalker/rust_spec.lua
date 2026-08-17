@@ -11,6 +11,12 @@ describe("In a rust file:", function()
 
   h.ensure_has_parser("rust")
 
+  it("Navigates up to the first node after a leading blank line", function()
+    vim.fn.cursor(3, 1)
+    tw.move_up()
+    h.assert_cursor_at(2, 1, "use rand::{thread_rng, Rng};")
+  end)
+
   it("Does not hang moving up from a leading blank line", function()
     vim.fn.cursor(1, 1)
     tw.move_up()
