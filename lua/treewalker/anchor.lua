@@ -316,7 +316,15 @@ local function has_same_indent_jump_ancestor(current, candidate)
       and lines.get_start_col(iter_line) == candidate.indent
     then
       if iter == current.node then
-        return parent ~= current.node
+        -- Up/down navigate peers, so descendants belong to move_in instead. Some
+        -- parsers wrap sibling lists in a container whose range starts exactly at
+        -- its first child; normalization represents that first child by the wrapper.
+        local first_child = current.node:named_child(0)
+        local is_transparent_container = first_child
+          and nodes.have_same_srow(current.node, first_child)
+          and nodes.have_same_scol(current.node, first_child)
+
+        return not is_transparent_container
       end
 
       if vim.treesitter.is_ancestor(iter, current.node) then

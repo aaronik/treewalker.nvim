@@ -85,3 +85,18 @@ fn main() {
     let shapes = vec![&circle, &rectangle];
     println!("The total area is: {}", sum_areas(shapes));
 }
+
+fn function_with_where_clause<T, U>(t: &T, u: &U) -> i32
+where
+    T: std::fmt::Display + Clone,
+    U: Clone + std::fmt::Debug,
+{
+    2
+}
+
+fn function_with_inline_where_clause<T>(t: &T) -> i32 where T: Clone,
+{
+    2
+}
+
+fn function_after_where_clause() {}
