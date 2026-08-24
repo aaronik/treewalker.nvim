@@ -230,7 +230,7 @@ function M.current()
   return current_anchor
 end
 
--- Choose the outermost same-position node for lateral swaps.
+-- Choose the outermost transparent node for lateral swaps.
 ---@param node TSNode
 ---@return TSNode
 local function normalize_lateral_node(node)
@@ -245,6 +245,87 @@ local function normalize_lateral_node(node)
   end
 
   return lateral
+end
+
+---@param node TSNode
+---@return string | nil
+local function field_name(node)
+  local parent = node:parent()
+  if not parent then return nil end
+
+  for child, name in parent:iter_children() do
+    if child:equal(node) then
+      return name
+    end
+  end
+end
+
+-- Nodes in distinct grammar fields are structural parts, not lateral peers.
+---@param left TSNode
+---@param right TSNode
+---@return boolean
+function M.can_swap_laterally(left, right)
+  local parent = left:parent()
+  return parent ~= nil and parent:equal(right:parent()) and field_name(left) == field_name(right)
+end
+
+---@param node TSNode
+---@param direction "left" | "right"
+---@return TSNode | nil
+local function lateral_sibling(node, direction)
+  local parent = node:parent()
+  if not parent then return nil end
+
+  local previous = nil ---@type TSNode | nil
+  local found = false
+  for child in parent:iter_children() do
+    if child:named() then
+      if direction == "right" then
+        if found then return child end
+        found = child:equal(node)
+      else
+        if child:equal(node) then return previous end
+        previous = child
+      end
+    end
+  end
+end
+
+-- Find a swappable sibling pair, preferring the outermost cursor node.
+---@param direction "left" | "right"
+---@return TSNode | nil, TSNode | nil
+function M.find_lateral_pair(direction)
+  local current = vim.treesitter.get_node({ ignore_injections = false })
+  if not current then
+    error(PARSER_ERROR_STR)
+  end
+
+  if M.get_highest_string_node(current) then
+    local outer = normalize_lateral_node(current)
+    local sibling = lateral_sibling(outer, direction)
+    if sibling and M.can_swap_laterally(outer, sibling) then
+      return outer, sibling
+    end
+    return nil, nil
+  end
+
+  local root = nodes.get_root()
+  local current_range = nodes.range(current)
+  local direct_sibling = lateral_sibling(current, direction)
+  current = root:named_descendant_for_range(
+    current_range[1], current_range[2], current_range[3], current_range[4]
+  )
+  if direct_sibling and M.can_swap_laterally(current, direct_sibling) then
+    return current, direct_sibling
+  end
+
+  local outer = normalize_lateral_node(current)
+  local sibling = lateral_sibling(outer, direction)
+  if sibling and M.can_swap_laterally(outer, sibling) then
+    return outer, sibling
+  end
+
+  return nil, nil
 end
 
 -- Get the cursor node normalized for lateral swaps.

@@ -1,6 +1,7 @@
 local load_fixture = require "tests.load_fixture"
 local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
+local lines = require 'treewalker.lines'
 
 describe("Movement in Go file with tab indentation:", function()
   before_each(function()
@@ -64,6 +65,22 @@ describe("Movement in Go file with tab indentation:", function()
     vim.fn.cursor(27, 1) -- case 1
     tw.move_down()
     h.assert_cursor_at(29, 2, "case 2:")
+  end)
+
+  it("swaps a range blank identifier right", function()
+    vim.fn.cursor(39, 6) -- |_|, num := range nums
+
+    tw.swap_right()
+
+    assert.same("\tfor num, _ := range nums {", lines.get_line(39))
+  end)
+
+  it("does not swap a range clause with a loop body", function()
+    vim.fn.cursor(39, 7) -- _, |num := range nums
+
+    tw.swap_right()
+
+    assert.same("\tfor _, num := range nums {", lines.get_line(39))
   end)
 
   describe("scope_confined", function()

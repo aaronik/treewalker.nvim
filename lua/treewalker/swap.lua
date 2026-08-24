@@ -86,8 +86,7 @@ end
 function M.swap_right()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
-  local current = anchor.current_lateral_node()
-  local target = anchor.next_sibling(current)
+  local current, target = anchor.find_lateral_pair("right")
 
   if not current or not target then return end
 
@@ -127,8 +126,7 @@ end
 function M.swap_left()
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
-  local current = anchor.current_lateral_node()
-  local target = anchor.prev_sibling(current)
+  local current, target = anchor.find_lateral_pair("left")
 
   if not current or not target then return end
 
