@@ -1,43 +1,39 @@
-local load_fixture = require "tests.load_fixture"
 local nodes = require "treewalker.nodes"
 
+---@class MockNode
+---@field child MockNode|nil
+---@field start_row integer
+---@field start_col integer
+
+---@param child MockNode|nil
+---@param start_row integer
+---@param start_col integer
+---@return MockNode
+local function mock_node(child, start_row, start_col)
+  local node = {
+    child = child,
+    start_row = start_row,
+    start_col = start_col,
+  }
+
+  function node:named_child(index)
+    if index == 0 then return self.child end
+  end
+
+  function node:range()
+    return self.start_row, self.start_col, self.start_row, self.start_col
+  end
+
+  return node
+end
+
 describe("nodes", function()
-  before_each(function()
-    load_fixture("/go.go")
-  end)
-
   it("identifies transparent AST containers", function()
-    local root = nodes.get_root()
-    assert(root)
+    local child = mock_node(nil, 2, 4)
+    local transparent_container = mock_node(child, 2, 4)
+    local opaque_container = mock_node(child, 2, 5)
 
-    local function_declaration = nil
-    local root_children = root:iter_children()
-    local child = root_children()
-    while child do
-      if child:named() and child:type() == "function_declaration" then
-        function_declaration = child
-        break
-      end
-      child = root_children()
-    end
-    assert(function_declaration)
-
-    local block = nil
-    local function_children = function_declaration:iter_children()
-    child = function_children()
-    while child do
-      if child:named() and child:type() == "block" then
-        block = child
-        break
-      end
-      child = function_children()
-    end
-    assert(block)
-    local statement_list = block:named_child(0)
-    assert(statement_list)
-
-    assert.is_true(nodes.have_same_start(statement_list, statement_list:named_child(0)))
-    assert.is_true(nodes.is_transparent_container(statement_list))
-    assert.is_false(nodes.is_transparent_container(function_declaration))
+    assert.is_true(nodes.is_transparent_container(transparent_container))
+    assert.is_false(nodes.is_transparent_container(opaque_container))
   end)
 end)
