@@ -65,6 +65,7 @@ describe("In a rust file:", function()
     tw.swap_left()
     assert.same('    println!(calculate_area(shape), "shape_area");', lines.get_line(47))
   end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })
