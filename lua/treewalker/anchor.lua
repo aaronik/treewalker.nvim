@@ -356,22 +356,12 @@ function M.prev_sibling(node)
   return node:prev_named_sibling()
 end
 
--- Check whether a node owns a comment or decorator child.
+-- Check whether a node starts with a comment or decorator child.
 ---@param node TSNode
 ---@return boolean
 local function has_augment_child(node)
-  local iter = node:iter_children()
-  local child = iter()
-
-  while child do
-    if classify.is_augment_target(child) then
-      return true
-    end
-
-    child = iter()
-  end
-
-  return false
+  local child = node:named_child(0)
+  return child ~= nil and classify.is_augment_target(child)
 end
 
 -- Reject a candidate nested under a competing same-indent target.

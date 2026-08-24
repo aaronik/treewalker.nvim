@@ -22,10 +22,14 @@ func helper() {
 }
 
 func switchCondition() {
+	// case values can be any value, constants are not mandatory
+
 	i := 2
-	switch i {
+	switch i { //
 	case 1:
 		fmt.Println("one")
+		// fallthrough // this is a special keyword that lets you fallthrough to the next case
+		//                because in go, switch exits after first returned value / last executed statement
 	case 2:
 		fmt.Println("two")
 	case 3:

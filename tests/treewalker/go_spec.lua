@@ -50,37 +50,43 @@ describe("Movement in Go file with tab indentation:", function()
   end)
 
   it("skips switch cases with move_down", function()
-    vim.fn.cursor(26, 1) -- switch i
+    vim.fn.cursor(28, 1) -- switch i
     tw.move_down()
-    h.assert_cursor_at(34, 2, 'fmt.Println("done")')
+    h.assert_cursor_at(38, 2, 'fmt.Println("done")')
+  end)
+
+  it("skips switch cases with move_up", function()
+    vim.fn.cursor(38, 1) -- fmt.Println("done")
+    tw.move_up()
+    h.assert_cursor_at(28, 2, "switch i { //")
   end)
 
   it("moves out of a switch case to its switch", function()
-    vim.fn.cursor(27, 1) -- case 1
+    vim.fn.cursor(29, 1) -- case 1
     tw.move_out()
-    h.assert_cursor_at(26, 2, "switch i")
+    h.assert_cursor_at(28, 2, "switch i { //")
   end)
 
   it("moves between switch cases", function()
-    vim.fn.cursor(27, 1) -- case 1
+    vim.fn.cursor(29, 1) -- case 1
     tw.move_down()
-    h.assert_cursor_at(29, 2, "case 2:")
+    h.assert_cursor_at(33, 2, "case 2:")
   end)
 
   it("swaps a range blank identifier right", function()
-    vim.fn.cursor(39, 6) -- |_|, num := range nums
+    vim.fn.cursor(43, 6) -- |_|, num := range nums
 
     tw.swap_right()
 
-    assert.same("\tfor num, _ := range nums {", lines.get_line(39))
+    assert.same("\tfor num, _ := range nums {", lines.get_line(43))
   end)
 
   it("does not swap a range clause with a loop body", function()
-    vim.fn.cursor(39, 7) -- _, |num := range nums
+    vim.fn.cursor(43, 7) -- _, |num := range nums
 
     tw.swap_right()
 
-    assert.same("\tfor _, num := range nums {", lines.get_line(39))
+    assert.same("\tfor _, num := range nums {", lines.get_line(43))
   end)
 
   describe("scope_confined", function()
