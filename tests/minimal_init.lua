@@ -29,6 +29,7 @@ ts_config.setup {
     "javascript",
     "c_sharp",
     "typescript",
+    "tsx",
     "php",
     "markdown",
     "ruby",
