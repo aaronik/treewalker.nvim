@@ -90,6 +90,7 @@ Consider yourself a senior engineer who specializes in writing clean code, which
     Only run these checks - don't do no-utils or pass
 
 - Never remove existing comments
+- Never add language-specific behavior outside `lua/treewalker/classify.lua`; generic movement must use AST structure rather than node-type or language checks
 - Only comment on strange pieces of code, be minimal
 - Add types for all code
     - Avoid using `table`, prefer being explicit, ex ---@return { foo: string, bar?: integer }
