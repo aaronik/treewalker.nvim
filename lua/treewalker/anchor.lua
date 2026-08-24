@@ -237,7 +237,7 @@ local function normalize_lateral_node(node)
   local lateral = M.get_highest_string_node(node) or node
   local iter = lateral:parent()
 
-  while iter and nodes.have_same_srow(lateral, iter) and nodes.have_same_scol(lateral, iter) do
+  while iter and nodes.have_same_start(lateral, iter) do
     if classify.is_highlight_target(iter) then
       lateral = iter
     end
@@ -298,6 +298,11 @@ end
 ---@param candidate TreewalkerAnchor
 ---@return boolean
 local function has_same_indent_jump_ancestor(current, candidate)
+  -- A direct child is a structural child, not a lateral neighbor.
+  if current.row == current.start_row and candidate.node:parent() == current.node then
+    return true
+  end
+
   ---@type TSNode | nil
   local parent = candidate.node:parent()
 
@@ -319,12 +324,7 @@ local function has_same_indent_jump_ancestor(current, candidate)
         -- Up/down navigate peers, so descendants belong to move_in instead. Some
         -- parsers wrap sibling lists in a container whose range starts exactly at
         -- its first child; normalization represents that first child by the wrapper.
-        local first_child = current.node:named_child(0)
-        local is_transparent_container = first_child
-          and nodes.have_same_srow(current.node, first_child)
-          and nodes.have_same_scol(current.node, first_child)
-
-        return not is_transparent_container
+        return not nodes.is_transparent_container(current.node)
       end
 
       if vim.treesitter.is_ancestor(iter, current.node) then
@@ -422,6 +422,11 @@ function M.find_out(current)
 
   if classify.is_comment_node(current.node) then
     current = M.find_down(current) or current
+  end
+
+  local parent = current.node:parent()
+  if parent and classify.is_jump_target(parent) and classify.is_highlight_target(parent) then
+    return build_anchor(parent, nodes.get_srow(parent))
   end
 
   local fallback = nil ---@type TSNode | nil

@@ -20,3 +20,16 @@ func helper() {
 	var a = 10
 	var b = 20
 }
+
+func switchCondition() {
+	i := 2
+	switch i {
+	case 1:
+		fmt.Println("one")
+	case 2:
+		fmt.Println("two")
+	case 3:
+		fmt.Println("three")
+	}
+	fmt.Println("done")
+}

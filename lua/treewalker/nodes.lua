@@ -20,6 +20,22 @@ function M.have_same_scol(node1, node2)
   return scol1 == scol2
 end
 
+---Do the nodes start at the same buffer position.
+---@param node1 TSNode
+---@param node2 TSNode
+---@return boolean
+function M.have_same_start(node1, node2)
+  return M.have_same_srow(node1, node2) and M.have_same_scol(node1, node2)
+end
+
+---Whether a node starts at the same position as its first named child.
+---@param node TSNode
+---@return boolean
+function M.is_transparent_container(node)
+  local child = node:named_child(0)
+  return child ~= nil and M.have_same_start(node, child)
+end
+
 ---Return the root TSNode for the given buffer (defaults to current buffer).
 ---Safe wrapper around parser/parse() that handles missing parsers and empty parse results.
 ---@param bufnr integer|nil

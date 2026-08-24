@@ -48,6 +48,24 @@ describe("Movement in Go file with tab indentation:", function()
     assert.equals(19, row, "Should move from main to helper (line 19)")
   end)
 
+  it("skips switch cases with move_down", function()
+    vim.fn.cursor(26, 1) -- switch i
+    tw.move_down()
+    h.assert_cursor_at(34, 2, 'fmt.Println("done")')
+  end)
+
+  it("moves out of a switch case to its switch", function()
+    vim.fn.cursor(27, 1) -- case 1
+    tw.move_out()
+    h.assert_cursor_at(26, 2, "switch i")
+  end)
+
+  it("moves between switch cases", function()
+    vim.fn.cursor(27, 1) -- case 1
+    tw.move_down()
+    h.assert_cursor_at(29, 2, "case 2:")
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

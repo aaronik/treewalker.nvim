@@ -18,6 +18,7 @@ local TARGET_BLACKLIST_TYPE_MATCHERS = {
 
 local HIGHLIGHT_BLACKLIST_TYPE_MATCHERS = {
   "body",
+  "statement_list",
   "^block$",
   "^block_[^_]+$",
   "document",
