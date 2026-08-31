@@ -26,6 +26,8 @@ ts_config.setup {
     "rust",
     "haskell",
     "html",
+    "svelte",
+    "css",
     "javascript",
     "c_sharp",
     "typescript",

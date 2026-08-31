@@ -496,6 +496,13 @@ function M.find_out(current)
   end
 
   local parent = current.node:parent()
+  if parent == nil or parent:parent() == nil then
+    local host_node = nodes.get_host_node(current.node)
+    if host_node and not host_node:equal(current.node) then
+      parent = host_node:parent()
+    end
+  end
+
   if parent and classify.is_jump_target(parent) and classify.is_highlight_target(parent) then
     return build_anchor(parent, nodes.get_srow(parent))
   end

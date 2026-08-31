@@ -61,6 +61,17 @@ function M.get_root(bufnr)
 end
 
 
+---Get the smallest node in the host tree that contains a node's range.
+---@param node TSNode
+---@return TSNode | nil
+function M.get_host_node(node)
+  local root = M.get_root()
+  if not root then return nil end
+
+  local start_row, start_col, end_row, end_col = node:range()
+  return root:named_descendant_for_range(start_row, start_col, end_row, end_col)
+end
+
 ---Get the given node's text
 ---@param node TSNode
 ---@return string[]
