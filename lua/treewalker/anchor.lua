@@ -411,6 +411,21 @@ local function has_same_indent_jump_ancestor(current, candidate)
   return false
 end
 
+---@param current TreewalkerAnchor
+---@param candidate TreewalkerAnchor
+---@return boolean
+local function is_visually_aligned_peer(current, candidate)
+  if current.row ~= current.start_row or not classify.is_jump_target(current.node) then
+    return false
+  end
+
+  local parent = current.node:parent()
+  return parent ~= nil
+    and candidate.node:parent() == parent
+    and not classify.is_highlight_target(parent)
+    and nodes.have_same_indent(current, candidate)
+end
+
 -- Find the nearest eligible target at the same indentation.
 ---@param direction "up" | "down"
 ---@param current TreewalkerAnchor
@@ -427,7 +442,7 @@ function M.find_neighbor(direction, current)
       candidate
       and candidate.start_row == row
       and candidate.line ~= ""
-      and candidate.indent == current.indent
+      and (candidate.indent == current.indent or is_visually_aligned_peer(current, candidate))
       and classify.is_jump_target(candidate.node)
       and not has_same_indent_jump_ancestor(current, candidate)
     then

@@ -20,6 +20,15 @@ function M.have_same_scol(node1, node2)
   return scol1 == scol2
 end
 
+-- Compare the byte or displayed columns of two anchors' first code characters.
+---@param current TreewalkerAnchor
+---@param candidate TreewalkerAnchor
+---@return boolean
+function M.have_same_indent(current, candidate)
+  return candidate.indent == current.indent
+    or vim.fn.virtcol({ candidate.row, candidate.indent }) == vim.fn.virtcol({ current.row, current.indent })
+end
+
 ---Do the nodes start at the same buffer position.
 ---@param node1 TSNode
 ---@param node2 TSNode

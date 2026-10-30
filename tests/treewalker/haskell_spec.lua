@@ -31,6 +31,12 @@ describe("In a haskell file: ", function()
   --   tw.move_out()
   --   h.assert_cursor_at(19, 1)
   -- end)
+  it("does not treat the start of the current multiline function as an up neighbor", function()
+    vim.fn.cursor(27, 3) -- where inside median
+    tw.move_up()
+    h.assert_cursor_at(22, 3)
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

@@ -17,6 +17,12 @@ describe("In a Svelte file", function()
     h.assert_cursor_at(1, 1)
   end)
 
+  it("moves up from inside a style element without selecting its opening tag", function()
+    vim.fn.cursor(10, 3) -- .card inside style
+    tw.move_up()
+    h.assert_cursor_at(6, 3)
+  end)
+
   it("moves out from embedded style to its host element", function()
     vim.fn.cursor(10, 5)
     tw.move_out()

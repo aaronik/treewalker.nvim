@@ -190,10 +190,32 @@ else
   print('hi', 'bye')
 end
 
-return M
+do return M end
 
 -- This is a lua fixture. I thought I was being cute when I got it
 -- from this plugin. But actually I was being dumb, and this is very confusing, l0lz
 
 -- Last line intentionally left blank
+
+if vim.g.neovide then
+	vim.o.guifont = "CommitMono Nerd Font Mono:h15"
+	vim.opt.linespace = 0
+
+	vim.g.neovide_padding_top = 0
+	vim.g.neovide_padding_bottom = 0
+	vim.g.neovide_padding_right = 0
+	vim.g.neovide_padding_left = 0
+
+	vim.g.neovide_cursor_smooth_blink = true
+
+	vim.keymap.set("t", "<C-S-V>", "<C-\\><C-n>pi") -- somehow it goes down only to this line, lower it doesnt go
+    vim.keymap.set("n", "<C-S-v>", '"+p', { noremap = true, silent = true }) -- if you place cursor here, then it goes down and up except the above line and the last line
+    vim.keymap.set("i", "<C-S-v>", "<C-R>+", { noremap = true, silent = true })
+    vim.keymap.set("v", "<C-S-v>", '"+p', { noremap = true, silent = true })
+    vim.keymap.set("c", "<C-S-v>", function()
+        vim.api.nvim_feedkeys(vim.keycode("<C-R>+"), "n", false)
+        vim.cmd("redraw")
+    end, { noremap = true, silent = true })
+	vim.keymap.set("t", "<C-S-V>", "<C-\\><C-n>pi") -- but if you put cursor here, it jumps across 4 lines above and ends up on the line werer the first comment is
+end
 

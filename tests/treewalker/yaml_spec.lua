@@ -105,6 +105,18 @@ describe("Movement in a YAML file:", function()
     h.assert_cursor_at(9, 5)
   end)
 
+  it("does not treat a multiline value's own key as its up neighbor", function()
+    vim.fn.cursor(20, 5) -- Welcome to SampleApp! inside welcomeMessage
+    tw.move_up()
+    h.assert_cursor_at(16, 5)
+  end)
+
+  it("does not treat a comment after a mapping as a nested sibling", function()
+    vim.fn.cursor(92, 1) -- Explicit tag example
+    tw.move_up()
+    h.assert_cursor_at(81, 1)
+  end)
+
   it("moves up in array", function()
     vim.fn.cursor(9, 5) -- - notifications
     tw.move_up()
