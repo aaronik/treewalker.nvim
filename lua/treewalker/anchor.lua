@@ -291,6 +291,27 @@ local function lateral_sibling(node, direction)
   end
 end
 
+-- Stop before a same-start ancestor consumes the entire sibling list.
+---@param node TSNode
+---@param direction "left" | "right"
+---@return TSNode | nil, TSNode | nil
+local function outer_lateral_pair(node, direction)
+  local current, target = nil, nil ---@type TSNode | nil, TSNode | nil
+  local iter = node ---@type TSNode | nil
+
+  while iter and nodes.have_same_start(node, iter) do
+    if iter:equal(node) or classify.is_highlight_target(iter) then
+      local sibling = lateral_sibling(iter, direction)
+      if sibling and M.can_swap_laterally(iter, sibling) then
+        current, target = iter, sibling
+      end
+    end
+    iter = iter:parent()
+  end
+
+  return current, target
+end
+
 -- Find a swappable sibling pair, preferring the outermost cursor node.
 ---@param direction "left" | "right"
 ---@return TSNode | nil, TSNode | nil
@@ -319,13 +340,7 @@ function M.find_lateral_pair(direction)
     return current, direct_sibling
   end
 
-  local outer = normalize_lateral_node(current)
-  local sibling = lateral_sibling(outer, direction)
-  if sibling and M.can_swap_laterally(outer, sibling) then
-    return outer, sibling
-  end
-
-  return nil, nil
+  return outer_lateral_pair(current, direction)
 end
 
 -- Get the cursor node normalized for lateral swaps.

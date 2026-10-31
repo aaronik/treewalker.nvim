@@ -45,3 +45,11 @@ func sum(nums ...int) {
 	}
 	fmt.Println(total)
 }
+
+func swapReturns() (int, error) {
+	return 2, fmt.Errorf("error")
+}
+
+func swapReturnsReverse() (int, error) {
+	return fmt.Errorf("error"), 2
+}

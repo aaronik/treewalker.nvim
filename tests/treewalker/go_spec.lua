@@ -89,6 +89,22 @@ describe("Movement in Go file with tab indentation:", function()
     assert.same("\tfor _, num := range nums {", lines.get_line(43))
   end)
 
+  it("swaps a call left from its first identifier in a return list", function()
+    vim.fn.cursor(50, 12) -- return 2, |fmt.Errorf("error")
+
+    tw.swap_left()
+
+    assert.same('\treturn fmt.Errorf("error"), 2', lines.get_line(50))
+  end)
+
+  it("swaps a call right from its first identifier in a return list", function()
+    vim.fn.cursor(54, 9) -- return |fmt.Errorf("error"), 2
+
+    tw.swap_right()
+
+    assert.same('\treturn 2, fmt.Errorf("error")', lines.get_line(54))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })
