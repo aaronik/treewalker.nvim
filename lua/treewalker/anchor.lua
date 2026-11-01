@@ -291,28 +291,30 @@ local function lateral_sibling(node, direction)
   end
 end
 
--- Stop before a same-start ancestor consumes the entire sibling list.
+-- Use the nearest valid lateral sibling in the requested direction.
 ---@param node TSNode
 ---@param direction "left" | "right"
 ---@return TSNode | nil, TSNode | nil
-local function outer_lateral_pair(node, direction)
-  local current, target = nil, nil ---@type TSNode | nil, TSNode | nil
-  local iter = node ---@type TSNode | nil
+local function nearest_lateral_pair(node, direction)
+  local iter = M.get_highest_string_node(node) or node ---@type TSNode | nil
+  local initial_row = nodes.get_srow(iter)
 
-  while iter and nodes.have_same_start(node, iter) do
-    if iter:equal(node) or classify.is_highlight_target(iter) then
+  while iter do
+    if classify.is_highlight_target(iter) then
       local sibling = lateral_sibling(iter, direction)
       if sibling and M.can_swap_laterally(iter, sibling) then
-        current, target = iter, sibling
+        return iter, sibling
       end
     end
-    iter = iter:parent()
+    local parent = iter:parent()
+    if not parent or nodes.get_srow(parent) ~= initial_row or nodes.get_erow(parent) ~= initial_row then break end
+    iter = parent
   end
 
-  return current, target
+  return nil, nil
 end
 
--- Find a swappable sibling pair, preferring the outermost cursor node.
+-- Find a swappable sibling pair, preferring the innermost eligible cursor node.
 ---@param direction "left" | "right"
 ---@return TSNode | nil, TSNode | nil
 function M.find_lateral_pair(direction)
@@ -321,26 +323,7 @@ function M.find_lateral_pair(direction)
     error(PARSER_ERROR_STR)
   end
 
-  if M.get_highest_string_node(current) then
-    local outer = normalize_lateral_node(current)
-    local sibling = lateral_sibling(outer, direction)
-    if sibling and M.can_swap_laterally(outer, sibling) then
-      return outer, sibling
-    end
-    return nil, nil
-  end
-
-  local root = nodes.get_root()
-  local current_range = nodes.range(current)
-  local direct_sibling = lateral_sibling(current, direction)
-  current = root:named_descendant_for_range(
-    current_range[1], current_range[2], current_range[3], current_range[4]
-  )
-  if direct_sibling and M.can_swap_laterally(current, direct_sibling) then
-    return current, direct_sibling
-  end
-
-  return outer_lateral_pair(current, direction)
+  return nearest_lateral_pair(current, direction)
 end
 
 -- Get the cursor node normalized for lateral swaps.

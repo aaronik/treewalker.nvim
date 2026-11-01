@@ -105,6 +105,46 @@ describe("Movement in Go file with tab indentation:", function()
     assert.same('\treturn 2, fmt.Errorf("error")', lines.get_line(54))
   end)
 
+  it("swaps a return call right from its method name", function()
+    vim.fn.cursor(54, 13) -- return fmt.|Errorf("error"), 2
+
+    tw.swap_right()
+
+    assert.same('\treturn 2, fmt.Errorf("error")', lines.get_line(54))
+  end)
+
+  it("swaps a return call right from inside its string argument", function()
+    vim.fn.cursor(54, 22) -- return fmt.Errorf("|error"), 2
+
+    tw.swap_right()
+
+    assert.same('\treturn 2, fmt.Errorf("error")', lines.get_line(54))
+  end)
+
+  it("swaps a return call left from inside its string argument", function()
+    vim.fn.cursor(50, 25) -- return 2, fmt.Errorf("|error")
+
+    tw.swap_left()
+
+    assert.same('\treturn fmt.Errorf("error"), 2', lines.get_line(50))
+  end)
+
+  it("prefers swapping an argument over its enclosing return call", function()
+    vim.fn.cursor(58, 30) -- return fmt.Errorf("%s %s", "|first", "second"), 2
+
+    tw.swap_right()
+
+    assert.same('\treturn fmt.Errorf("%s %s", "second", "first"), 2', lines.get_line(58))
+  end)
+
+  it("swaps the enclosing call when the innermost argument has no right sibling", function()
+    vim.fn.cursor(58, 39) -- return fmt.Errorf("%s %s", "first", "|second"), 2
+
+    tw.swap_right()
+
+    assert.same('\treturn 2, fmt.Errorf("%s %s", "first", "second")', lines.get_line(58))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

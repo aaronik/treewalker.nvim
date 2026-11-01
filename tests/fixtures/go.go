@@ -53,3 +53,7 @@ func swapReturns() (int, error) {
 func swapReturnsReverse() (int, error) {
 	return fmt.Errorf("error"), 2
 }
+
+func swapNested() (int, error) {
+	return fmt.Errorf("%s %s", "first", "second"), 2
+}
