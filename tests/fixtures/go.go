@@ -57,3 +57,10 @@ func swapReturnsReverse() (int, error) {
 func swapNested() (int, error) {
 	return fmt.Errorf("%s %s", "first", "second"), 2
 }
+
+// These are comments
+func swapALot(a, b, c, d, e, f int) (error, error) {
+	a := 2
+	return errors.New("error"), 2, errors.New("dsfsdf") // swap any node from here to left multiple times, it will go and replace the entire line with the above line, it will do the same with swap to righ and swap the below line
+	c := 2
+}

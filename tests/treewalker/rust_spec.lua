@@ -66,6 +66,34 @@ describe("In a rust file:", function()
     assert.same('    println!(calculate_area(shape), "shape_area");', lines.get_line(47))
   end)
 
+  it("swaps right across a trailing comment", function()
+    vim.fn.cursor(106, 9) -- let |b = 2; // stay
+
+    tw.swap_right()
+
+    assert.same('    let c = 3; // stay', lines.get_line(106))
+    assert.same('    let b = 2;', lines.get_line(107))
+  end)
+
+  it("swaps left across a trailing comment", function()
+    vim.fn.cursor(107, 9) -- let |c = 3;
+
+    tw.swap_left()
+
+    assert.same('    let c = 3; // stay', lines.get_line(106))
+    assert.same('    let b = 2;', lines.get_line(107))
+  end)
+
+  it("does not start a lateral swap on a trailing comment", function()
+    vim.fn.cursor(106, 20) -- let b = 2; // |stay
+
+    tw.swap_right()
+    tw.swap_left()
+
+    assert.same('    let b = 2; // stay', lines.get_line(106))
+    assert.same('    let c = 3;', lines.get_line(107))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

@@ -202,4 +202,10 @@ public class JavaDemo {
     demo.processData("123");
     demo.complexOperation("data", 50, true);
   }
+
+  void swapComments() {
+    int a = 1;
+    int b = 2; // stay
+    int c = 3;
+  }
 }

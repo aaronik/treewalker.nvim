@@ -3,6 +3,9 @@ local tw = require 'treewalker'
 local h = require 'tests.treewalker.helpers'
 local lines = require 'treewalker.lines'
 
+local trailing_comment = " // swap any node from here to left multiple times, it will go and replace the entire line "
+  .. "with the above line, it will do the same with swap to righ and swap the below line"
+
 describe("Movement in Go file with tab indentation:", function()
   before_each(function()
     load_fixture("/go.go")
@@ -143,6 +146,33 @@ describe("Movement in Go file with tab indentation:", function()
     tw.swap_right()
 
     assert.same('\treturn 2, fmt.Errorf("%s %s", "first", "second")', lines.get_line(58))
+  end)
+
+  it("swaps statements right across a trailing comment without swapping the comment", function()
+    vim.fn.cursor(64, 2) -- |return errors.New("error"), 2, errors.New("dsfsdf") // ...
+
+    tw.swap_right()
+
+    assert.same('\tc := 2' .. trailing_comment, lines.get_line(64))
+    assert.same('\treturn errors.New("error"), 2, errors.New("dsfsdf")', lines.get_line(65))
+  end)
+
+  it("swaps statements left across a trailing comment without swapping the comment", function()
+    vim.fn.cursor(65, 2) -- |c := 2
+
+    tw.swap_left()
+
+    assert.same('\tc := 2' .. trailing_comment, lines.get_line(64))
+    assert.same('\treturn errors.New("error"), 2, errors.New("dsfsdf")', lines.get_line(65))
+  end)
+
+  it("does not swap a trailing comment as a starting node", function()
+    vim.fn.cursor(64, 57) -- return ... // |swap any node ...
+
+    tw.swap_right()
+
+    assert.same('\treturn errors.New("error"), 2, errors.New("dsfsdf")' .. trailing_comment, lines.get_line(64))
+    assert.same('\tc := 2', lines.get_line(65))
   end)
 
   describe("scope_confined", function()

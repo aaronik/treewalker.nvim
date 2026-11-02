@@ -142,6 +142,34 @@ describe("In a java file:", function()
     tw.move_out()
     h.assert_cursor_at(13, 1) -- public class JavaDemo
   end)
+  it("swaps right across a trailing comment", function()
+    vim.fn.cursor(208, 9) -- int |b = 2; // stay
+
+    tw.swap_right()
+
+    assert.same('    int c = 3; // stay', lines.get_line(208))
+    assert.same('    int b = 2;', lines.get_line(209))
+  end)
+
+  it("swaps left across a trailing comment", function()
+    vim.fn.cursor(209, 9) -- int |c = 3;
+
+    tw.swap_left()
+
+    assert.same('    int c = 3; // stay', lines.get_line(208))
+    assert.same('    int b = 2;', lines.get_line(209))
+  end)
+
+  it("does not start a lateral swap on a trailing comment", function()
+    vim.fn.cursor(208, 20) -- int b = 2; // |stay
+
+    tw.swap_right()
+    tw.swap_left()
+
+    assert.same('    int b = 2; // stay', lines.get_line(208))
+    assert.same('    int c = 3;', lines.get_line(209))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

@@ -38,6 +38,8 @@ Tests use Plenary.nvim's busted-style framework (describe, it, before_each) and 
 
 Each test spec focuses on a specific language or feature, loading the appropriate fixture and verifying cursor movement and text manipulation behavior.
 
+For every behavior change or bug fix, mutation-test the regression tests: temporarily remove or disable the specific production-code change, run the tests to confirm the new tests fail for the intended behavior, then restore the code and run `make test` again to confirm they pass. If a fix has independent parts, mutation-test each part separately. For multi-language changes, disable fail-fast (`keep_going = true` in `PlenaryBustedDirectory`) during mutation runs so failures in every affected language are visible. Preserve unrelated worktree changes while doing this; do not leave mutations in the final code.
+
 ## Linting
 
 The linter doesn't like whitespace at the end of rows, so avoid leaving it

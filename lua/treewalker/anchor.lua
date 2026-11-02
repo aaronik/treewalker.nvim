@@ -279,12 +279,12 @@ local function lateral_sibling(node, direction)
   local previous = nil ---@type TSNode | nil
   local found = false
   for child in parent:iter_children() do
-    if child:named() then
+    if child:equal(node) then
+      if direction == "right" then found = true else return previous end
+    elseif child:named() and not classify.is_comment_node(child) then
       if direction == "right" then
         if found then return child end
-        found = child:equal(node)
       else
-        if child:equal(node) then return previous end
         previous = child
       end
     end
@@ -322,6 +322,7 @@ function M.find_lateral_pair(direction)
   if not current then
     error(PARSER_ERROR_STR)
   end
+  if classify.is_comment_node(current) then return nil, nil end
 
   return nearest_lateral_pair(current, direction)
 end

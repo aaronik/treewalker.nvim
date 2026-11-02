@@ -189,6 +189,34 @@ describe("In a typescript file:", function()
     end)
   end)
 
+  it("swaps right across a trailing comment", function()
+    vim.fn.cursor(139, 7) -- let |b = 2; // stay
+
+    tw.swap_right()
+
+    assert.same('  let c = 3; // stay', lines.get_line(139))
+    assert.same('  let b = 2;', lines.get_line(140))
+  end)
+
+  it("swaps left across a trailing comment", function()
+    vim.fn.cursor(140, 7) -- let |c = 3;
+
+    tw.swap_left()
+
+    assert.same('  let c = 3; // stay', lines.get_line(139))
+    assert.same('  let b = 2;', lines.get_line(140))
+  end)
+
+  it("does not start a lateral swap on a trailing comment", function()
+    vim.fn.cursor(139, 18) -- let b = 2; // |stay
+
+    tw.swap_right()
+    tw.swap_left()
+
+    assert.same('  let b = 2; // stay', lines.get_line(139))
+    assert.same('  let c = 3;', lines.get_line(140))
+  end)
+
   describe("scope_confined", function()
     before_each(function()
       tw.setup({ scope_confined = true })

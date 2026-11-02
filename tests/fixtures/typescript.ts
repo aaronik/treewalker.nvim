@@ -133,3 +133,9 @@ const thingy: Thingy = Stuff(
 const moar_thingy: Thingy = Stuff(
 'Moar_thingy'
 )
+
+function swapComments() {
+  let a = 1;
+  let b = 2; // stay
+  let c = 3;
+}

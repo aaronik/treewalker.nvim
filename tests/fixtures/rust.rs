@@ -100,3 +100,9 @@ fn function_with_inline_where_clause<T>(t: &T) -> i32 where T: Clone,
 }
 
 fn function_after_where_clause() {}
+
+fn swap_comments() {
+    let a = 1;
+    let b = 2; // stay
+    let c = 3;
+}
