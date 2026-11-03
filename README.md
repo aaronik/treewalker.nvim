@@ -93,7 +93,7 @@ the same nodes as Up/Down, but won't take the comments, decorators or annotation
 {
   'aaronik/treewalker.nvim',
 
-  -- optional (see options below)
+  -- optional (see options/mapping below)
   opts = { ... }
 }
 ```
@@ -103,7 +103,7 @@ the same nodes as Up/Down, but won't take the comments, decorators or annotation
 use {
   'aaronik/treewalker.nvim',
 
-  -- optional (see options below)
+  -- optional (see options/mapping below)
   setup = function()
       require('treewalker').setup({ ... })
   end
@@ -114,7 +114,7 @@ use {
 ```vimscript
 Plug 'aaronik/treewalker.nvim'
 
-" Optionally (see options below)
+" Optionally (see options/mapping below)
 :lua require('treewalker').setup({ ... })
 ```
 
