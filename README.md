@@ -7,9 +7,7 @@
         ·
         <a href="#Mapping">Mapping</a>
     </h4>
-    <a href="https://neovim.io/">
-        <img alt="Neovim" style="height: 20px;" src="https://img.shields.io/badge/NeoVim-%2357A143.svg?&amp;style=for-the-badge&amp;logo=neovim&amp;logoColor=white">
-    </a>
+    <a href="https://neovim.io/"><img alt="Neovim" style="height: 20px;" src="https://img.shields.io/badge/NeoVim-%2357A143.svg?&amp;style=for-the-badge&amp;logo=neovim&amp;logoColor=white"></a>
     <img alt="100% Lua" src="https://img.shields.io/badge/100%25_lua-purple" height="20px">
     <span>&nbsp;</span>
     <img src="https://github.com/aaronik/treewalker.nvim/actions/workflows/test.yml/badge.svg" alt="build status">
