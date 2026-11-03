@@ -28,8 +28,11 @@ function Treewalker.setup(opts)
   if opts == nil then return end -- nil is valid, in which case we stick to the defaults
 
   local is_opts_valid, validation_errors = options.validate_opts(opts)
-  if not is_opts_valid and opts.notifications ~= false then
-    return options.handle_opts_validation_errors(validation_errors)
+  if not is_opts_valid then
+    if opts.notifications ~= false then
+      options.handle_opts_validation_errors(validation_errors)
+    end
+    return
   end
 
   Treewalker.opts = vim.tbl_deep_extend('force', Treewalker.opts, opts)

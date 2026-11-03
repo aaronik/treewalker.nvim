@@ -105,6 +105,27 @@ describe("When given all good options", function()
 end)
 
 describe("Notifications", function()
+  it("rejects invalid options silently without changing existing configuration", function()
+    local original = vim.deepcopy(tw.opts)
+    tw.setup({ highlight = false, highlight_group = "DiffAdd", notifications = true })
+    local configured = vim.deepcopy(tw.opts)
+    local notify_stub = stub.new(vim, "notify")
+
+    tw.setup({
+      ---@diagnostic disable-next-line: assign-type-mismatch
+      highlight = "invalid",
+      highlight_group = "ColorColumn",
+      notifications = false,
+    })
+
+    local after = vim.deepcopy(tw.opts)
+    notify_stub:revert()
+    tw.opts = original
+
+    assert.same(configured, after)
+    assert.stub(notify_stub).was.called(0)
+  end)
+
   it("does not notify of bad ops when notifications is turned off", function()
     local notify_stub = stub(vim, "notify")
     local notify_once_stub = stub(vim, "notify_once")
