@@ -18,8 +18,9 @@ local function find_target(current, direction)
 end
 
 ---@param target TreewalkerAnchor | { node: TSNode, row: integer }
-local function jump_to(target)
-  operations.jump(target.node, target.row)
+---@param opts Opts
+local function jump_to(target, opts)
+  operations.jump(target.node, target.row, opts)
 end
 
 -- Check whether a move crosses only one line.
@@ -30,8 +31,10 @@ local function is_neighbor(current, target)
   return math.abs(current.row - target.row) == 1
 end
 
-local function should_add_jumplist(command)
-  local opts = require('treewalker').opts
+---@param command string
+---@param opts Opts
+---@return boolean
+local function should_add_jumplist(command, opts)
   local jumplist = opts.jumplist
 
   if jumplist == false then return false end
@@ -44,8 +47,10 @@ local function should_add_jumplist(command)
   return true
 end
 
-local function add_jumplist_for_move(command)
-  if should_add_jumplist(command) then
+---@param command string
+---@param opts Opts
+local function add_jumplist_for_move(command, opts)
+  if should_add_jumplist(command, opts) then
     vim.cmd("normal! m'")
   end
 end
@@ -60,76 +65,80 @@ local function current_anchor()
   return anchor.current()
 end
 
+---@param opts Opts
 ---@return nil
-function M.move_out()
+function M.move_out(opts)
   local current = current_anchor()
   if not current then return end
 
   -- Add to jumplist at original cursor position before normalizing
-  add_jumplist_for_move('move_out')
+  add_jumplist_for_move('move_out', opts)
 
   local target = find_target(current, "find_out")
   if not target then
-    operations.jump(current.node, current.row)
+    operations.jump(current.node, current.row, opts)
     return
   end
 
-  jump_to(target)
-  add_jumplist_for_move('move_out') -- for easy Ctrl-o/Ctrl-i navigation
+  jump_to(target, opts)
+  add_jumplist_for_move('move_out', opts) -- for easy Ctrl-o/Ctrl-i navigation
 end
 
+---@param opts Opts
 ---@return nil
-function M.move_in()
+function M.move_in(opts)
   local current = current_anchor()
   if not current then return end
 
   local target = find_target(current, "find_in")
   if not target then return end
 
-  add_jumplist_for_move('move_in')
-  jump_to(target)
-  add_jumplist_for_move('move_in')
+  add_jumplist_for_move('move_in', opts)
+  jump_to(target, opts)
+  add_jumplist_for_move('move_in', opts)
 end
 
+---@param opts Opts
 ---@return nil
-function M.move_up()
+function M.move_up(opts)
   local current = current_anchor()
   if not current then return end
   local target = find_target(current, "find_up")
   if not target then return end
 
-  if confinement.should_confine(current, target) then
+  if confinement.should_confine(current, target, opts) then
     return
   end
 
   if not is_neighbor(current, target) then
-    add_jumplist_for_move('move_up')
+    add_jumplist_for_move('move_up', opts)
   end
 
-  jump_to(target)
+  jump_to(target, opts)
 end
 
+---@param opts Opts
 ---@return nil
-function M.move_down()
+function M.move_down(opts)
   local current = current_anchor()
   if not current then return end
   local target = find_target(current, "find_down")
   if not target then return end
 
-  if confinement.should_confine(current, target) then
+  if confinement.should_confine(current, target, opts) then
     return
   end
 
   local neighbor = is_neighbor(current, target)
 
   if not neighbor then
-    add_jumplist_for_move('move_down')
+    add_jumplist_for_move('move_down', opts)
   end
 
-  jump_to(target)
+  jump_to(target, opts)
 
   if not neighbor then
-    add_jumplist_for_move('move_down')
+    add_jumplist_for_move('move_down', opts)
   end
 end
 

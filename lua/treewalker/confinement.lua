@@ -19,9 +19,9 @@ end
 -- Reject moves that leave the current parent when confinement is enabled.
 ---@param current TreewalkerAnchor | TSNode
 ---@param candidate TreewalkerAnchor | TSNode
+---@param opts Opts
 ---@return boolean
-function M.should_confine(current, candidate)
-  local opts = require('treewalker').opts
+function M.should_confine(current, candidate, opts)
   if opts.scope_confined ~= true then
     return false
   end

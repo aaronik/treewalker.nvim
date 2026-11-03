@@ -23,7 +23,7 @@ Treewalker.opts = {
 }
 
 -- This does not need to be called for Treewalker to work. The defaults are preinitialized and aim to be sane.
----@param opts Opts | nil
+---@param opts OptsOverride | nil
 function Treewalker.setup(opts)
   if opts == nil then return end -- nil is valid, in which case we stick to the defaults
 
@@ -37,16 +37,30 @@ end
 
 -- Makes sure the treesitter parser is available, otherwise makes a notification
 -- Wrap a command to report a missing parser once.
----@param fn function
+---@param fn fun(opts: Opts): nil
+---@return fun(opts?: OptsOverride): boolean
 local function ensuring_parser(fn)
+  ---@param overrides OptsOverride | nil
   ---@return boolean
-  return function(...)
+  return function(overrides)
+    local opts = Treewalker.opts
+    if overrides ~= nil then
+      opts = vim.tbl_deep_extend("force", {}, opts, overrides)
+      local valid, errors = options.validate_opts(overrides)
+      if not valid then
+        if opts.notifications ~= false then
+          options.handle_opts_validation_errors(errors)
+        end
+        return false
+      end
+    end
+
     local ft = vim.bo.ft
     if has_parser() then
-      fn(...)
+      fn(opts)
       return true
     else
-      if Treewalker.opts.notifications == false then
+      if opts.notifications == false then
         return false
       end
 

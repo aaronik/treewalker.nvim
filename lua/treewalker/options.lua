@@ -10,7 +10,16 @@ local M = {}
 ---    notifications: boolean,
 ---    scope_confined: boolean }
 
----@param opts Opts
+---@alias OptsOverride
+---| { highlight?: boolean,
+---    highlight_duration?: integer,
+---    jumplist?: boolean | 'left',
+---    highlight_group?: string,
+---    select?: boolean,
+---    notifications?: boolean,
+---    scope_confined?: boolean }
+
+---@param opts OptsOverride
 ---@return boolean, table<string>
 function M.validate_opts(opts)
   local errors = {}

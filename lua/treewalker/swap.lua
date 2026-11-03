@@ -31,7 +31,8 @@ local function current_vertical_anchor()
   return anchor.current()
 end
 
-function M.swap_down()
+---@param opts Opts
+function M.swap_down(opts)
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
   if util.is_markdown_file() then
@@ -46,7 +47,7 @@ function M.swap_down()
   local target = anchor.find_down(current)
   if not target then return end
 
-  if confinement.should_confine(current.node, target.node) then
+  if confinement.should_confine(current.node, target.node, opts) then
     return
   end
 
@@ -57,7 +58,8 @@ function M.swap_down()
   vim.fn.cursor(target.row - node_length_diff, target.col)
 end
 
-function M.swap_up()
+---@param opts Opts
+function M.swap_up(opts)
   vim.cmd("normal! ^")
   if not is_supported_ft() then return end
   if util.is_markdown_file() then
@@ -72,7 +74,7 @@ function M.swap_up()
   local target = anchor.find_up(current)
   if not target then return end
 
-  if confinement.should_confine(current.node, target.node) then
+  if confinement.should_confine(current.node, target.node, opts) then
     return
   end
 
@@ -83,14 +85,15 @@ function M.swap_up()
   vim.fn.cursor(target.row + current.augment_length - target.augment_length, target.col)
 end
 
-function M.swap_right()
+---@param opts Opts
+function M.swap_right(opts)
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
   local current, target = anchor.find_lateral_pair("right")
 
   if not current or not target then return end
 
-  if confinement.should_confine(current, target) then
+  if confinement.should_confine(current, target, opts) then
     return
   end
 
@@ -123,14 +126,15 @@ function M.swap_right()
   vim.api.nvim_buf_clear_namespace(0, ns_id, 0, -1)
 end
 
-function M.swap_left()
+---@param opts Opts
+function M.swap_left(opts)
   if not is_supported_ft() then return end
   if util.is_markdown_file() then return end
   local current, target = anchor.find_lateral_pair("left")
 
   if not current or not target then return end
 
-  if confinement.should_confine(current, target) then
+  if confinement.should_confine(current, target, opts) then
     return
   end
 

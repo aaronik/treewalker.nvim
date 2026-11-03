@@ -169,6 +169,8 @@ Treewalker aims for sane behavior, but you can modify some via the options below
 I found Ctrl - h / j / k / l to be a natural flow for this plugin, and adding
 Shift to that for swapping felt like a clean follow on. So here are the mappings I use:
 
+### Lua -> Ex Mapping
+
 In `init.lua`:
 
 ```lua
@@ -184,6 +186,34 @@ vim.keymap.set('n', '<C-S-j>', '<cmd>Treewalker SwapDown<cr>', { silent = true }
 vim.keymap.set('n', '<C-S-h>', '<cmd>Treewalker SwapLeft<cr>', { silent = true })
 vim.keymap.set('n', '<C-S-l>', '<cmd>Treewalker SwapRight<cr>', { silent = true })
 ```
+
+### Direct Lua Mapping
+
+Treewalker also allows all options to be passed into the lua functions themselves, which
+are exposed as `move_up`, `move_down`, `move_out` (Left), `move_in` (Right),
+and `swap_up`, `swap_down`, `swap_left`, `swap_right`.
+
+Options passed to a call override `setup()` for that call only; they do not
+change later calls or `:Treewalker` commands. So you can use Lua mappings
+without calling `setup()` at all by putting your options table into the lua
+functions directly:
+
+In `init.lua`:
+
+```lua
+local tw = require('treewalker')
+
+vim.keymap.set('n', '<M-j>', tw.move_down) -- use setup() options (or defaults)
+vim.keymap.set('n', '<M-S-j>', function() tw.move_down({ select = true }) end)
+vim.keymap.set('n', '<M-k>', function()
+  tw.move_up({ highlight_group = 'Search', highlight_duration = 500 })
+end)
+vim.keymap.set('n', '<M-h>', function() tw.move_out({ jumplist = false }) end)
+vim.keymap.set('n', '<M-l>', function() tw.move_in({ highlight = false }) end)
+vim.keymap.set('n', '<M-S-k>', function() tw.swap_up({ scope_confined = true }) end)
+```
+
+Each of the above is a unique keymap for a specific treewalker command / behavior.
 
 ---
 

@@ -131,9 +131,9 @@ end
 
 ---@param node TSNode
 ---@param row integer
-function M.jump(node, row)
+---@param opts Opts
+function M.jump(node, row, opts)
   M.jump_to_line_start(row)
-  local opts = require("treewalker").opts
   local range = nodes.range(node)
 
   if util.is_markdown_file() then
