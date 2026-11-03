@@ -77,14 +77,31 @@ local function ensuring_parser(fn)
   end
 end
 
-Treewalker.move_up    = ensuring_parser(movement.move_up)
-Treewalker.move_out   = ensuring_parser(movement.move_out)
-Treewalker.move_down  = ensuring_parser(movement.move_down)
-Treewalker.move_in    = ensuring_parser(movement.move_in)
+Treewalker.up    = ensuring_parser(movement.move_up)
+Treewalker.down  = ensuring_parser(movement.move_down)
+Treewalker.left  = ensuring_parser(movement.move_out)
+Treewalker.right = ensuring_parser(movement.move_in)
 
 Treewalker.swap_up    = ensuring_parser(swap.swap_up)
 Treewalker.swap_down  = ensuring_parser(swap.swap_down)
 Treewalker.swap_right = ensuring_parser(swap.swap_right)
 Treewalker.swap_left  = ensuring_parser(swap.swap_left)
+
+-- In the plugin's past, the exposed lua API were these.
+-- Although it was never documented, I'm sure some people had mapped straight
+-- to these. Once the mappings became documented (when options were able
+-- to be passed in), I wanted to conform the function names to the Ex
+-- subcommand names. These four are here now for backwards compatibility
+-- to anyone who may have mapped to them in the past.
+-- TODO at some point put in a deprecation notification
+
+---@deprecated Use up() instead.
+Treewalker.move_up = Treewalker.up
+---@deprecated Use down() instead.
+Treewalker.move_down = Treewalker.down
+---@deprecated Use left() instead.
+Treewalker.move_out = Treewalker.left
+---@deprecated Use right() instead.
+Treewalker.move_in = Treewalker.right
 
 return Treewalker

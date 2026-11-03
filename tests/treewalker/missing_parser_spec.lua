@@ -9,10 +9,10 @@ local tw = require("treewalker")
 
 ---@type TreewalkerCommandCase[]
 local command_cases = {
-  { name = "move_up", run = tw.move_up },
-  { name = "move_down", run = tw.move_down },
-  { name = "move_out", run = tw.move_out },
-  { name = "move_in", run = tw.move_in },
+  { name = "up", run = tw.up },
+  { name = "down", run = tw.down },
+  { name = "left", run = tw.left },
+  { name = "right", run = tw.right },
   { name = "swap_up", run = tw.swap_up },
   { name = "swap_down", run = tw.swap_down },
   { name = "swap_left", run = tw.swap_left },

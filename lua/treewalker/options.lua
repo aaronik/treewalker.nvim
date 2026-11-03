@@ -63,11 +63,13 @@ function M.validate_opts(opts)
 end
 
 function M.handle_opts_validation_errors(errors)
-  local err_string = "Treewalker.nvim's setup() call has received incorrect option(s):\n"
+  local err_string = "Treewalker.nvim received invalid options:\n"
   for _, msg in pairs(errors) do
     err_string = err_string .. "\n" .. msg
   end
-  err_string = err_string .. "\n\nTreewalker.nvim will use the default options until all options are fixed."
+  err_string = err_string .. "\n\nIf these options were passed in via setup(), Treewalker.nvim will use its " ..
+    "default options until all options passed in are valid. If these options were passed directly in to a lua " ..
+    "movement or swap command, the command won't work until all options are valid."
   vim.notify(err_string, vim.log.levels.ERROR)
 end
 

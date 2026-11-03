@@ -15,19 +15,19 @@ end
 
 local subcommands = {
   Up = function()
-    tw().move_up()
+    tw().up()
   end,
 
   Left = function()
-    tw().move_out()
+    tw().left()
   end,
 
   Down = function()
-    tw().move_down()
+    tw().down()
   end,
 
   Right = function()
-    tw().move_in()
+    tw().right()
   end,
 
   SwapUp = function()

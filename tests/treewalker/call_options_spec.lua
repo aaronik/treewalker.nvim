@@ -96,6 +96,46 @@ describe('Per-call options', function()
   end)
 end)
 
+describe('Lua movement directions', function()
+  before_each(function()
+    reset('/lua.lua')
+  end)
+
+  it('matches Ex commands while preserving all move_* names', function()
+    -- ensuring backwards compat from an API name change on Nov 3 2026
+    assert.equal(tw.up, tw.move_up)
+    assert.equal(tw.down, tw.move_down)
+    assert.equal(tw.left, tw.move_out)
+    assert.equal(tw.right, tw.move_in)
+
+    local cases = {
+      { 'up', 'Up', 30, 1, 21, 1 },
+      { 'down', 'Down', 10, 1, 21, 1 },
+      { 'left', 'Left', 7, 3, 5, 1 },
+      { 'right', 'Right', 21, 1, 22, 3 },
+    }
+    for _, case in ipairs(cases) do
+      vim.fn.cursor(case[3], case[4])
+      assert.is_true(tw[case[1]]())
+      h.assert_cursor_at(case[5], case[6])
+      vim.fn.cursor(case[3], case[4])
+      vim.cmd('Treewalker ' .. case[2])
+      h.assert_cursor_at(case[5], case[6])
+    end
+  end)
+
+  it('accepts per-call selection with the new names', function()
+    vim.fn.cursor(21, 1)
+    assert.is_true(tw.right({ select = true }))
+    h.assert_selected(22, 3, 26, 5)
+    vim.cmd('normal! \27')
+    vim.fn.cursor(7, 3)
+    assert.is_true(tw.left({ select = true }))
+    h.assert_selected(5, 1, 8, 1)
+    assert.is_false(tw.opts.select)
+  end)
+end)
+
 describe('Per-call options in markdown', function()
   before_each(function()
     reset('/markdown.md')

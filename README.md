@@ -189,9 +189,9 @@ vim.keymap.set('n', '<C-S-l>', '<cmd>Treewalker SwapRight<cr>', { silent = true 
 
 ### Direct Lua Mapping
 
-Treewalker also allows all options to be passed into the lua functions themselves, which
-are exposed as `move_up`, `move_down`, `move_out` (Left), `move_in` (Right),
-and `swap_up`, `swap_down`, `swap_left`, `swap_right`.
+Treewalker also allows all options to be passed into the lua functions
+themselves, which are exposed as `up`, `down`, `left`, `right`, and `swap_up`,
+`swap_down`, `swap_left`, `swap_right`.
 
 Options passed to a call override `setup()` for that call only; they do not
 change later calls or `:Treewalker` commands. So you can use Lua mappings
@@ -203,13 +203,13 @@ In `init.lua`:
 ```lua
 local tw = require('treewalker')
 
-vim.keymap.set('n', '<M-j>', tw.move_down) -- use setup() options (or defaults)
-vim.keymap.set('n', '<M-S-j>', function() tw.move_down({ select = true }) end)
+vim.keymap.set('n', '<M-j>', tw.down) -- use setup() options (or defaults)
+vim.keymap.set('n', '<M-S-j>', function() tw.down({ select = true }) end)
 vim.keymap.set('n', '<M-k>', function()
-  tw.move_up({ highlight_group = 'Search', highlight_duration = 500 })
+  tw.up({ highlight_group = 'Search', highlight_duration = 500 })
 end)
-vim.keymap.set('n', '<M-h>', function() tw.move_out({ jumplist = false }) end)
-vim.keymap.set('n', '<M-l>', function() tw.move_in({ highlight = false }) end)
+vim.keymap.set('n', '<M-h>', function() tw.left({ jumplist = false }) end)
+vim.keymap.set('n', '<M-l>', function() tw.right({ highlight = false }) end)
 vim.keymap.set('n', '<M-S-k>', function() tw.swap_up({ scope_confined = true }) end)
 ```
 
