@@ -17,13 +17,20 @@ local function as_anchor(value)
 end
 
 -- Reject moves that leave the current parent when confinement is enabled.
----@param current TreewalkerAnchor | TSNode
----@param candidate TreewalkerAnchor | TSNode
+---@param current TreewalkerAnchor | MarkdownAnchor | TSNode
+---@param candidate TreewalkerAnchor | MarkdownAnchor | TSNode
 ---@param opts Opts
 ---@return boolean
 function M.should_confine(current, candidate, opts)
   if opts.scope_confined ~= true then
     return false
+  end
+
+  if type(current) == "table" and current.section then
+    ---@cast current MarkdownAnchor
+    ---@cast candidate MarkdownAnchor
+    local parent = current.section:parent()
+    return parent ~= nil and not vim.treesitter.is_ancestor(parent, candidate.section)
   end
 
   local current_anchor = as_anchor(current)

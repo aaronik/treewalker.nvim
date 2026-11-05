@@ -33,6 +33,38 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(9, 1, "### Subheader")
   end)
 
+  it("moves Down between peer headings when scope is confined", function()
+    vim.fn.cursor(4, 1)
+
+    tw.down({ scope_confined = true })
+
+    h.assert_cursor_at(19, 1, "## Text Formatting")
+  end)
+
+  it("moves Up between peer headings when scope is confined", function()
+    vim.fn.cursor(19, 1)
+
+    tw.up({ scope_confined = true })
+
+    h.assert_cursor_at(4, 1, "## Header")
+  end)
+
+  it("does not move Down outside a heading's parent section when scope is confined", function()
+    vim.fn.cursor(9, 1)
+
+    tw.down({ scope_confined = true })
+
+    h.assert_cursor_at(9, 1, "### Subheader")
+  end)
+
+  it("does not move Up outside a heading's parent section when scope is confined", function()
+    vim.fn.cursor(41, 1)
+
+    tw.up({ scope_confined = true })
+
+    h.assert_cursor_at(41, 1, "### Another Header")
+  end)
+
   it("moves to parent headings with move_out", function()
     vim.fn.cursor(9, 1)
     tw.move_out()
@@ -383,12 +415,16 @@ describe("Swapping in a markdown file with h2s at the top:", function()
       tw.setup({ scope_confined = true })
     end)
 
-    it("confines move_down", function()
-      h.assert_confined_by_parent(33, 1, 'down')
+    it("allows moving Down between top-level headings", function()
+      vim.fn.cursor(1, 1)
+      tw.move_down()
+      h.assert_cursor_at(6, 1, "## Something else")
     end)
 
-    it("confines move_up", function()
-      h.assert_confined_by_parent(19, 1, 'up')
+    it("allows moving Up between top-level headings", function()
+      vim.fn.cursor(6, 1)
+      tw.move_up()
+      h.assert_cursor_at(1, 1, "## Something")
     end)
 
     it("confines swap_down", function()
