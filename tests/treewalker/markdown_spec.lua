@@ -25,6 +25,14 @@ describe("Movement in a markdown file", function()
     h.assert_cursor_at(9, 1, "### Subheader")
   end)
 
+  it("moves Right into a child heading when scope is confined", function()
+    vim.fn.cursor(4, 1)
+
+    tw.right({ scope_confined = true })
+
+    h.assert_cursor_at(9, 1, "### Subheader")
+  end)
+
   it("moves to parent headings with move_out", function()
     vim.fn.cursor(9, 1)
     tw.move_out()

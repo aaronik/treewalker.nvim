@@ -57,6 +57,38 @@ describe("Movement in a regular lua file: ", function()
     h.assert_cursor_at(179, 3, "local")
   end)
 
+  it("moves right past a comment-only table when scope is not confined", function()
+    vim.fn.cursor(225, 5) -- opts = {
+
+    tw.move_in()
+
+    h.assert_cursor_at(229, 9, "        for _, item in ipairs(items) do")
+  end)
+
+  it("keeps Right inside the current node when scope is confined", function()
+    vim.fn.cursor(225, 5) -- opts = {
+
+    tw.right({ scope_confined = true })
+
+    h.assert_cursor_at(225, 5)
+  end)
+
+  it("allows Right into a descendant when scope is confined", function()
+    vim.fn.cursor(228, 5) -- transform_items = function(_, items)
+
+    tw.right({ scope_confined = true })
+
+    h.assert_cursor_at(229, 9, "        for _, item in ipairs(items) do")
+  end)
+
+  it("still moves Left to a parent when scope is confined", function()
+    vim.fn.cursor(229, 9) -- for _, item in ipairs(items) do
+
+    tw.left({ scope_confined = true })
+
+    h.assert_cursor_at(228, 5, "    transform_items = function(_, items)")
+  end)
+
   it("goes out of functions", function()
     vim.fn.cursor(149, 7)
     tw.move_out()

@@ -219,3 +219,18 @@ if vim.g.neovide then
 	vim.keymap.set("t", "<C-S-V>", "<C-\\><C-n>pi") -- but if you put cursor here, it jumps across 4 lines above and ends up on the line werer the first comment is
 end
 
+ripgrep = {
+    module = "blink-ripgrep",
+    name = "Ripgrep",
+    opts = { -- if you try to swap right from here, it goes inside transform_items function instead of the comment inside "opts"
+        -- if you try to swap left from here, it goes do the transform_items function instead of "opts" parent
+    },
+    transform_items = function(_, items)
+        for _, item in ipairs(items) do
+            item.labelDetails = {
+                description = " 󰥨 ",
+            }
+        end
+        return items
+    end,
+}

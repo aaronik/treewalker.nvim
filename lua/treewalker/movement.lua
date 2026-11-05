@@ -92,6 +92,8 @@ function M.move_in(opts)
 
   local target = find_target(current, "find_in")
   if not target then return end
+  if opts.scope_confined and not util.is_markdown_file()
+    and not vim.treesitter.is_ancestor(current.node, target.node) then return end
 
   add_jumplist_for_move('move_in', opts)
   jump_to(target, opts)
